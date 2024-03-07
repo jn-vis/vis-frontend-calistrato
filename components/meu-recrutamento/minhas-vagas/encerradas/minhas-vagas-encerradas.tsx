@@ -9,8 +9,9 @@ import IconTrashLines from '@/components/icon/icon-trash-lines';
 import Tippy from '@tippyjs/react';
 import IconNotesEdit from '@/components/icon/icon-notes-edit';
 import IconPencil from '@/components/icon/icon-pencil';
-import VerMaisGeneric from './ver-mais-generic';
+
 import IconCircleCheck from '@/components/icon/icon-circle-check';
+import VerMaisGeneric from '../ver-mais-generic';
 
 const rowData = [
     {
@@ -90,7 +91,7 @@ const rowData = [
 
 const col = ['id', 'vagas', 'descricao', 'dataLimite'];
 
-const MinhasVagasLista = () => {
+const MinhasVagasEncerradas = () => {
     const [page, setPage] = useState(1);
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
@@ -328,7 +329,7 @@ const MinhasVagasLista = () => {
                                         <IconNotesEdit className="h-4.5 w-4.5" />
                                     </Link>
                                     </Tippy >
-                                    <Tippy content="Editar vaga" delay={[1000, 0]}>
+                                    <Tippy content="Reativar vaga" delay={[1000, 0]}>
                                     <Link href="/meu-recrutamento/minhas-vagas/edita-vaga" className="flex hover:text-primary">
                                         <IconPencil />
                                     </Link>
@@ -359,4 +360,4 @@ const MinhasVagasLista = () => {
     );
 };
 
-export default MinhasVagasLista;
+export default MinhasVagasEncerradas;

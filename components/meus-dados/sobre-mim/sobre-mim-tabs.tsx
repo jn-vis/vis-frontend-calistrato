@@ -1,10 +1,10 @@
 'use client';
 import IconHome from '@/components/icon/icon-home';
 import React, { useState } from 'react';
-import MinhasVagasLista from './minhas-vagas-lista';
-import MinhasVagasEncerradas from './encerradas/minhas-vagas-encerradas';
+import { SobreMimComponente } from './sobre-mim-componente';
 
-export const MinhasVagasTabs = () => {
+
+export const SobreMimTabs = () => {
     const [tabs, setTabs] = useState<string>('home');
     const toggleTabs = (name: string) => {
         setTabs(name);
@@ -17,35 +17,35 @@ export const MinhasVagasTabs = () => {
                 <ul className="mb-5 overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] font-semibold dark:border-[#191e3a] sm:flex">
                     <li className="inline-block">
                         <button
-                            onClick={() => toggleTabs('home')}
-                            className={`flex items-center gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'home' ? '!border-primary text-primary' : ''}`}
+                            onClick={() => toggleTabs('sobremim')}
+                            className={`flex items-center gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'sobremim' ? '!border-primary text-primary' : ''}`}
                         >
                             <IconHome />
-                            Em aberto
+                            Meus Dados
                         </button>
                     </li>
                     <li className="inline-block">
                         <button
-                            onClick={() => toggleTabs('encerradas')}
-                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'encerradas' ? '!border-primary text-primary' : ''}`}
+                            onClick={() => toggleTabs('viscurriculo')}
+                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'viscurriculo' ? '!border-primary text-primary' : ''}`}
                         >
-                            Encerradas
+                            Visualizar meu currículo
                         </button>
                     </li>
                 </ul>
             </div>
-            {tabs === 'home' ? (
+            {tabs === 'sobremim' ? (
                 <div>
-                    <MinhasVagasLista />
+                    <SobreMimComponente />
                 </div>
             ) : (
                 ''
             )}
-             {tabs === 'encerradas' ? (
+             {tabs === 'viscurriculo' ? (
                 <div>
                     <div className="mt-3 flex flex-row gap-6 pb-4 sm:col-span-2">
                     </div>
-                    <MinhasVagasEncerradas />
+                    {/* <SobreMimComponente /> */}
                 </div>
             ) : (
                 ''

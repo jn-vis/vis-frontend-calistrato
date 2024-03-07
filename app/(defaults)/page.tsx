@@ -1,13 +1,13 @@
-import ComponentsDashboardSales from '@/components/home/home-page-componente';
+import HomePage from '@/components/home/home-page-componente';
 import { Metadata } from 'next';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Sales Admin',
+    title: 'Home',
 };
 
 const Home = () => {
-    return <ComponentsDashboardSales />;
+    return <HomePage />;
 };
 
 export default Home;

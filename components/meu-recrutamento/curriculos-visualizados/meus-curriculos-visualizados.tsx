@@ -9,8 +9,9 @@ import IconTrashLines from '@/components/icon/icon-trash-lines';
 import Tippy from '@tippyjs/react';
 import IconNotesEdit from '@/components/icon/icon-notes-edit';
 import IconPencil from '@/components/icon/icon-pencil';
-import VerMaisGeneric from './ver-mais-generic';
+
 import IconCircleCheck from '@/components/icon/icon-circle-check';
+import VerMaisGeneric from '../minhas-vagas/ver-mais-generic';
 
 const rowData = [
     {
@@ -90,7 +91,7 @@ const rowData = [
 
 const col = ['id', 'vagas', 'descricao', 'dataLimite'];
 
-const MinhasVagasLista = () => {
+const MeusCurriculosVisualizados = () => {
     const [page, setPage] = useState(1);
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
@@ -281,10 +282,6 @@ const MinhasVagasLista = () => {
                         <IconPrinter className="ltr:mr-2 rtl:ml-2" />
                         PRINT
                     </button>
-                    <Link href="/meu-recrutamento/minhas-vagas/nova-vaga" type="button"  className="btn btn-primary btn-sm m-1">
-                        <IconCircleCheck className="ltr:mr-2 rtl:ml-2" />
-                        Cadastrar Nova Vaga
-                    </Link>
                 </div>
 
                 <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -316,31 +313,31 @@ const MinhasVagasLista = () => {
                             sortable: true,
                             render: ({ dataLimite }) => <div>{formatDate(dataLimite)}</div>,
                         },
-                        {
-                            accessor: 'action',
-                            title: 'Ações',
-                            sortable: false,
-                            textAlignment: 'center',
-                            render: ({ id }) => (
-                                <div className="mx-auto flex w-max items-center gap-4">
-                                    <Tippy content="Ver currículos" delay={[1000, 0]}>
-                                    <Link href="/meu-recrutamento/minhas-vagas/curriculo" className="flex hover:text-info">
-                                        <IconNotesEdit className="h-4.5 w-4.5" />
-                                    </Link>
-                                    </Tippy >
-                                    <Tippy content="Editar vaga" delay={[1000, 0]}>
-                                    <Link href="/meu-recrutamento/minhas-vagas/edita-vaga" className="flex hover:text-primary">
-                                        <IconPencil />
-                                    </Link>
-                                    </Tippy>
-                                    <Tippy content="Excluir Vaga" delay={[1000, 0]}>
-                                    <button type="button" className="flex hover:text-danger">
-                                        <IconTrashLines />
-                                    </button>
-                                    </Tippy>
-                                </div>
-                            ),
-                        },
+                        // {
+                        //     accessor: 'action',
+                        //     title: 'Ações',
+                        //     sortable: false,
+                        //     textAlignment: 'center',
+                        //     render: ({ id }) => (
+                        //         <div className="mx-auto flex w-max items-center gap-4">
+                        //             <Tippy content="Ver currículos" delay={[1000, 0]}>
+                        //             <Link href="/meu-recrutamento/minhas-vagas/curriculo" className="flex hover:text-info">
+                        //                 <IconNotesEdit className="h-4.5 w-4.5" />
+                        //             </Link>
+                        //             </Tippy >
+                        //             <Tippy content="Editar vaga" delay={[1000, 0]}>
+                        //             <Link href="/meu-recrutamento/minhas-vagas/edita-vaga" className="flex hover:text-primary">
+                        //                 <IconPencil />
+                        //             </Link>
+                        //             </Tippy>
+                        //             <Tippy content="Excluir Vaga" delay={[1000, 0]}>
+                        //             <button type="button" className="flex hover:text-danger">
+                        //                 <IconTrashLines />
+                        //             </button>
+                        //             </Tippy>
+                        //         </div>
+                        //     ),
+                        // },
                     ]}
                     totalRecords={initialRecords.length}
                     recordsPerPage={pageSize}
@@ -359,4 +356,4 @@ const MinhasVagasLista = () => {
     );
 };
 
-export default MinhasVagasLista;
+export default MeusCurriculosVisualizados

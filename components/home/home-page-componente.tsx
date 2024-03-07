@@ -1,6 +1,5 @@
 import Link from 'next/link';
-const ComponentsDashboard = () => {
-
+const HomePage = () => {
     return (
         <>
             <div>
@@ -10,13 +9,16 @@ const ComponentsDashboard = () => {
                             Home
                         </Link>
                     </li>
-                    <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                        <span>Pendente</span>
-                    </li>
                 </ul>
+            </div>
+            <div className="panel flex justify-center items-center mt-6 h-[calc(100vh-16rem)]">
+                <div className="mb-5 flex flex-col items-center justify-between dark:text-white-light">
+                    <h5 className="text-lg font-semibold">Seja Bem Vindo a JobsNow</h5>
+                    <p>Seu Buscador de currículos</p>
                 </div>
+            </div>
         </>
     );
 };
 
-export default ComponentsDashboard;
+export default HomePage;

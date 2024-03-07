@@ -1,27 +1,26 @@
-import { SobreMimTabs } from '@/components/meus-dados/sobre-mim/sobre-mim-tabs';
-import { getTranslation } from '@/i18n';
+
+import { MeusCurriculosVisualizadosTabs } from '@/components/meu-recrutamento/curriculos-visualizados/meus-curriculos-visualizados-tabs';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Sobre mim',
+    title: 'Cvc Visualizados',
 };
 
-const SobreMim = () => {
-    const { t } = getTranslation();
+const MinhasVagas = () => {
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
                     <Link href="#" className="text-primary hover:underline">
-                    {t('about_me')}
+                       Currículos Visualizados
                     </Link>
                 </li>
             </ul>
-            <SobreMimTabs />
+            <MeusCurriculosVisualizadosTabs />
         </div>
     );
 };
 
-export default SobreMim;
+export default MinhasVagas;

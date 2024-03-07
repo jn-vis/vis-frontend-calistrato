@@ -5,7 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Account Setting',
+    title: 'Curriculos',
 };
 
 const Curriculos = () => {

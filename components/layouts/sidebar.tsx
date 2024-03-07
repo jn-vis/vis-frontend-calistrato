@@ -170,7 +170,7 @@ const Sidebar = () => {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link href="/maintenence">
+                                            <Link href="/meu-recrutamento/curriculos-visualizados">
                                                 {t('Cvs visualizados')}
                                             </Link>
                                         </li>

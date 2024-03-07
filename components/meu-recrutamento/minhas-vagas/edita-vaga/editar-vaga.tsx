@@ -1,16 +1,15 @@
 'use client';
 import IconHome from '@/components/icon/icon-home';
+import IconThumbUp from '@/components/icon/icon-thumb-up';
 import IconUser from '@/components/icon/icon-user';
 import { estados } from '@/components/jsons-mock/estados';
 import { pcd } from '@/components/jsons-mock/pcd';
 import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
 import React, { useState } from 'react';
-import ComponentsTablesValorServico from './components-tables-valor-servico';
-import IconNotesEdit from '@/components/icon/icon-notes-edit';
-import IconDollarSignCircle from '@/components/icon/icon-dollar-sign-circle';
-import IconListCheck from '@/components/icon/icon-list-check';
+import ComponentsTablesValorServico from '../nova-vaga/components-tables-valor-servico';
 
-const CadastrarNovaVaga = () => {
+
+const EditarVagaExiste = () => {
     const [activeTab4, setActiveTab4] = useState<any>(1);
     const [checkHomeOffice, setCheckHomeOffice] = useState(true);
     const [checkPcd, setCheckPcd] = useState(false);
@@ -89,7 +88,7 @@ const CadastrarNovaVaga = () => {
     };
 
     return (
-        <PanelCodeHighlight title="Cadastro de vaga">
+        <PanelCodeHighlight title="Editar Vaga">
             <div className="mb-5">
                 <div className="inline-block w-full">
                     <div className="relative z-[1] overflow-x-auto">
@@ -128,7 +127,7 @@ const CadastrarNovaVaga = () => {
                                                 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
                                     onClick={() => setActiveTab4(3)}
                                 >
-                                    <IconListCheck className="h-5 w-5" />
+                                    <IconThumbUp className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 3 ? 'text-primary ' : ''}text-center mt-2 block`}>Filtrar requisitos</span>
                             </li>
@@ -139,7 +138,7 @@ const CadastrarNovaVaga = () => {
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
                                     onClick={() => setActiveTab4(4)}
                                 >
-                                    <IconNotesEdit className="h-5 w-5" />
+                                    <IconThumbUp className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 4 ? 'text-primary ' : ''}text-center mt-2 block`}>Ordenar candidatos</span>
                             </li>
@@ -150,7 +149,7 @@ const CadastrarNovaVaga = () => {
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
                                     onClick={() => setActiveTab4(5)}
                                 >
-                                    <IconDollarSignCircle className="h-5 w-5" />
+                                    <IconThumbUp className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 5 ? 'text-primary ' : ''}text-center mt-2 block`}>Serviços Extras</span>
                             </li>
@@ -316,10 +315,10 @@ const CadastrarNovaVaga = () => {
                     </div>
                     <div className="flex justify-between">
                         <button type="button" className={`btn btn-primary ${activeTab4 === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab4(activeTab4 > 1 ? activeTab4 - 1 : 1)}>
-                            Voltar
+                            Back
                         </button>
                         <button type="button" className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={() => setActiveTab4(activeTab4 < 5 ? activeTab4 + 1 : 5)}>
-                            {activeTab4 === 5 ? 'Salvar' : 'Avançar'}
+                            {activeTab4 === 5 ? 'Finish' : 'Next'}
                         </button>
                     </div>
                 </div>
@@ -328,4 +327,4 @@ const CadastrarNovaVaga = () => {
     );
 };
 
-export default CadastrarNovaVaga;
+export default EditarVagaExiste;

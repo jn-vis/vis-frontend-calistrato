@@ -24,7 +24,7 @@ export const getTranslation = () => {
     const data: any = langObj[lang || 'en'];
 
     const t = (key: string) => {
-        return data[key] ? data[key] : key;
+        return data && data[key] ? data[key] : key;
     };
 
     const initLocale = (themeLocale: string) => {

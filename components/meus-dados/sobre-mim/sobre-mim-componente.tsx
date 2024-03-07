@@ -1,5 +1,4 @@
 'use client';
-import IconUser from '@/components/icon/icon-user';
 import { getTranslation } from '@/i18n';
 import React, { useState } from 'react';
 import { estados } from '../../jsons-mock/estados';
@@ -11,11 +10,6 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import ModalConfirmarExclusao from './modal-confirma-exclusao';
 export const SobreMimComponente = () => {
-    const [tabs, setTabs] = useState<string>('home');
-    const toggleTabs = (name: string) => {
-        setTabs(name);
-    };
-
     const { t } = getTranslation();
 
     const [checkHomeOffice, setCheckHomeOffice] = useState(true);
@@ -33,36 +27,6 @@ export const SobreMimComponente = () => {
 
     return (
         <div className="pt-5">
-            <div>
-                <ul className="mb-5 overflow-y-auto whitespace-nowrap border-b border-[#ebedf2] font-semibold dark:border-[#191e3a] sm:flex">
-                    <li className="inline-block">
-                        <button
-                            onClick={() => toggleTabs('home')}
-                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'home' ? '!border-primary text-primary' : ''}`}
-                        >
-                            <IconUser className="h-5 w-5" />
-                            {t('My Data')}
-                        </button>
-                    </li>
-                    {/* <li className="inline-block">
-                        <button
-                            onClick={() => toggleTabs('payment-details')}
-                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'payment-details' ? '!border-primary text-primary' : ''}`}
-                        >
-                            Pontos Fracos
-                        </button>
-                    </li>
-                    <li className="inline-block">
-                        <button
-                            onClick={() => toggleTabs('preferences')}
-                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'preferences' ? '!border-primary text-primary' : ''}`}
-                        >
-                            Pontos Fortes
-                        </button>
-                    </li> */}
-                </ul>
-            </div>
-            {tabs === 'home' ? (
                 <div>
                     <form className="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-black">
                         <h6 className="mb-5 text-lg font-bold">{t('information about me')}</h6>
@@ -183,9 +147,7 @@ export const SobreMimComponente = () => {
                         </div>
                     </form>
                 </div>
-            ) : (
-                ''
-            )}
+
         </div>
     );
 };
