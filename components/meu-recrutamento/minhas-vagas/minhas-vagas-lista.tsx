@@ -62,7 +62,7 @@ const MinhasVagasLista = () => {
                     records={recordsData}
                     columns={[
                         { accessor: 'id', title: '#', sortable: true },
-                        { accessor: 'vagas', sortable: true },
+                        { accessor: 'vaga', sortable: true },
                         {
                             accessor: 'descricao',
                             title: 'Descrição',
@@ -77,7 +77,7 @@ const MinhasVagasLista = () => {
                             ),
                         },
                         {
-                            accessor: 'dataLimite',
+                            accessor: 'datalimite',
                             title: 'Data Limite',
                             sortable: true,
                             render: ({ datalimite }) => <div>{formatDate(datalimite)}</div>,
