@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
 import usePagination from '@/components/hooks/usePagination';
 import useModalVerMais from '@/components/hooks/useModalVermais';
+import { deleteVagas } from '@/infra/service/vagas-service';
 
 export type FilterFunction<T> = (item: T, search: string) => boolean;
 const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction: FilterFunction<T>) => {
@@ -15,7 +16,7 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
     const { page, pageSize, updatePage, updatePageSize } = usePagination(PAGE_SIZES[0]);
     const { isOpen, content, openModal, closeModal } = useModalVerMais(false);
 
-    useEffect(() => {
+
         const fetchData = async () => {
             try {
                 const data = await fetchDataFunction();
@@ -27,8 +28,19 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
             }
         };
 
-        fetchData();
-    }, []);
+        useEffect(() => {
+            fetchData();
+        }, []);
+
+    const handleExcluirVaga = async (id) => {
+        try {
+            await deleteVagas(id);
+            fetchData();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'id',
@@ -49,7 +61,7 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
         setInitialRecords(() => {
             return rowData.filter((item: T) => filterFunction(item, search));
         });
-    }, [search, rowData]);
+    }, [search]);
 
     useEffect(() => {
         const data = sortBy(initialRecords, sortStatus.columnAccessor);
@@ -76,7 +88,8 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
         setSortStatus,
         updatePage,
         updatePageSize,
-        PAGE_SIZES
+        PAGE_SIZES,
+        handleExcluirVaga
     };
 };
 

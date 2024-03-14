@@ -12,7 +12,7 @@ import formatDate from '@/utils/format-date';
 import ExportTableComponent from '@/components/shared/export-table-component';
 import { Vagas } from '../interfaces/vagas';
 import useTableData, { FilterFunction } from '../../hooks/useTableData';
-import getVagas from '@/infra/service/vagas-service';
+import getVagas, { deleteVagas } from '@/infra/service/vagas-service';
 
 const filterFunction: FilterFunction<Vagas> = (item, search) => {
     return (
@@ -41,7 +41,10 @@ const MinhasVagasLista = () => {
         setSortStatus,
         updatePage,
         updatePageSize,
+        handleExcluirVaga
     } = useTableData<Vagas>(getVagas,filterFunction);
+
+
 
     return (
         <div className="panel mt-6">
@@ -100,7 +103,7 @@ const MinhasVagasLista = () => {
                                         </Link>
                                     </Tippy>
                                     <Tippy content="Excluir Vaga" delay={[1000, 0]}>
-                                        <button type="button" className="flex hover:text-danger">
+                                        <button onClick={() => handleExcluirVaga(id)} type="button" className="flex hover:text-danger">
                                             <IconTrashLines />
                                         </button>
                                     </Tippy>

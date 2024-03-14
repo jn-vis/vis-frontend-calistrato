@@ -14,5 +14,15 @@ export const postVagas = async (data) => {
     }
 };
 
+export const deleteVagas = async (id) => {
+    try {
+        const response = await axios.delete(`http://localhost:3333/vagas/${id}`,);
+        return response.data;
+    } catch (error) {
+        console.error(`Erro ao deletar vaga: ${error}`);
+    }
+};
+
+
 
 export default getVagas
