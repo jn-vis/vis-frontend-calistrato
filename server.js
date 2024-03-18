@@ -26,16 +26,42 @@ app.get('/vagas', async (req, res) => {
   });
 
   app.post('/vagas', async (req, res) => {
-    const { vaga, descricao, datalimite, pagamentopj, pagamentoclt, pagamentobtc, homeoffice, pcd, country } = req.body;
+
+
+    const { vaga, descricao, pagamentopj, pagamentoclt, pagamentobtc, homeoffice, sortable,datelimite, obrigatorios, desejaveis,contato,estado_id, deficiencia_id,pcd } = req.body;
     try {
-        await pool.query('INSERT INTO vagas (vaga, descricao, datalimite, pagamentopj, pagamentoclt, pagamentobtc, homeoffice, pcd, country) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)',
-        [vaga, descricao, datalimite, pagamentopj, pagamentoclt, pagamentobtc, homeoffice, pcd, country]);
+
+        await pool.query('INSERT INTO vagas (vaga, descricao, pagamentopj, pagamentoclt, pagamentobtc, homeoffice, sortable,datelimite, obrigatorios, desejaveis,contato,estado_id,deficiencia_id, pcd ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)',
+        [vaga, descricao, pagamentopj, pagamentoclt, pagamentobtc, homeoffice,  JSON.stringify(sortable),datelimite, JSON.stringify(obrigatorios), JSON.stringify(desejaveis),contato,estado_id, deficiencia_id,pcd ]);
         res.status(201).json({ message: 'Dados inseridos com sucesso' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao inserir dados', error: error.toString() });
     }
 });
+
+app.get('/estados', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM estados');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao buscar estados' });
+    }
+  });
+
+  app.get('/deficiencia', async (req, res) => {
+    try {
+      const result = await pool.query('SELECT * FROM deficiencia');
+      res.status(200).json(result.rows);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao buscar deficiencia' });
+    }
+  });
+
+
+
+
+
 
 
 

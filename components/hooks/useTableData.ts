@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
 import usePagination from '@/components/hooks/usePagination';
 import useModalVerMais from '@/components/hooks/useModalVermais';
-import { deleteVagas } from '@/infra/service/vagas-service';
+import { deleteVagas, editarVagas } from '@/infra/service/vagas-service';
+import { useRouter } from 'next/navigation';
 
 export type FilterFunction<T> = (item: T, search: string) => boolean;
 const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction: FilterFunction<T>) => {
@@ -11,6 +12,8 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
     const [initialRecords, setInitialRecords] = useState(sortBy(rowData, 'id'));
     const [recordsData, setRecordsData] = useState(initialRecords);
     const [search, setSearch] = useState('');
+
+    const [modalConfirmacao, setModalConfirmacao] = useState(false);
 
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const { page, pageSize, updatePage, updatePageSize } = usePagination(PAGE_SIZES[0]);
@@ -36,10 +39,23 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
         try {
             await deleteVagas(id);
             fetchData();
+            setModalConfirmacao(true)
         } catch (error) {
             console.error(error);
         }
     };
+
+    // const route = useRouter()
+
+    // const handleEditarVaga = async (id) => {
+    //     try {
+    //         await editarVagas(id);
+    //         route.push(`/meu-recrutamento/minhas-vagas`);
+    //         // fetchData();
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
 
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
@@ -89,7 +105,9 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
         updatePage,
         updatePageSize,
         PAGE_SIZES,
-        handleExcluirVaga
+        handleExcluirVaga,
+        modalConfirmacao,
+        setModalConfirmacao
     };
 };
 

@@ -1,6 +1,5 @@
 'use client';
-import { DataTable} from 'mantine-datatable';
-import { useEffect} from 'react';
+import { DataTable } from 'mantine-datatable';
 import Link from 'next/link';
 import IconTrashLines from '@/components/icon/icon-trash-lines';
 import Tippy from '@tippyjs/react';
@@ -12,18 +11,18 @@ import formatDate from '@/utils/format-date';
 import ExportTableComponent from '@/components/shared/export-table-component';
 import { Vagas } from '../interfaces/vagas';
 import useTableData, { FilterFunction } from '../../hooks/useTableData';
-import getVagas, { deleteVagas } from '@/infra/service/vagas-service';
+import getVagas from '@/infra/service/vagas-service';
+import ModalConfirmarExclusao from '@/components/meus-dados/sobre-mim/modal-confirma-exclusao';
 
 const filterFunction: FilterFunction<Vagas> = (item, search) => {
     return (
         item.id.toString().includes(search.toLowerCase()) ||
         item.vagas.toLowerCase().includes(search.toLowerCase()) ||
         item.descricao.toLowerCase().includes(search.toLowerCase()) ||
-        item.datalimite.toLowerCase().includes(search.toLowerCase())
+        item.datelimite.toLowerCase().includes(search.toLowerCase())
     );
 };
 const MinhasVagasLista = () => {
-
     const {
         rowData,
         initialRecords,
@@ -35,14 +34,17 @@ const MinhasVagasLista = () => {
         isOpen,
         content,
         PAGE_SIZES,
+        modalConfirmacao,
         openModal,
         closeModal,
         setSearch,
         setSortStatus,
         updatePage,
         updatePageSize,
-        handleExcluirVaga
-    } = useTableData<Vagas>(getVagas,filterFunction);
+        handleExcluirVaga,
+        setModalConfirmacao
+    } = useTableData<Vagas>(getVagas, filterFunction);
+
 
 
 
@@ -64,7 +66,7 @@ const MinhasVagasLista = () => {
                     className="table-hover whitespace-nowrap"
                     records={recordsData}
                     columns={[
-                        { accessor: 'id', title: '#', sortable: true },
+                        // { accessor: 'id', title: '#', sortable: true },
                         { accessor: 'vaga', sortable: true },
                         {
                             accessor: 'descricao',
@@ -80,10 +82,10 @@ const MinhasVagasLista = () => {
                             ),
                         },
                         {
-                            accessor: 'datalimite',
+                            accessor: 'datelimite',
                             title: 'Data Limite',
                             sortable: true,
-                            render: ({ datalimite }) => <div>{formatDate(datalimite)}</div>,
+                            render: ({ datelimite }) => <div>{formatDate(datelimite)}</div>,
                         },
                         {
                             accessor: 'action',
@@ -103,9 +105,14 @@ const MinhasVagasLista = () => {
                                         </Link>
                                     </Tippy>
                                     <Tippy content="Excluir Vaga" delay={[1000, 0]}>
-                                        <button onClick={() => handleExcluirVaga(id)} type="button" className="flex hover:text-danger">
+                                        <ModalConfirmarExclusao
+                                            modalConfirmacao={modalConfirmacao}
+                                            handleCloseModal={() => setModalConfirmacao(false)}
+                                            handleOpenModal={() => setModalConfirmacao(true)}
+                                            onClickDelete={() => handleExcluirVaga(id)}
+                                        >
                                             <IconTrashLines />
-                                        </button>
+                                        </ModalConfirmarExclusao>
                                     </Tippy>
                                 </div>
                             ),
