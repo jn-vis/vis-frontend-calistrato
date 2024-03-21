@@ -45,16 +45,16 @@ const VerMaisGeneric: React.FC<VerMaisGenericProps> = ({ modalOpen, setModalOpen
                                                 <IconX />
                                             </button>
                                         </div>
-                                        <div className="p-5">
+                                        <div className="p-5 overflow-auto h-[300px]">
                                           <p>
                                             {conteudoModal}
                                             </p>
-                                            <div className="mt-8 flex items-center justify-end">
+                                        </div>
+                                            <div className="m-5 flex items-center justify-end">
                                                 <button type="button" className="btn btn-outline-danger" onClick={() => setModalOpen(false)}>
-                                                    Cancelar
+                                                    Fechar
                                                 </button>
                                             </div>
-                                        </div>
                                     </Dialog.Panel>
                                 </Transition.Child>
                             </div>

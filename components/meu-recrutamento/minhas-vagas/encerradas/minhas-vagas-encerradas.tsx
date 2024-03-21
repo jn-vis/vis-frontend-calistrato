@@ -282,10 +282,10 @@ const MinhasVagasEncerradas = () => {
                         <IconPrinter className="ltr:mr-2 rtl:ml-2" />
                         PRINT
                     </button>
-                    <Link href="/meu-recrutamento/minhas-vagas/nova-vaga" type="button"  className="btn btn-primary btn-sm m-1">
+                    {/* <Link href="/meu-recrutamento/minhas-vagas/nova-vaga" type="button"  className="btn btn-primary btn-sm m-1">
                         <IconCircleCheck className="ltr:mr-2 rtl:ml-2" />
                         Cadastrar Nova Vaga
-                    </Link>
+                    </Link> */}
                 </div>
 
                 <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />

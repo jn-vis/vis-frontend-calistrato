@@ -1,8 +1,6 @@
 'use client';
 import IconHome from '@/components/icon/icon-home';
 import IconUser from '@/components/icon/icon-user';
-// import { estados } from '@/components/jsons-mock/estados';
-import { pcd } from '@/components/jsons-mock/pcd';
 import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
 import React, { useEffect, useState } from 'react';
 import ComponentsTablesValorServico from './components-tables-valor-servico';
@@ -13,8 +11,10 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ReactSortable } from 'react-sortablejs';
-import { getDeficiencia, getEstados, getPcd, postVagas } from '@/infra/service/vagas-service';
-import Link from 'next/link';
+import { postVagas } from '@/services/vagas-service';
+import { useRouter } from 'next/navigation';
+import { getEstados } from '@/services/estados-service';
+import { getDeficiencia } from '@/services/pcd-service';
 
 interface Estados {
     id: string;
@@ -26,22 +26,22 @@ interface Deficiencia {
     nome: string;
 }
 
-//TODO fazer validacoes
+
 const schema = z.object({
-    vaga: z.string(),
+    vaga: z.string().min(5, 'Vaga deve ter no mínimo 5 caracteres'),
     datelimite: z.string(),
-    descricao: z.string(),
-    pagamentopj: z.string(),
-    pagamentoclt: z.string(),
-    pagamentobtc: z.string(),
+    descricao: z.string().min(100, 'Descrição deve ter no mínimo 100 caracteres'),
+    pagamentopj: z.string().nullable(),
+    pagamentoclt: z.string().nullable(),
+    pagamentobtc: z.string().nullable(),
     homeoffice: z.boolean(),
-    estado_id: z.string(),
+    estado_id: z.string().nullable().optional(),
     pcd: z.boolean(),
-    deficiencia_id:z.string(),
-    // contato: z.string(),
+    deficiencia_id: z.string().nullable().optional(),
+    contato: z.string().nullable()
 });
 
-
+type FormData = z.infer<typeof schema>;
 const CadastrarNovaVaga = () => {
     const [activeTab4, setActiveTab4] = useState<any>(1);
     const [checkHomeOffice, setCheckHomeOffice] = useState(true);
@@ -55,13 +55,7 @@ const CadastrarNovaVaga = () => {
         setCheckPcd(!checkPcd);
     };
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: zodResolver(schema),
-    });
+
 
     const items = [
         {
@@ -143,16 +137,31 @@ const CadastrarNovaVaga = () => {
         setNewItem('');
     };
 
-    const onSubmit = async (data: any) => {
-        console.log(data);
+    const router = useRouter()
+
+    const {
+        register,
+        handleSubmit,
+        formState:{
+            errors
+        },
+    } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        mode: 'onChange'
+    });
+
+    const onSubmit = async (data: FormData) => {
         const formData = {
             ...data,
+            estado_id: data.estado_id || null,
+            deficiencia_id: data.deficiencia_id || null,
             sortable: sortable,
             obrigatorios: obrigatorios,
             desejaveis: desejaveis,
         };
 
         const response = await postVagas(formData);
+        router.push('/meu-recrutamento/minhas-vagas');
         return response;
     };
 
@@ -160,25 +169,36 @@ const CadastrarNovaVaga = () => {
 
     const [deficiencia, setDeficiencia] = useState<Deficiencia[]>([]);
 
-    useEffect(() => {
-        getEstados()
-          .then(data => {
-            setEstados(data);
-          })
-          .catch(error => {
-            console.error('Erro ao buscar estados:', error);
-          });
-      }, []);
+      const getEstadosTeste = async () => {
+        try {
+          const response = await getEstados();
+          setEstados(response);
+        } catch (error) {
+          console.error('Erro ao buscar estados:', error);
+        }
+      }
+
+      const getDeficienciaTeste = async () => {
+        try {
+          const response = await getDeficiencia();
+          setDeficiencia(response);
+        } catch (error) {
+          console.error('Erro ao buscar pcds:', error);
+        }
+      }
 
       useEffect(() => {
-        getDeficiencia()
-          .then(data => {
-            setDeficiencia(data);
-          })
-          .catch(error => {
-            console.error('Erro ao buscar pcds:', error);
-          });
+        getEstadosTeste()
+        getDeficienciaTeste()
       }, []);
+
+
+      const nextStep = async () => {
+            setActiveTab4(activeTab4 + 1);
+    };
+
+    const today = new Date();
+    const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
 
     return (
@@ -197,7 +217,7 @@ const CadastrarNovaVaga = () => {
                                     type="button"
                                     className={`${activeTab4 === 1 ? '!border-primary !bg-primary text-white' : ''}
                     flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(1)}
+                                    onClick={nextStep}
                                 >
                                     <IconHome />
                                 </button>
@@ -208,7 +228,7 @@ const CadastrarNovaVaga = () => {
                                     type="button"
                                     className={`${activeTab4 === 2 ? '!border-primary !bg-primary text-white' : ''}
                                                 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(2)}
+                                    onClick={nextStep}
                                 >
                                     <IconUser className="h-5 w-5" />
                                 </button>
@@ -219,7 +239,7 @@ const CadastrarNovaVaga = () => {
                                     type="button"
                                     className={`${activeTab4 === 3 ? '!border-primary !bg-primary text-white' : ''}
                                                 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(3)}
+                                    onClick={nextStep}
                                 >
                                     <IconListCheck className="h-5 w-5" />
                                 </button>
@@ -230,7 +250,7 @@ const CadastrarNovaVaga = () => {
                                     type="button"
                                     className={`${activeTab4 === 4 ? '!border-primary !bg-primary text-white' : ''}
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(4)}
+                                    onClick={nextStep}
                                 >
                                     <IconNotesEdit className="h-5 w-5" />
                                 </button>
@@ -241,7 +261,7 @@ const CadastrarNovaVaga = () => {
                                     type="button"
                                     className={`${activeTab4 === 5 ? '!border-primary !bg-primary text-white' : ''}
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(5)}
+                                    onClick={nextStep}
                                 >
                                     <IconDollarSignCircle className="h-5 w-5" />
                                 </button>
@@ -254,7 +274,7 @@ const CadastrarNovaVaga = () => {
                             <div className="mb-5">
                                 {activeTab4 === 1 && (
                                     <>
-                                        <div>
+                                          <div className="mt-2">
                                             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
                                             <input
                                                 {...register('vaga')}
@@ -265,8 +285,9 @@ const CadastrarNovaVaga = () => {
                                                 placeholder="vaga.example"
                                                 required
                                             />
+                                            {errors.vaga && <p className='text-red-500 mt-1'>{errors.vaga.message}</p>}
                                         </div>
-                                        <div>
+                                        <div className="mt-2">
                                             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
                                             <input
                                                 {...register('datelimite')}
@@ -275,14 +296,15 @@ const CadastrarNovaVaga = () => {
                                                 id="datelimite"
                                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                                                 placeholder="name@company.com"
+                                                defaultValue={date}
                                                 required
                                             />
                                         </div>
-                                        <div>
+                                        <div className="mt-2">
                                             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
                                             <input
                                                 {...register('contato')}
-                                                type="text"
+                                                type="number"
                                                 name="contato"
                                                 id="contato"
                                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -290,7 +312,7 @@ const CadastrarNovaVaga = () => {
                                                 required
                                             />
                                         </div>
-                                        <div>
+                                        <div className="mt-2">
                                             <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
                                             <textarea
                                                 {...register('descricao')}
@@ -300,6 +322,7 @@ const CadastrarNovaVaga = () => {
                                                 placeholder="name@company.com"
                                                 required
                                             />
+                                             {errors.descricao && <p className='text-red-500 mt-1'>{errors.descricao.message}</p>}
                                         </div>
                                     </>
                                 )}
@@ -322,10 +345,9 @@ const CadastrarNovaVaga = () => {
                                                 id="estado_id"
                                                 className="form-select text-white-dark"
                                                 name="estado_id"
-                                                defaultValue="United States"
                                             >
                                                 {estados.map((estado) => {
-                                                    return <option key={estado.id} value={estado.id}>{estado.nome}</option>;
+                                                    return <option key={estado.id} value={estado.nome}>{estado.nome}</option>;
                                                 })}
 
                                             </select>
@@ -344,24 +366,25 @@ const CadastrarNovaVaga = () => {
                                                 id="deficiencia_id"
                                                 className="form-select text-white-dark"
                                                 name="deficiencia_id"
-                                                defaultValue="United States"
                                             >
                                                 {deficiencia.map((pcd) => {
-                                                    return <option key={pcd.id} value={pcd.id}>{pcd.nome}</option>;
+                                                    return <option key={pcd.id} value={pcd.nome}>{pcd.nome}</option>;
                                                 })}
                                             </select>
                                         </div>
                                         <div>
                                             <label htmlFor="web">Pagamento Mensal Pessoa Jurídica</label>
-                                            <input {...register('pagamentopj')} id="web" type="text" placeholder="Ex. R$15.000,00" className="form-input" />
+                                            <input {...register('pagamentopj')} id="web" type="number" placeholder="Ex. R$15.000,00" className="form-input" />
+                                            {errors.pagamentopj && <p>{errors.pagamentopj.message}</p>}
+
                                         </div>
                                         <div>
                                             <label htmlFor="web">Pagamento Mensal Carteira Assinada</label>
-                                            <input {...register('pagamentoclt')} id="web" type="text" placeholder="Ex. R$10.000,00" className="form-input" />
+                                            <input {...register('pagamentoclt')} id="web" type="number" placeholder="Ex. R$10.000,00" className="form-input" />
                                         </div>
                                         <div>
                                             <label htmlFor="web">Pagamento Mensal BTC</label>
-                                            <input {...register('pagamentobtc')} id="web" type="text" placeholder="Ex. 0,039฿ " className="form-input" />
+                                            <input {...register('pagamentobtc')} id="web" type="number" placeholder="Ex. 0,039฿ " className="form-input" />
                                         </div>
                                     </div>
                                 )}
@@ -488,7 +511,7 @@ const CadastrarNovaVaga = () => {
                                     Voltar
                                 </button>
                                 {activeTab4 < 5 ? (
-                                    <button type="button" className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={() => setActiveTab4(activeTab4 + 1)}>
+                                    <button type="button"  className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={nextStep}>
                                         Avançar
                                     </button>
                                 ) : null}

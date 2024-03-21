@@ -17,7 +17,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
                 <Setting />
                 <MainContainer>
                     <Sidebar />
-                    <div className="main-content flex min-h-screen flex-col">
+                    <div className="main-content flex flex-col min-h-screen">
                         <Header />
                         <ContentAnimation>{children}</ContentAnimation>
                         <Footer />

@@ -1,24 +1,82 @@
 'use client';
 import IconHome from '@/components/icon/icon-home';
-import IconThumbUp from '@/components/icon/icon-thumb-up';
 import IconUser from '@/components/icon/icon-user';
-import { estados } from '@/components/jsons-mock/estados';
-import { pcd } from '@/components/jsons-mock/pcd';
 import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import IconNotesEdit from '@/components/icon/icon-notes-edit';
+import IconDollarSignCircle from '@/components/icon/icon-dollar-sign-circle';
+import IconListCheck from '@/components/icon/icon-list-check';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ReactSortable } from 'react-sortablejs';
+import { editarVagas, getVagasId, postVagas } from '@/services/vagas-service';
+import { useRouter } from 'next/navigation';
 import ComponentsTablesValorServico from '../nova-vaga/components-tables-valor-servico';
+import { getEstados } from '@/services/estados-service';
+import { getDeficiencia } from '@/services/pcd-service';
+
+interface Estados {
+    id: string;
+    nome: string;
+}
+
+interface Deficiencia {
+    id: string;
+    nome: string;
+}
 
 
-const EditarVagaExiste = () => {
+interface ItensProsp {
+    id: number,
+    text:string,
+    chosen:boolean,
+    selected:boolean,
+}
+
+
+const schema = z.object({
+    vaga: z.string().min(5, 'Vaga deve ter no mínimo 5 caracteres'),
+    datelimite: z.string(),
+    descricao: z.string().min(100, 'Descrição deve ter no mínimo 100 caracteres'),
+    pagamentopj: z.string().nullable(),
+    pagamentoclt: z.string().nullable(),
+    pagamentobtc: z.string().nullable(),
+    homeoffice: z.boolean(),
+    estado_id: z.string().nullable().optional(),
+    pcd: z.boolean(),
+    deficiencia_id: z.string().nullable().optional(),
+    contato: z.string().nullable()
+});
+
+type FormData = z.infer<typeof schema>;
+const EditarVagaExistente = ({id}:any) => {
+    const[vagas, setVagas] = useState<FormData | null>(null);
+    const [sortable, setSortable] = useState<ItensProsp[]>([]);
+    const [obrigatorios, setObrigatorios] = useState<ItensProsp[]>([]);
+    const [desejaveis, setDesejaveis] = useState<ItensProsp[]>([]);
+
+    const getTesteEdit = async () => {
+        try {
+          const response = await getVagasId(id);
+          setVagas(response);
+          setSortable(response.sortable);
+          setObrigatorios(response.obrigatorios);
+          setDesejaveis(response.desejaveis);
+        } catch (error) {
+          console.error('Erro ao buscar pcds:', error);
+        }
+      }
+
+      useEffect(() => {
+        getTesteEdit()
+      }, []);
+
+
     const [activeTab4, setActiveTab4] = useState<any>(1);
     const [checkHomeOffice, setCheckHomeOffice] = useState(true);
     const [checkPcd, setCheckPcd] = useState(false);
-    const [left, setLeft] = useState(['Nest', 'Go', 'React']);
-    const [right, setRight] = useState(['Node', 'Typescript', 'Vue']);
-    const [checked, setChecked] = useState<string[]>([]);
-    const [leftChecked, setLeftChecked] = useState<string[]>([]);
-    const [rightChecked, setRightChecked] = useState<string[]>([]);
-    const [newItem, setNewItem] = useState('');
 
     const handleChangeHome = () => {
         setCheckHomeOffice(!checkHomeOffice);
@@ -28,67 +86,108 @@ const EditarVagaExiste = () => {
         setCheckPcd(!checkPcd);
     };
 
-    const handleToggle = (value: string) => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
 
-        if (currentIndex === -1) {
-            newChecked.push(value);
-        } else {
-            newChecked.splice(currentIndex, 1);
-        }
-
-        setChecked(newChecked);
-
-        setLeftChecked(left.filter((item) => newChecked.includes(item)));
-        setRightChecked(right.filter((item) => newChecked.includes(item)));
+    const moverParaDesejaveis = (item) => {
+        setObrigatorios((prev) => prev.filter((i) => i.id !== item.id));
+        setDesejaveis((prev) => [...prev, item]);
     };
 
-    const handleCheckedRight = () => {
-        setRight(right.concat(checked));
-        setLeft(left.filter((value) => !checked.includes(value)));
-        setChecked([]);
+    const moverParaObrigatorios = (item) => {
+        setDesejaveis((prev) => prev.filter((i) => i.id !== item.id));
+        setObrigatorios((prev) => [...prev, item]);
     };
 
-    const handleCheckedLeft = () => {
-        setLeft(left.concat(checked));
-        setRight(right.filter((value) => !checked.includes(value)));
-        setChecked([]);
-    };
+    const [newItem, setNewItem] = useState('');
 
-    const handleDelete = () => {
-        setLeft(left.filter((item) => !checked.includes(item)));
-        setRight(right.filter((item) => !checked.includes(item)));
-        setChecked([]);
-    };
-
-    const customList = (title: string, items: string[], checkedItems: string[], handleToggle: (value: string) => void) => (
-        <div className="m-2 w-64 rounded border p-4" style={{ maxHeight: '9rem', overflow: 'auto' }}>
-            <h1 className="mb-2 font-bold">{title}</h1>
-            <ul>
-                {items.map((item, index) => (
-                    <li key={index} className="my-1 flex items-center">
-                        <input type="checkbox" checked={checkedItems.includes(item)} onChange={() => handleToggle(item)} />
-                        <span className="ml-2">{item}</span>
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
-
-    const handleNewItemChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNewItemChange = (event) => {
         setNewItem(event.target.value);
     };
 
     const handleNewItemSubmit = () => {
-        if (newItem) {
-            setLeft([...left, newItem]);
-            setNewItem('');
-        }
+        const item = {
+            id: Math.random(),
+            text: newItem,
+        };
+
+        setObrigatorios((prev) => [...prev, item]);
+        setNewItem('');
     };
 
+    const router = useRouter()
+
+    const {
+        register,
+        handleSubmit,
+        formState:{
+            errors
+        },
+    } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        mode: 'onChange'
+    });
+
+
+
+    const onSubmit = async (data: FormData) => {
+        console.log('chamando aqui agora')
+        const formData = {
+            ...data,
+            estado_id: data.estado_id || null,
+            deficiencia_id: data.deficiencia_id || null,
+            sortable: sortable,
+            obrigatorios: obrigatorios,
+            desejaveis: desejaveis,
+        };
+
+        const response = await editarVagas(formData);
+        router.push('/meu-recrutamento/minhas-vagas');
+        return response;
+    };
+
+    const [estados, setEstados] = useState<Estados[]>([]);
+
+    const [deficiencia, setDeficiencia] = useState<Deficiencia[]>([]);
+
+      const getEstadosTeste = async () => {
+        try {
+          const response = await getEstados();
+          setEstados(response);
+        } catch (error) {
+          console.error('Erro ao buscar estados:', error);
+        }
+      }
+
+      const getDeficienciaTeste = async () => {
+        try {
+          const response = await getDeficiencia();
+          setDeficiencia(response);
+        } catch (error) {
+          console.error('Erro ao buscar pcds:', error);
+        }
+      }
+
+      useEffect(() => {
+        getEstadosTeste()
+        getDeficienciaTeste()
+      }, []);
+
+
+      const nextStep = () => {
+            setActiveTab4(activeTab4 + 1);
+    };
+
+    useEffect(() => {
+        getTesteEdit();
+    }, [activeTab4]);
+
+
+    let dataFormatada = '';
+if (vagas && vagas.datelimite) {
+    dataFormatada = new Date(vagas.datelimite).toISOString().split('T')[0];
+}
+
     return (
-        <PanelCodeHighlight title="Editar Vaga">
+        <PanelCodeHighlight title="Cadastro de vaga">
             <div className="mb-5">
                 <div className="inline-block w-full">
                     <div className="relative z-[1] overflow-x-auto">
@@ -103,7 +202,7 @@ const EditarVagaExiste = () => {
                                     type="button"
                                     className={`${activeTab4 === 1 ? '!border-primary !bg-primary text-white' : ''}
                     flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(1)}
+                                    onClick={nextStep}
                                 >
                                     <IconHome />
                                 </button>
@@ -114,7 +213,7 @@ const EditarVagaExiste = () => {
                                     type="button"
                                     className={`${activeTab4 === 2 ? '!border-primary !bg-primary text-white' : ''}
                                                 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(2)}
+                                    onClick={nextStep}
                                 >
                                     <IconUser className="h-5 w-5" />
                                 </button>
@@ -125,9 +224,9 @@ const EditarVagaExiste = () => {
                                     type="button"
                                     className={`${activeTab4 === 3 ? '!border-primary !bg-primary text-white' : ''}
                                                 flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(3)}
+                                    onClick={nextStep}
                                 >
-                                    <IconThumbUp className="h-5 w-5" />
+                                    <IconListCheck className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 3 ? 'text-primary ' : ''}text-center mt-2 block`}>Filtrar requisitos</span>
                             </li>
@@ -136,9 +235,9 @@ const EditarVagaExiste = () => {
                                     type="button"
                                     className={`${activeTab4 === 4 ? '!border-primary !bg-primary text-white' : ''}
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(4)}
+                                    onClick={nextStep}
                                 >
-                                    <IconThumbUp className="h-5 w-5" />
+                                    <IconNotesEdit className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 4 ? 'text-primary ' : ''}text-center mt-2 block`}>Ordenar candidatos</span>
                             </li>
@@ -147,179 +246,272 @@ const EditarVagaExiste = () => {
                                     type="button"
                                     className={`${activeTab4 === 5 ? '!border-primary !bg-primary text-white' : ''}
                             flex h-16 w-16 items-center justify-center rounded-full border-[3px] border-[#f3f2ee] bg-white dark:border-[#1b2e4b] dark:bg-[#253b5c]`}
-                                    onClick={() => setActiveTab4(5)}
+                                    onClick={nextStep}
                                 >
-                                    <IconThumbUp className="h-5 w-5" />
+                                    <IconDollarSignCircle className="h-5 w-5" />
                                 </button>
                                 <span className={`${activeTab4 === 5 ? 'text-primary ' : ''}text-center mt-2 block`}>Serviços Extras</span>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <div className="mb-5">
-                            {activeTab4 === 1 && (
-                                <>
-                                    <div>
-                                        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
-                                        <input
-                                            type="text"
-                                            name="vaga"
-                                            id="vaga"
-                                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                            placeholder="vaga.example"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
-                                        <input
-                                            type="date"
-                                            name="data"
-                                            id="data"
-                                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                            placeholder="name@company.com"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
-                                        <input
-                                            type="text"
-                                            name="contato"
-                                            id="contato"
-                                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                            placeholder="name@company.com"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
-                                        <textarea
-                                            name="descricao"
-                                            id="descricao"
-                                            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                            placeholder="name@company.com"
-                                            required
-                                        />
-                                    </div>
-                                </>
-                            )}
-                        </div>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="mb-5">
+                                {activeTab4 === 1 && (
+                                    <>
+                                          <div className="mt-2">
+                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
+                                            <input
+                                                {...register('vaga')}
+                                                type="text"
+                                                name="vaga"
+                                                id="vaga"
+                                                 defaultValue={vagas?.vaga}
+                                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                                placeholder="Desenvolvedor Web"
+                                                required
+                                            />
+                                            {errors.vaga && <p className='text-red-500 mt-1'>{errors.vaga.message}</p>}
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
+                                            <input
+                                                {...register('datelimite')}
+                                                type="date"
+                                                name="datelimite"
+                                                id="datelimite"
+                                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                                placeholder="data"
+                                                defaultValue={dataFormatada}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
+                                            <input
+                                                {...register('contato')}
+                                                type="number"
+                                                name="contato"
+                                                id="contato"
+                                                defaultValue={vagas?.contato?.toString()}
+                                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                                placeholder="contato"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
+                                            <textarea
+                                                {...register('descricao')}
+                                                name="descricao"
+                                                id="descricao"
+                                                defaultValue={vagas?.descricao}
+                                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                                placeholder="descrição da vaga"
+                                                required
+                                            />
+                                             {errors.descricao && <p className='text-red-500 mt-1'>{errors.descricao.message}</p>}
+                                        </div>
+                                    </>
+                                )}
+                            </div>
 
-                        <div className="mb-5">
-                            {activeTab4 === 2 && (
-                                <>
+                            <div className="mb-5">
+                                {activeTab4 === 2 && (
                                     <div>
                                         <div>
-                                            <label className="inline-flex cursor-pointer">
-                                                <input type="checkbox" className="form-checkbox" onChange={handleChangeHome} checked={checkHomeOffice} />
-                                                <span className="relative text-white-dark checked:bg-none">Somente Home Office</span>
-                                            </label>
-                                        </div>
-                                        <label htmlFor="country">Selecione a região da Vaga anunciada</label>
-                                        <select disabled={checkHomeOffice} id="country" className="form-select text-white-dark" name="country" defaultValue="United States">
-                                            {estados.map((estado) => {
-                                                return <option value={estado.id}>{estado.nome}</option>;
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <div>
-                                            <label className="inline-flex cursor-pointer">
-                                                <input checked={checkPcd} onChange={handleChangePcd} type="checkbox" className="form-checkbox" />
-                                                <span className="relative text-white-dark checked:bg-none">Vaga exclusiva (PCD)</span>
-                                            </label>
-                                        </div>
-                                        <label htmlFor="country">Selecione a deficiência</label>
-                                        <select disabled={!checkPcd} id="country" className="form-select text-white-dark" name="country" defaultValue="United States">
-                                            {pcd.map((pcd) => {
-                                                return <option value={pcd.id}>{pcd.nome}</option>;
-                                            })}
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label htmlFor="web">Pagamento Mensal Pessoa Jurídica</label>
-                                        <input id="web" type="text" placeholder="Ex. R$15.000,00" className="form-input" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="web">Pagamento Mensal Carteira Assinada</label>
-                                        <input id="web" type="text" placeholder="Ex. R$10.000,00" className="form-input" />
-                                    </div>
-                                    <div>
-                                        <label htmlFor="web">Pagamento Mensal BTC</label>
-                                        <input id="web" type="text" placeholder="Ex. 0,039฿ " className="form-input" />
-                                    </div>
-                                </>
-                            )}
-                        </div>
+                                            <div>
+                                                <label className="inline-flex cursor-pointer">
+                                                    <input {...register('homeoffice')} value={vagas?.homeoffice?.toString()} type="checkbox" className="form-checkbox" onChange={handleChangeHome} checked={checkHomeOffice} />
+                                                    <span className="relative text-white-dark checked:bg-none">Somente Home Office</span>
+                                                </label>
+                                            </div>
+                                            <label htmlFor="estado_id">Selecione a região da Vaga anunciada</label>
+                                            <select
+                                                {...register('estado_id')}
+                                                disabled={checkHomeOffice}
+                                                id="estado_id"
+                                                defaultValue={vagas?.estado_id?.toString()}
+                                                className="form-select text-white-dark"
+                                                name="estado_id"
+                                            >
+                                                {estados.map((estado) => {
+                                                    return <option key={estado.id} value={estado.nome}>{estado.nome}</option>;
+                                                })}
 
-                        <div className="mb-5">
-                            {activeTab4 === 3 && (
-                                <>
-                                    <div className="flex flex-col items-center justify-center sm:flex-row">
-                                        {customList('Obrigatórios', left, checked, handleToggle)}
-                                        <div className="mx-2 flex items-center sm:flex-col">
-                                            <button className="my-2 rounded border border-gray-300 px-4 py-2" onClick={handleCheckedRight} disabled={leftChecked.length === 0}>
-                                                {'>>'}
-                                            </button>
-                                            <button className="my-2 rounded border border-gray-300 px-4 py-2" onClick={handleCheckedLeft} disabled={rightChecked.length === 0}>
-                                                {'<<'}
-                                            </button>
-                                            <button className="btn btn-outline-danger my-2 rounded border px-4 py-2" onClick={handleDelete} disabled={checked.length === 0}>
-                                                {'Excluir'}
-                                            </button>
+                                            </select>
                                         </div>
-                                        {customList('Desejáveis', right, checked, handleToggle)}
+                                        <div>
+                                            <div>
+                                                <label className="inline-flex cursor-pointer">
+                                                    <input {...register('pcd')}  value={vagas?.pcd?.toString()} checked={checkPcd} onChange={handleChangePcd} type="checkbox" className="form-checkbox" />
+                                                    <span className="relative text-white-dark checked:bg-none">Vaga exclusiva (PCD)</span>
+                                                </label>
+                                            </div>
+                                            <label htmlFor="deficiencia_id">Selecione a deficiência</label>
+                                            <select
+                                                {...register('deficiencia_id')}
+                                                disabled={!checkPcd}
+                                                id="deficiencia_id"
+                                                defaultValue={vagas?.deficiencia_id?.toString()}
+                                                className="form-select text-white-dark"
+                                                name="deficiencia_id"
+                                            >
+                                                {deficiencia.map((pcd) => {
+                                                    return <option key={pcd.id} defaultValue={pcd.nome}>{pcd.nome}</option>;
+                                                })}
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="web">Pagamento Mensal Pessoa Jurídica</label>
+                                            <input {...register('pagamentopj')} defaultValue={vagas?.pagamentopj?.toString()} id="web" type="number" placeholder="Ex. R$15.000,00" className="form-input" />
+                                            {errors.pagamentopj && <p>{errors.pagamentopj.message}</p>}
+
+                                        </div>
+                                        <div>
+                                            <label htmlFor="web">Pagamento Mensal Carteira Assinada</label>
+                                            <input {...register('pagamentoclt')} defaultValue={vagas?.pagamentoclt?.toString()} id="web" type="number" placeholder="Ex. R$10.000,00" className="form-input" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="web">Pagamento Mensal BTC</label>
+                                            <input {...register('pagamentobtc')} defaultValue={vagas?.pagamentobtc?.toString()} id="web" type="number" placeholder="Ex. 0,039฿ " className="form-input" />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="mb-5">
+                                {activeTab4 === 3 && (
+                                    <>
                                         <div className="text-center">
                                             <label htmlFor="new-item">Adicionar Itens</label>
                                             <div className="mx-2 flex flex-row items-center">
                                                 <input id="new-item" type="text" placeholder="+ java" className="form-input" value={newItem} onChange={handleNewItemChange} />
-                                                <button className="btn btn-primary my-2 rounded border px-4 py-2" onClick={handleNewItemSubmit}>
+                                                <button type="button" className="btn btn-primary my-2 rounded border px-4 py-2" onClick={handleNewItemSubmit}>
                                                     {'Adicionar'}
                                                 </button>
                                             </div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                        <div className="mb-5">
-                            {activeTab4 === 4 && (
-                                <>
-                                    <div className="flex flex-col items-center justify-center sm:flex-row">
-                                        {customList('Obrigatórios', left, checked, handleToggle)}
-                                        <div className="mx-2 flex items-center sm:flex-col">
-                                            <button className="my-2 rounded border border-gray-300 px-4 py-2" onClick={handleCheckedRight} disabled={leftChecked.length === 0}>
-                                                {'>>'}
-                                            </button>
-                                            <button className="my-2 rounded border border-gray-300 px-4 py-2" onClick={handleCheckedLeft} disabled={rightChecked.length === 0}>
-                                                {'<<'}
-                                            </button>
-                                            <button className="btn btn-outline-danger my-2 rounded border px-4 py-2" onClick={handleDelete} disabled={checked.length === 0}>
-                                                {'Excluir'}
-                                            </button>
+                                        <div>
+                                            <div className="panel" style={{ maxHeight: '400px', overflow: 'auto' }}>
+                                                <div className="mb-5 text-lg font-semibold">Obrigatórios</div>
+                                                <div className="gap-x-12 sm:grid-cols-2">
+                                                    <ul id="obrigatorios-list">
+                                                        <ReactSortable
+                                                            list={obrigatorios}
+                                                            setList={setObrigatorios}
+                                                            animation={200}
+                                                            delay={1}
+                                                            ghostClass="gu-transit"
+                                                            group="shared"
+                                                            onAdd={(evt) => moverParaDesejaveis(evt.item)}
+                                                        >
+                                                            {obrigatorios.map((item) => {
+                                                                return (
+                                                                    <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                        <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                            <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                                <div className="my-3 font-semibold md:my-0">
+                                                                                    <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                                </div>
+                                                                                <div></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                );
+                                                            })}
+                                                        </ReactSortable>
+                                                    </ul>
+                                                </div>
+                                                <div className="panel">
+                                                    <div className="mb-5 text-lg font-semibold">Desejáveis</div>
+                                                    <div className="gap-x-12 sm:grid-cols-2">
+                                                        <ul id="desejaveis-list">
+                                                            <ReactSortable
+                                                                list={desejaveis}
+                                                                setList={setDesejaveis}
+                                                                animation={200}
+                                                                delay={1}
+                                                                ghostClass="gu-transit"
+                                                                group="shared"
+                                                                onAdd={(evt) => moverParaObrigatorios(evt.item)}
+                                                            >
+                                                                {desejaveis.map((item) => {
+                                                                    return (
+                                                                        <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                            <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                                <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                                    <div className="my-3 font-semibold md:my-0">
+                                                                                        <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                                    </div>
+                                                                                    <div></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    );
+                                                                })}
+                                                            </ReactSortable>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                        {customList('Desejáveis', right, checked, handleToggle)}
-                                    </div>
-                                </>
-                            )}
-                        </div>
+                                    </>
+                                )}
+                            </div>
+                            <div className="mb-5">
+                                {activeTab4 === 4 && (
+                                    <>
+                                        <div className="panel">
+                                            <div className="mb-5 text-lg font-semibold">Ordenar critérios candidatos</div>
+                                            <div className="gap-x-12 sm:grid-cols-2">
+                                                <ul id="example1">
+                                                    <ReactSortable list={sortable} setList={setSortable} animation={200} delay={2} ghostClass="gu-transit" group="shared">
+                                                        {sortable.map((item) => {
+                                                            return (
+                                                                <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                    <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                        <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                            <div className="my-3 font-semibold md:my-0">
+                                                                                <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                            </div>
+                                                                            <div></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            );
+                                                        })}
+                                                    </ReactSortable>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
 
-                        <div className="mb-5">
-                            {activeTab4 === 5 && (
-                                <>
-                                    <ComponentsTablesValorServico />
-                                </>
-                            )}
-                        </div>
-                    </div>
-                    <div className="flex justify-between">
-                        <button type="button" className={`btn btn-primary ${activeTab4 === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab4(activeTab4 > 1 ? activeTab4 - 1 : 1)}>
-                            Back
-                        </button>
-                        <button type="button" className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={() => setActiveTab4(activeTab4 < 5 ? activeTab4 + 1 : 5)}>
-                            {activeTab4 === 5 ? 'Finish' : 'Next'}
-                        </button>
+                            <div className="mb-5">
+                                {activeTab4 === 5 && (
+                                    <>
+                                        <ComponentsTablesValorServico />
+                                    </>
+                                )}
+                            </div>
+                            <div className="flex justify-between">
+                                <button type="button" className={`btn btn-primary ${activeTab4 === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab4(activeTab4 > 1 ? activeTab4 - 1 : 1)}>
+                                    Voltar
+                                </button>
+                                {activeTab4 < 5 ? (
+                                    <button type="button"  className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={nextStep}>
+                                        Avançar
+                                    </button>
+                                ) : null}
+                                {activeTab4 === 5 ? (
+                                    <button type="submit" className="btn btn-primary">
+                                        Editar Vaga
+                                    </button>
+                                ) : null}
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -327,4 +519,4 @@ const EditarVagaExiste = () => {
     );
 };
 
-export default EditarVagaExiste;
+export default EditarVagaExistente;

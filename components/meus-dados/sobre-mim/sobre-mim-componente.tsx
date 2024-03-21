@@ -54,7 +54,7 @@ export const SobreMimComponente = () => {
                                     </ul>
                                 </Dropdown>
                             </div>
-                            <ModalConfirmarExclusao label='Excluir' />
+                            {/* <ModalConfirmarExclusao>Excluir</ModalConfirmarExclusao> */}
 
                         </div>
                         <div className="flex flex-col sm:flex-row">

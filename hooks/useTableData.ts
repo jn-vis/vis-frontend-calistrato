@@ -1,9 +1,9 @@
 import { DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
-import usePagination from '@/components/hooks/usePagination';
-import useModalVerMais from '@/components/hooks/useModalVermais';
-import { deleteVagas, editarVagas } from '@/infra/service/vagas-service';
+import usePagination from '@/hooks/usePagination';
+import useModalVerMais from '@/hooks/useModalVermais';
+import { deleteVagas, editarVagas } from '@/services/vagas-service';
 import { useRouter } from 'next/navigation';
 
 export type FilterFunction<T> = (item: T, search: string) => boolean;
@@ -39,24 +39,11 @@ const useTableData = <T,>(fetchDataFunction: () => Promise<T[]>, filterFunction:
         try {
             await deleteVagas(id);
             fetchData();
-            setModalConfirmacao(true)
+            setModalConfirmacao(false)
         } catch (error) {
             console.error(error);
         }
     };
-
-    // const route = useRouter()
-
-    // const handleEditarVaga = async (id) => {
-    //     try {
-    //         await editarVagas(id);
-    //         route.push(`/meu-recrutamento/minhas-vagas`);
-    //         // fetchData();
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
 
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'id',

@@ -10,9 +10,12 @@ import IconCircleCheck from '@/components/icon/icon-circle-check';
 import formatDate from '@/utils/format-date';
 import ExportTableComponent from '@/components/shared/export-table-component';
 import { Vagas } from '../interfaces/vagas';
-import useTableData, { FilterFunction } from '../../hooks/useTableData';
-import getVagas from '@/infra/service/vagas-service';
+import useTableData, { FilterFunction } from '../../../hooks/useTableData';
+import getVagas from '@/services/vagas-service';
 import ModalConfirmarExclusao from '@/components/meus-dados/sobre-mim/modal-confirma-exclusao';
+import { useRouter } from 'next/dist/client/components/navigation';
+import { useState } from 'react';
+import Loading from '@/components/layouts/loading';
 
 const filterFunction: FilterFunction<Vagas> = (item, search) => {
     return (
@@ -46,15 +49,33 @@ const MinhasVagasLista = () => {
     } = useTableData<Vagas>(getVagas, filterFunction);
 
 
+    const router = useRouter();
+
+    const handleEdit = (id: number) => {
+        console.group('chamando')
+        router.push(`/meu-recrutamento/minhas-vagas/editar/${id}`)
+    }
+
+    const [loading, setLoading] = useState(false);
+
+    const handleClick = () => {
+        setLoading(true);
+    };
 
 
     return (
         <div className="panel mt-6">
             <div className="mb-4.5 flex flex-col justify-between gap-5 md:flex-row md:items-center">
-                <Link href="/meu-recrutamento/minhas-vagas/nova-vaga" type="button" className="btn btn-primary btn-sm m-1">
-                    <IconCircleCheck className="ltr:mr-2 rtl:ml-2" />
-                    Cadastrar Nova Vaga
+            {loading ? (
+                <Loading />
+            ) : (
+                <Link href="/meu-recrutamento/minhas-vagas/nova-vaga">
+                    <button type="button" className="btn btn-primary btn-sm m-1" onClick={handleClick}>
+                        <IconCircleCheck className="ltr:mr-2 rtl:ml-2" />
+                        Cadastrar Nova Vaga
+                    </button>
                 </Link>
+            )}
                 <div className="flex flex-wrap items-center">
                     <ExportTableComponent rowData={rowData} />
                     <input type="text" className="form-input w-auto" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -100,9 +121,9 @@ const MinhasVagasLista = () => {
                                         </Link>
                                     </Tippy>
                                     <Tippy content="Editar vaga" delay={[1000, 0]}>
-                                        <Link href="/meu-recrutamento/minhas-vagas/edita-vaga" className="flex hover:text-primary">
+                                    <div onClick={() => handleEdit(id)}  className="flex hover:text-primary">
                                             <IconPencil />
-                                        </Link>
+                                        </div>
                                     </Tippy>
                                     <Tippy content="Excluir Vaga" delay={[1000, 0]}>
                                         <ModalConfirmarExclusao

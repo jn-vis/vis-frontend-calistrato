@@ -5,7 +5,7 @@ import { SobreMimComponente } from './sobre-mim-componente';
 
 
 export const SobreMimTabs = () => {
-    const [tabs, setTabs] = useState<string>('home');
+    const [tabs, setTabs] = useState<string>('sobremim');
     const toggleTabs = (name: string) => {
         setTabs(name);
     };

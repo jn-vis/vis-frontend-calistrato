@@ -4,9 +4,9 @@ import { Fragment, useState } from 'react';
 
 type ModalConfirmarExclusaoProps = {
     children: React.ReactNode;
-    handleOpenModal: () => void;
-    onClickDelete: () => void;
-    modalConfirmacao: boolean;
+    handleOpenModal?: () => void;
+    onClickDelete?: () => void;
+    modalConfirmacao?: boolean;
     handleCloseModal: () => void;
 };
 
