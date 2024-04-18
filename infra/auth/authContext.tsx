@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AuthService } from './authService';
 import { IAuthContextData, IAuthProviderProps } from './interface';
-import { callBacks } from './callbacks';
+import { logoutEmail, postConfirmaEmail, postCredencias, postEmail, postPassword, postQuestions } from '@/services/login-service';
+import { EmailNaoExisteError } from '@/components/shared/errors/email-nao-existe-error';
+import { EmailNaoConfirmadoError } from '@/components/shared/errors/email-nao-confirmado.error';
+import { left } from '@/core/either';
+import { useRouter } from 'next/navigation';
 
 const LOCAL_STORAGE_KEY_ACCESS_TOKEN = 'sessionToken';
 
 export const AuthContext = React.createContext({} as IAuthContextData);
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<string | null>(null);
-    // const [userMail, setUserMail] = useState<string | null>(null);
-    const [accessToken, setAccessToken] = useState<string>();
+    const [emailUsuario, setEmailUsuario] = useState(null);
+    const [accessToken, setAccessToken] = useState<string | undefined>();
     const [modal, setModal] =
-        useState<'login' | 'confirmLogin' | 'register' | 'password' | 'registration' | null>(null);
+        useState<'login' | 'password'  | 'register' | 'confirmLogin' | 'registration' | null>(null);
+
 
     const openModal = (modalType) => {
         setModal(modalType);
@@ -19,94 +23,159 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-        const user = localStorage.getItem('user'); // Recupere o e-mail do usuário do localStorage
+        const user = localStorage.getItem('user');
 
         if (accessToken) {
-            setAccessToken(JSON.parse(accessToken));
+            try {
+                setAccessToken(JSON.parse(accessToken));
+            } catch (error) {
+                console.error('Error parsing access token:', error);
+            }
         } else {
             setAccessToken(undefined);
         }
 
         if (user) {
-            setUser(user);
+            try {
+                setUser(JSON.parse(user));
+            } catch (error) {
+                console.error('Error parsing user:', error);
+            }
         }
     }, []);
 
-    const handleLogin = async (email) => {
-        const responseStatus = await AuthService.headEmail(email);
-        const callback = (callBacks as { [key: number]: (setModal: any) => void })[responseStatus];
-        if (callback) {
-            callback(setModal);
-        } else {
-            setModal(null);
-        }
-        setUser(email)
-        // setUserMail(email)
-    };
+    const handleEmail = async (email: string) => {
+        const result = await postEmail(email);
 
-    const handleConfirmLogin = async (email) => {
-        try {
-            const responseStatus = await AuthService.confirmEmail(email);
-            const callback = (callBacks as { [key: number]: (setModal: any) => void })[responseStatus];
-            if (callback) {
-                callback(setModal);
+        if (result.isLeft()) {
+            const error = result.value as EmailNaoExisteError;
+            if (error.statusCode === 404) {
+                setModal('confirmLogin');
             } else {
                 setModal(null);
             }
-        } catch (error) {
-            console.error(`Ocorreu um erro ao confirmar o login: ${error}`);
+        } else {
+            const response = result.value;
+            if (response.status === 200) {
+                setEmailUsuario(email);
+                setModal('password');
+            }
         }
     };
 
+    const handleConfirmaEmail = async (email: string) => {
+        const result = await postConfirmaEmail(email);
 
-
-    const handleRegister = async (email, token, password, confirmPassword) => {
-        try {
-            const responseStatus = await AuthService.authRegister(email, token, password, confirmPassword);
-            const callback = (callBacks as { [key: number]: (setModal: any) => void })[responseStatus];
-            if (callback) {
-                callback(setModal);
+        if (result.isLeft()) {
+            const error = result.value as EmailNaoConfirmadoError;
+            if (error.statusCode === 409) {
+                return left(new EmailNaoConfirmadoError(error.message));
             } else {
                 setModal(null);
             }
-        } catch (error) {
-            console.error(`Ocorreu um erro ao registrar: ${error}`);
+        } else {
+            const response = result.value;
+            if (response.status === 200) {
+                setEmailUsuario(email);
+                setModal('register');
+            }
         }
     };
 
+    const handleRegister = async (token:string, password:string, confirmPassword:string)  => {
 
-    const handleRegistration = async (email, option, option1) => {
-        console.log('email aqui:', email)
-        const responseStatus = await AuthService.registration(email, option, option1);
-        const callback = (callBacks as { [key: number]: (setModal: any) => void })[responseStatus];
-        if (callback) {
-            callback(setModal);
+        const result = await postCredencias(emailUsuario, token, password, confirmPassword);
+
+        if (result.isLeft()) {
+            const error = result.value as EmailNaoConfirmadoError;
+            if (error.statusCode === 409) {
+                return left(new EmailNaoConfirmadoError(error.message));
+            } else {
+                setModal(null);
+            }
         } else {
-            setModal(null);
+            const response = result.value;
+            if (response.status === 200) {
+                setModal('registration');
+            }
         }
     };
 
-    const login = useCallback(async (email: any, password: string) => {
-        console.log('login', email, password);
-        const result = await AuthService.auth(email, password);
-        if (result instanceof Error) {
-            return result.message;
-        } else {
-            localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, JSON.stringify(result.sessionToken));
-            setAccessToken(result.sessionToken);
-            setModal(null);
-            localStorage.setItem('user', email);
-        }
+    const handleRegistration = async (option: any, option1: any)  => {
+        const result = await postQuestions(emailUsuario, option, option1);
 
-        setUser(email);
-    }, []);
+        if (result.isLeft()) {
+            const error = result.value as EmailNaoConfirmadoError;
+            if (error.statusCode === 409) {
+                return left(new EmailNaoConfirmadoError(error.message));
+            } else {
+                setModal(null);
+            }
+        } else {
+            const response = result.value;
+            if (response.status === 201) {
+
+                localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, JSON.stringify(response.data.accessToken));
+                if(!emailUsuario) {
+                    return left(new EmailNaoConfirmadoError('Email não informado'));
+                }
+                localStorage.setItem('user', JSON.stringify(emailUsuario));
+
+                setAccessToken(response.data.accessToken);
+                setUser(emailUsuario);
+
+                setModal(null);
+                return result;
+            }
+        }
+    };
+
+    const login = useCallback(async (password: string) => {
+        const result = await postPassword(emailUsuario, password);
+
+        if (result.isLeft()) {
+            const error = result.value as EmailNaoConfirmadoError;
+            if (error.statusCode === 409) {
+                return left(new EmailNaoConfirmadoError(error.message));
+            } else {
+                setModal(null);
+            }
+        } else {
+            const response = result.value;
+            if (response.status === 200) {
+
+                localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, JSON.stringify(response.data.accessToken));
+                if(!emailUsuario) {
+                    return left(new EmailNaoConfirmadoError('Email não informado'));
+                }
+                localStorage.setItem('user', emailUsuario);
+                setAccessToken(response.data.accessToken);
+                setUser(emailUsuario);
+
+                setModal(null);
+                return result;
+            }
+        }
+    }, [emailUsuario]);
+
+    const router = useRouter();
 
     const logout = useCallback(async (email: string) => {
-        await AuthService.logout(email);
-        localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-        setAccessToken(undefined);
-        setUser(null);
+        const result = await logoutEmail(email);
+        if (result.isRight()) {
+            const response = result.value;
+            if (response.status === 200) {
+                localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
+                localStorage.removeItem('user');
+                setAccessToken(undefined);
+                setUser(null);
+                router.push('/')
+            }
+        } else {
+            console.log('não foi removido')
+        }
     }, []);
+
 
 
     function closeModal() {
@@ -115,24 +184,24 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
     const isAuthenticated = useMemo(() => !!accessToken, [accessToken]);
 
+    const value = useMemo(() => ({
+        user,
+        emailUsuario,
+        login,
+        logout,
+        isAuthenticated,
+        openModal,
+        closeModal,
+        modal,
+        setModal,
+        handleEmail,
+        handleConfirmaEmail,
+        handleRegister,
+        handleRegistration
+    }), [user, isAuthenticated, modal]);
+
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                // userMail,
-                login,
-                logout,
-                isAuthenticated,
-                openModal,
-                closeModal,
-                modal,
-                setModal,
-                handleLogin,
-                handleConfirmLogin,
-                handleRegister,
-                handleRegistration
-            }}
-        >
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
