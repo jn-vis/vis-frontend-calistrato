@@ -1,10 +1,10 @@
 import React from 'react';
 import { useAuth } from '../../presentation/contexts/authContext';
-import { LoginModal } from './modal-login';
-import { ConfirmarLogin } from './modal-confirm-login';
-import { RegisterUser } from './modal-register';
-import { AuthPassword } from './modal-auth-password';
-import { RegistrationModal } from './modal-pre-registration';
+import { ModalPassword } from './modal-password';
+import { ModalExistsEmail } from './modal-exists-email';
+import { ModalConfirmEmail } from './modal-confirm-email';
+import { ModalSavePasswordToken } from './modal-save-password-token';
+import { ModalQuestionsAndAnswers } from './modal-questions-and-answers';
 
 
 export const AuthenticationManager= () => {
@@ -12,11 +12,12 @@ export const AuthenticationManager= () => {
     const {modal} = useAuth();
   return (
     <div>
-      {modal === 'login' && <LoginModal  />}
-      {modal === 'confirmLogin' && <ConfirmarLogin />}
-      {modal === 'register' && <RegisterUser />}
-      {modal === 'registration' && <RegistrationModal />}
-      {modal === 'password' && <AuthPassword />}
+      {modal === 'login' && <ModalExistsEmail  />}
+      {modal === 'confirmLogin' && <ModalConfirmEmail />}
+      {modal === 'register' && <ModalSavePasswordToken />}
+      {modal === 'registration' && <ModalQuestionsAndAnswers />}
+      {modal === 'password' && <ModalPassword />}
+
     </div>
   );
 }
