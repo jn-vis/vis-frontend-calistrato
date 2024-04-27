@@ -21,9 +21,7 @@ const ContentAnimation = ({ children }: { children: React.ReactNode }) => {
     }, [pathname]);
     return (
         <>
-            {/* BEGIN CONTENT AREA */}
             <div className={`${animation} animate__animated p-6`}>{children}</div>
-            {/* END CONTENT AREA */}
         </>
     );
 };
