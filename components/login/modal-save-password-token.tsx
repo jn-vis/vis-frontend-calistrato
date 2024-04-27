@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Modal from '../../presentation/components/modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
 import IconUser from '@/components/icon/icon-user';
+import IconLockDots from '../icon/icon-lock-dots';
 
 export const ModalSavePasswordToken = () => {
     const [password, setPassword] = useState('');
@@ -27,7 +28,7 @@ export const ModalSavePasswordToken = () => {
                     <input
                         value={token}
                         onChange={(event) => setToken(event.target.value)}
-                        type="text"
+                        type="password"
                         placeholder="Token Enviado por E-mail"
                         className="form-input ltr:pl-10 rtl:pr-10"
                         id="token"
@@ -35,7 +36,7 @@ export const ModalSavePasswordToken = () => {
                 </div>
                 <div className="relative mb-4">
                     <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
-                        <IconUser className="h-5 w-5" />
+                    <IconLockDots fill={true} />
                     </span>
                     <input
                         value={password}
@@ -48,7 +49,7 @@ export const ModalSavePasswordToken = () => {
                 </div>
                 <div className="relative mb-4">
                     <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
-                        <IconUser className="h-5 w-5" />
+                    <IconLockDots fill={true} />
                     </span>
                     <input
                         value={confirmPassword}
