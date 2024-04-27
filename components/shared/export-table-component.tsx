@@ -1,4 +1,4 @@
-import { exportTable } from "@/utils/export-table"
+import { exportTable } from "@/presentation/utils/export-table"
 import IconFile from "../icon/icon-file"
 import IconPrinter from "../icon/icon-printer"
 

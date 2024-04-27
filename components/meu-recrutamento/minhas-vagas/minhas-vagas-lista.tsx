@@ -7,7 +7,7 @@ import IconNotesEdit from '@/components/icon/icon-notes-edit';
 import IconPencil from '@/components/icon/icon-pencil';
 import VerMaisGeneric from './ver-mais-generic';
 import IconCircleCheck from '@/components/icon/icon-circle-check';
-import formatDate from '@/utils/format-date';
+import formatDate from '@/presentation/utils/format-date';
 import ExportTableComponent from '@/components/shared/export-table-component';
 import { Vagas } from '../interfaces/vagas';
 import useTableData, { FilterFunction } from '../../../hooks/useTableData';

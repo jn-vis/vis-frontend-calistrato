@@ -6,7 +6,7 @@ import React, { ReactNode, Suspense } from 'react';
 import { appWithI18Next } from 'ni18n';
 import { ni18nConfig } from 'ni18n.config.ts';
 import Loading from '@/components/layouts/loading';
-import { AuthProvider } from '../../infra/auth/authContext';
+import { AuthProvider } from '../../presentation/contexts/authContext';
 
 
 interface IProps {

@@ -1,12 +1,11 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { IAuthContextData, IAuthProviderProps } from './interface';
-import { logoutEmail, postConfirmaEmail, postCredencias, postEmail, postPassword, postQuestions } from '@/services/login-service';
-import { EmailNaoExisteError } from '@/components/shared/errors/email-nao-existe-error';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { IAuthContextData, IAuthProviderProps } from '../../infra/auth/interface';
 import { EmailNaoConfirmadoError } from '@/components/shared/errors/email-nao-confirmado.error';
 import { Either, left } from '@/core/either';
 import { useRouter } from 'next/navigation';
-import { createLoginToken, existsLoginToken, updatePassword, useExecuteLogin, useExecuteLogout, useSavePreRegistration, useUpdatePassword } from '../query-login';
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { createLoginToken,existsLoginToken } from '@/infra/api';
+import { useUpdatePassword, useSavePreRegistration,useExecuteLogin, useExecuteLogout } from '@/infra/hooks';
 
 const LOCAL_STORAGE_KEY_ACCESS_TOKEN = 'sessionToken';
 

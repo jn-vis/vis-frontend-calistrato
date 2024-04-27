@@ -1,6 +1,6 @@
 import IconUser from '@/components/icon/icon-user';
 import { useState } from 'react';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 import { GenericModal } from './modal-generics';
 
 type ConfirmLoginFormProps = {
@@ -33,11 +33,11 @@ export const ConfirmLoginForm = ({ onSubmit }: ConfirmLoginFormProps) => {
   };
 
   export const ConfirmarLogin = () => {
-    const {handleConfirmLogin, setModal, modal} = useAuth();
+    const {handleConfirmaEmail,setModal, modal} = useAuth();
 
     return (
       <GenericModal isOpen={modal === 'confirmLogin'} onClose={() => setModal(null)} title="Confirmar Login" infoModalLogin={"Trocar o e-mail"}>
-        <ConfirmLoginForm onSubmit={handleConfirmLogin} />
+        <ConfirmLoginForm onSubmit={handleConfirmaEmail} />
       </GenericModal>
     );
   };

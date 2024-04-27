@@ -1,6 +1,6 @@
 import {  useState } from 'react';
 import Select from 'react-select';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 import { GenericModal } from './modal-generics';
 
 
@@ -64,7 +64,7 @@ export const RegistrationModal = () => {
 
     return (
       <GenericModal isOpen={modal === 'registration'} onClose={() => setModal(null)} title="Perguntas para te conhecer">
-        <RegistrationForm onSubmit={(option1, option2) => handleRegistration(user, option1, option2)} />
+        <RegistrationForm onSubmit={(option1, option2) => handleRegistration(option1, option2)} />
       </GenericModal>
     );
 };

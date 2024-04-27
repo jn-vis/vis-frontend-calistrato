@@ -15,6 +15,7 @@ import { postVagas } from '@/services/vagas-service';
 import { useRouter } from 'next/navigation';
 import { getEstados } from '@/services/estados-service';
 import { getDeficiencia } from '@/services/pcd-service';
+import IconTrashLines from '@/components/icon/icon-trash-lines';
 
 interface Estados {
     id: string;
@@ -25,7 +26,6 @@ interface Deficiencia {
     id: string;
     nome: string;
 }
-
 
 const schema = z.object({
     vaga: z.string().min(5, 'Vaga deve ter no mínimo 5 caracteres'),
@@ -38,7 +38,7 @@ const schema = z.object({
     estado_id: z.string().nullable().optional(),
     pcd: z.boolean(),
     deficiencia_id: z.string().nullable().optional(),
-    contato: z.string().nullable()
+    contato: z.string().nullable(),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -54,8 +54,6 @@ const CadastrarNovaVaga = () => {
     const handleChangePcd = () => {
         setCheckPcd(!checkPcd);
     };
-
-
 
     const items = [
         {
@@ -90,26 +88,32 @@ const CadastrarNovaVaga = () => {
 
     const [sortable, setSortable] = useState(items);
 
-    const itemsObrigatorios = [
-        {
-            id: 1,
-            text: 'Node',
-        },
-    ];
+    const techJobsnow = [
+        'Node',
+        'JavaScript',
+        'React',
+        'Java',
+        'Spring',
+        'Python',
+        'Django',
+        'Flask',
+        'Ruby',
+        'Rails',
+        'PHP',
+        'Laravel',
+        'C#',
+        '.NET',
+        'Angular',
+        'Vue',
+        'TypeScript',
+        'Swift',
+        'Kotlin',
+        'Docker'
+      ];
+    localStorage.setItem('techKeywords', JSON.stringify(techJobsnow));
 
-    const itemsDesejaveis = [
-        {
-            id: 4,
-            text: 'Java',
-        },
-        {
-            id: 5,
-            text: 'Spring',
-        },
-    ];
-
-    const [obrigatorios, setObrigatorios] = useState(itemsObrigatorios);
-    const [desejaveis, setDesejaveis] = useState(itemsDesejaveis);
+    const [obrigatorios, setObrigatorios] = useState<any[]>([]);
+    const [desejaveis, setDesejaveis] = useState<any[]>([]);
 
     const moverParaDesejaveis = (item) => {
         setObrigatorios((prev) => prev.filter((i) => i.id !== item.id));
@@ -137,17 +141,25 @@ const CadastrarNovaVaga = () => {
         setNewItem('');
     };
 
-    const router = useRouter()
+    function removerDaListaObrigatorios(id) {
+        setObrigatorios(obrigatorios.filter(item => item.id !== id));
+    }
+
+    function removerDaListaDesejaveis(id) {
+        setDesejaveis(desejaveis.filter(item => item.id !== id));
+    }
+
+
+    const router = useRouter();
 
     const {
         register,
         handleSubmit,
-        formState:{
-            errors
-        },
+        getValues,
+        formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(schema),
-        mode: 'onChange'
+        mode: 'onChange',
     });
 
     const onSubmit = async (data: FormData) => {
@@ -169,37 +181,71 @@ const CadastrarNovaVaga = () => {
 
     const [deficiencia, setDeficiencia] = useState<Deficiencia[]>([]);
 
-      const getEstadosTeste = async () => {
+    const getEstadosTeste = async () => {
         try {
-          const response = await getEstados();
-          setEstados(response);
+            const response = await getEstados();
+            setEstados(response);
         } catch (error) {
-          console.error('Erro ao buscar estados:', error);
+            console.error('Erro ao buscar estados:', error);
         }
-      }
+    };
 
-      const getDeficienciaTeste = async () => {
+    const getDeficienciaTeste = async () => {
         try {
-          const response = await getDeficiencia();
-          setDeficiencia(response);
+            const response = await getDeficiencia();
+            setDeficiencia(response);
         } catch (error) {
-          console.error('Erro ao buscar pcds:', error);
+            console.error('Erro ao buscar pcds:', error);
         }
-      }
+    };
 
-      useEffect(() => {
-        getEstadosTeste()
-        getDeficienciaTeste()
-      }, []);
+    useEffect(() => {
+        getEstadosTeste();
+        getDeficienciaTeste();
+    }, []);
 
+    const nextStep = async () => {
+        if (activeTab4 === 1) {
+            const obtemValorDaDescricao = getValues('descricao');
+            const descricaoSemPontuacao = obtemValorDaDescricao.replace(/[.,]/g, '');
+            const descricaoEmPalavrasIndividuais = descricaoSemPontuacao.split(' ');
+            const palavrasDescricaoMinusculasESemAcentos = descricaoEmPalavrasIndividuais.map((word) =>
+                word
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase()
+            );
 
-      const nextStep = async () => {
-            setActiveTab4(activeTab4 + 1);
+            let obtemPalavrasChaveLocalStorage: string[] | null = JSON.parse(localStorage.getItem('techKeywords') || '[]');
+
+            const palavrasChavesMinusculasESemAcentos = obtemPalavrasChaveLocalStorage?.map((keyword) =>
+                keyword
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase()
+            );
+
+            const filtraPalavrasChaves = palavrasDescricaoMinusculasESemAcentos.filter((word) => palavrasChavesMinusculasESemAcentos?.includes(word));
+            const removeDuplicatasERetornaArray = Array.from(new Set(filtraPalavrasChaves));
+            const desejaveisUpdated = removeDuplicatasERetornaArray.map((keyword, index) => ({ id: index + 1, text: keyword }));
+            setDesejaveis(desejaveisUpdated);
+        }
+
+        setActiveTab4(activeTab4 + 1);
     };
 
     const today = new Date();
     const date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
+    const widthMap = {
+        1: 'w-[10%]',
+        2: 'w-[30%]',
+        3: 'w-[50%]',
+        4: 'w-[70%]',
+        default: 'w-[90%]'
+      };
+
+      const width = widthMap[activeTab4 as keyof typeof widthMap] || widthMap.default;
 
     return (
         <PanelCodeHighlight title="Cadastro de vaga">
@@ -207,9 +253,7 @@ const CadastrarNovaVaga = () => {
                 <div className="inline-block w-full">
                     <div className="relative z-[1] overflow-x-auto">
                         <div
-                            className={`${activeTab4 === 1 ? 'w-[10%]' : activeTab4 === 2 ? 'w-[30%]' : activeTab4 === 3 ? 'w-[50%]' : activeTab4 === 4 ? 'w-[70%]' : 'w-[90%]'}
-
-                                        absolute top-[30px] -z-[1] m-auto h-1 w-[15%] bg-primary transition-[width] ltr:left-0 rtl:right-0`}
+                            className={`${width} absolute top-[30px] -z-[1] m-auto h-1 w-[15%] bg-primary transition-[width] ltr:left-0 rtl:right-0`}
                         ></div>
                         <ul className="mb-5 grid min-w-[500px] grid-cols-5">
                             <li className="mx-auto flex flex-col items-center">
@@ -274,8 +318,8 @@ const CadastrarNovaVaga = () => {
                             <div className="mb-5">
                                 {activeTab4 === 1 && (
                                     <>
-                                          <div className="mt-2">
-                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
+                                        <div className="mt-2">
+                                            <label htmlFor="vaga" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
                                             <input
                                                 {...register('vaga')}
                                                 type="text"
@@ -285,10 +329,10 @@ const CadastrarNovaVaga = () => {
                                                 placeholder="vaga.example"
                                                 required
                                             />
-                                            {errors.vaga && <p className='text-red-500 mt-1'>{errors.vaga.message}</p>}
+                                            {errors.vaga && <p className="mt-1 text-red-500">{errors.vaga.message}</p>}
                                         </div>
                                         <div className="mt-2">
-                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
+                                            <label  htmlFor="datelimite" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
                                             <input
                                                 {...register('datelimite')}
                                                 type="date"
@@ -301,7 +345,7 @@ const CadastrarNovaVaga = () => {
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
+                                            <label  htmlFor="contato" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
                                             <input
                                                 {...register('contato')}
                                                 type="number"
@@ -313,7 +357,7 @@ const CadastrarNovaVaga = () => {
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
+                                            <label  htmlFor="descricao" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
                                             <textarea
                                                 {...register('descricao')}
                                                 name="descricao"
@@ -322,7 +366,7 @@ const CadastrarNovaVaga = () => {
                                                 placeholder="name@company.com"
                                                 required
                                             />
-                                             {errors.descricao && <p className='text-red-500 mt-1'>{errors.descricao.message}</p>}
+                                            {errors.descricao && <p className="mt-1 text-red-500">{errors.descricao.message}</p>}
                                         </div>
                                     </>
                                 )}
@@ -331,59 +375,53 @@ const CadastrarNovaVaga = () => {
                             <div className="mb-5">
                                 {activeTab4 === 2 && (
                                     <div>
-                                        <div>
-                                            <div>
+                                         <div className="mb-5">
+                                            <div className="mb-5">
                                                 <label className="inline-flex cursor-pointer">
                                                     <input {...register('homeoffice')} type="checkbox" className="form-checkbox" onChange={handleChangeHome} checked={checkHomeOffice} />
                                                     <span className="relative text-white-dark checked:bg-none">Somente Home Office</span>
                                                 </label>
                                             </div>
                                             <label htmlFor="estado_id">Selecione a região da Vaga anunciada</label>
-                                            <select
-                                                {...register('estado_id')}
-                                                disabled={checkHomeOffice}
-                                                id="estado_id"
-                                                className="form-select text-white-dark"
-                                                name="estado_id"
-                                            >
+                                            <select {...register('estado_id')} disabled={checkHomeOffice} id="estado_id" className="form-select text-white-dark" name="estado_id">
                                                 {estados.map((estado) => {
-                                                    return <option key={estado.id} value={estado.nome}>{estado.nome}</option>;
+                                                    return (
+                                                        <option key={estado.id} value={estado.nome}>
+                                                            {estado.nome}
+                                                        </option>
+                                                    );
                                                 })}
-
                                             </select>
                                         </div>
-                                        <div>
-                                            <div>
+                                        <div className="mb-5">
+                                           <div className="mb-5">
                                                 <label className="inline-flex cursor-pointer">
                                                     <input {...register('pcd')} checked={checkPcd} onChange={handleChangePcd} type="checkbox" className="form-checkbox" />
                                                     <span className="relative text-white-dark checked:bg-none">Vaga exclusiva (PCD)</span>
                                                 </label>
                                             </div>
                                             <label htmlFor="deficiencia_id">Selecione a deficiência</label>
-                                            <select
-                                                {...register('deficiencia_id')}
-                                                disabled={!checkPcd}
-                                                id="deficiencia_id"
-                                                className="form-select text-white-dark"
-                                                name="deficiencia_id"
-                                            >
+                                            <select {...register('deficiencia_id')} disabled={!checkPcd} id="deficiencia_id" className="form-select text-white-dark" name="deficiencia_id">
                                                 {deficiencia.map((pcd) => {
-                                                    return <option key={pcd.id} value={pcd.nome}>{pcd.nome}</option>;
+                                                    return (
+                                                        <option key={pcd.id} value={pcd.nome}>
+                                                            {pcd.nome}
+                                                        </option>
+                                                    );
                                                 })}
                                             </select>
                                         </div>
-                                        <div>
-                                            <label htmlFor="web">Pagamento Mensal Pessoa Jurídica</label>
+                                        <div className="mb-5">
+                                            <label htmlFor="web">Pretensão PJ</label>
                                             <input {...register('pagamentopj')} id="web" type="number" placeholder="Ex. R$15.000,00" className="form-input" />
                                             {errors.pagamentopj && <p>{errors.pagamentopj.message}</p>}
-
                                         </div>
-                                        <div>
-                                            <label htmlFor="web">Pagamento Mensal Carteira Assinada</label>
+                                        <div className="mb-5">
+                                            <label htmlFor="web">Pretensão CLT</label>
                                             <input {...register('pagamentoclt')} id="web" type="number" placeholder="Ex. R$10.000,00" className="form-input" />
                                         </div>
-                                        <div>
-                                            <label htmlFor="web">Pagamento Mensal BTC</label>
+                                        <div className="mb-5">
+                                            <label htmlFor="web">Pretensão BTC</label>
                                             <input {...register('pagamentobtc')} id="web" type="number" placeholder="Ex. 0,039฿ " className="form-input" />
                                         </div>
                                     </div>
@@ -394,7 +432,7 @@ const CadastrarNovaVaga = () => {
                                 {activeTab4 === 3 && (
                                     <>
                                         <div className="text-center">
-                                            <label htmlFor="new-item">Adicionar Itens</label>
+                                            <label htmlFor="new-item">Insira uma Tecnologia que não está na lista e que gostaria que entrasse</label>
                                             <div className="mx-2 flex flex-row items-center">
                                                 <input id="new-item" type="text" placeholder="+ java" className="form-input" value={newItem} onChange={handleNewItemChange} />
                                                 <button type="button" className="btn btn-primary my-2 rounded border px-4 py-2" onClick={handleNewItemSubmit}>
@@ -403,65 +441,90 @@ const CadastrarNovaVaga = () => {
                                             </div>
                                         </div>
                                         <div>
-                                            <div className="panel" style={{ maxHeight: '400px', overflow: 'auto' }}>
-                                                <div className="mb-5 text-lg font-semibold">Obrigatórios</div>
-                                                <div className="gap-x-12 sm:grid-cols-2">
-                                                    <ul id="obrigatorios-list">
-                                                        <ReactSortable
-                                                            list={obrigatorios}
-                                                            setList={setObrigatorios}
-                                                            animation={200}
-                                                            delay={1}
-                                                            ghostClass="gu-transit"
-                                                            group="shared"
-                                                            onAdd={(evt) => moverParaDesejaveis(evt.item)}
-                                                        >
-                                                            {obrigatorios.map((item) => {
-                                                                return (
-                                                                    <li key={item.id} className="mb-2.5 cursor-grab">
-                                                                        <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
-                                                                            <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                            <div className="panel" style={{ maxHeight: '1000px', overflow: 'auto' }}>
+                                                <div>
+                                                    <div className="mb-5 text-lg font-semibold">Obrigatórios</div>
+                                                    <div className="panel mb-3" style={{ maxHeight: '400px', overflow: 'auto', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}>
+                                                        <div className="gap-x-12 sm:grid-cols-2">
+                                                            <ul id="obrigatorios-list">
+                                                                <ReactSortable
+                                                                    list={obrigatorios}
+                                                                    setList={setObrigatorios}
+                                                                    animation={200}
+                                                                    delay={1}
+                                                                    ghostClass="gu-transit"
+                                                                    group="shared"
+                                                                    onAdd={(evt) => moverParaDesejaveis(evt.item)}
+                                                                >
+                                                                    {obrigatorios.length > 0 ? (
+                                                                        obrigatorios.map((item) => {
+                                                                            return (
+                                                                                <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                                    <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                                        <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                                            <div className="my-3 font-semibold md:my-0">
+                                                                                                <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                                            </div>
+                                                                                            <div>
+                                                                                                <button onClick={() => removerDaListaObrigatorios(item.id)}>
+                                                                                                   <IconTrashLines />
+                                                                                                </button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </li>
+                                                                            );
+                                                                        })
+                                                                    ) : (
+                                                                        <li className="mb-2.5 cursor-grab">
+                                                                            <div className="flex items-center justify-center md:flex-row">
                                                                                 <div className="my-3 font-semibold md:my-0">
-                                                                                    <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                                    <div className="text-base text-dark dark:text-[#bfc9d4] ">Arraste e solte aqui para adicionar.</div>
                                                                                 </div>
                                                                                 <div></div>
                                                                             </div>
-                                                                        </div>
-                                                                    </li>
-                                                                );
-                                                            })}
-                                                        </ReactSortable>
-                                                    </ul>
-                                                </div>
-                                                <div className="panel">
-                                                    <div className="mb-5 text-lg font-semibold">Desejáveis</div>
-                                                    <div className="gap-x-12 sm:grid-cols-2">
-                                                        <ul id="desejaveis-list">
-                                                            <ReactSortable
-                                                                list={desejaveis}
-                                                                setList={setDesejaveis}
-                                                                animation={200}
-                                                                delay={1}
-                                                                ghostClass="gu-transit"
-                                                                group="shared"
-                                                                onAdd={(evt) => moverParaObrigatorios(evt.item)}
-                                                            >
-                                                                {desejaveis.map((item) => {
-                                                                    return (
-                                                                        <li key={item.id} className="mb-2.5 cursor-grab">
-                                                                            <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
-                                                                                <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
-                                                                                    <div className="my-3 font-semibold md:my-0">
-                                                                                        <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
-                                                                                    </div>
-                                                                                    <div></div>
-                                                                                </div>
-                                                                            </div>
                                                                         </li>
-                                                                    );
-                                                                })}
-                                                            </ReactSortable>
-                                                        </ul>
+                                                                    )}
+                                                                </ReactSortable>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="mb-5 text-lg font-semibold">Desejáveis</div>
+                                                    <div className="panel" style={{ maxHeight: '400px', overflow: 'auto', boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)' }}>
+                                                        <div className="gap-x-12 sm:grid-cols-2">
+                                                            <ul id="desejaveis-list">
+                                                                <ReactSortable
+                                                                    list={desejaveis}
+                                                                    setList={setDesejaveis}
+                                                                    animation={200}
+                                                                    delay={1}
+                                                                    ghostClass="gu-transit"
+                                                                    group="shared"
+                                                                    onAdd={(evt) => moverParaObrigatorios(evt.item)}
+                                                                >
+                                                                    {desejaveis.map((item) => {
+                                                                        return (
+                                                                            <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                                <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                                    <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                                        <div className="my-3 font-semibold md:my-0">
+                                                                                            <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                                <button onClick={() => removerDaListaDesejaveis(item.id)}>
+                                                                                                   <IconTrashLines />
+                                                                                                </button>
+                                                                                            </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        );
+                                                                    })}
+                                                                </ReactSortable>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -471,7 +534,6 @@ const CadastrarNovaVaga = () => {
                             </div>
                             <div className="mb-5">
                                 {activeTab4 === 4 && (
-                                    <>
                                         <div className="panel">
                                             <div className="mb-5 text-lg font-semibold">Ordenar critérios candidatos</div>
                                             <div className="gap-x-12 sm:grid-cols-2">
@@ -495,23 +557,18 @@ const CadastrarNovaVaga = () => {
                                                 </ul>
                                             </div>
                                         </div>
-                                    </>
                                 )}
                             </div>
 
                             <div className="mb-5">
-                                {activeTab4 === 5 && (
-                                    <>
-                                        <ComponentsTablesValorServico />
-                                    </>
-                                )}
+                                {activeTab4 === 5 && (<ComponentsTablesValorServico />)}
                             </div>
                             <div className="flex justify-between">
                                 <button type="button" className={`btn btn-primary ${activeTab4 === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab4(activeTab4 > 1 ? activeTab4 - 1 : 1)}>
                                     Voltar
                                 </button>
                                 {activeTab4 < 5 ? (
-                                    <button type="button"  className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={nextStep}>
+                                    <button type="button" className="btn btn-primary ltr:ml-auto rtl:mr-auto" onClick={nextStep}>
                                         Avançar
                                     </button>
                                 ) : null}

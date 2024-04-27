@@ -1,17 +1,18 @@
 import IconUser from '@/components/icon/icon-user';
 import { useState } from 'react';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 import { GenericModal } from './modal-generics';
 
 export const RegisterUser = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [token, setToken] = useState('');
-    const {handleRegister, setModal, modal,user} = useAuth();
+    const {handleRegister, setModal, modal} = useAuth();
+
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleRegister(password, confirmPassword, token, user);
+        handleRegister(token, password, confirmPassword);
     };
 
     return (
@@ -31,7 +32,7 @@ export const RegisterUser = () => {
                         type="text"
                         placeholder="Token Enviado por E-mail"
                         className="form-input ltr:pl-10 rtl:pr-10"
-                        id="login_password"
+                        id="token"
                     />
                 </div>
                 <div className="relative mb-4">
@@ -44,7 +45,7 @@ export const RegisterUser = () => {
                         type="password"
                         placeholder="Digite sua Senha"
                         className="form-input ltr:pl-10 rtl:pr-10"
-                        id="login_password"
+                        id="password"
                     />
                 </div>
                 <div className="relative mb-4">

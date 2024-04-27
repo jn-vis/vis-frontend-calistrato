@@ -18,7 +18,7 @@ import IconCaretDown from '@/components/icon/icon-caret-down';
 import IconMenuPages from '@/components/icon/menu/icon-menu-pages';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 
 const Header = () => {
     const pathname = usePathname();
@@ -73,7 +73,7 @@ const Header = () => {
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            {/* <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/logo.svg" alt="logo" /> */}
+                            {/* <img className="inline w-8 ltr:-ml-1 rtl:-mr-1" src="/assets/images/JN.png" alt="logo" /> */}
                             <span className="hidden align-middle text-2xl  font-semibold  transition-all duration-300 dark:text-white-light md:inline ltr:ml-1.5 rtl:mr-1.5">JOBSNOW</span>
                         </Link>
                         <button

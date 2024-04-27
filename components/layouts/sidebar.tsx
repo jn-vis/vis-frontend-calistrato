@@ -14,7 +14,7 @@ import IconMenuAuthentication from '@/components/icon/menu/icon-menu-authenticat
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
 import { AuthenticationManager } from '../login';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 
 
 const Sidebar = () => {

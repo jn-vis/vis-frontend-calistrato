@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '../../infra/auth/authContext';
+import { useAuth } from '../../presentation/contexts/authContext';
 import { LoginModal } from './modal-login';
 import { ConfirmarLogin } from './modal-confirm-login';
 import { RegisterUser } from './modal-register';
