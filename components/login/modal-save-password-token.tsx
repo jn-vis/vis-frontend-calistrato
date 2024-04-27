@@ -1,9 +1,10 @@
-import IconUser from '@/components/icon/icon-user';
+'use client';
 import { useState } from 'react';
-import { useAuth } from '../../presentation/contexts/authContext';
-import { GenericModal } from './modal-generics';
+import Modal from '../../presentation/components/modal-composition';
+import { useAuth } from '@/presentation/contexts/authContext';
+import IconUser from '@/components/icon/icon-user';
 
-export const RegisterUser = () => {
+export const ModalSavePasswordToken = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [token, setToken] = useState('');
@@ -16,11 +17,8 @@ export const RegisterUser = () => {
     };
 
     return (
-        <GenericModal
-            isOpen={modal === 'register'}
-            onClose={() => setModal(null)}
-            title="Register"
-        >
+        <>
+            <Modal isOpen={modal === 'register'} onClose={() => setModal(null)} title="Informe o token enviado por e-mail e crie uma senha">
             <form onSubmit={handleSubmit}>
                 <div className="relative mb-4">
                     <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
@@ -73,6 +71,7 @@ export const RegisterUser = () => {
                     </button>
                 </p>
             </div>
-        </GenericModal>
+            </Modal>
+        </>
     );
 };
