@@ -1,8 +1,9 @@
 'use client';
 import IconHome from '@/components/icon/icon-home';
 import React, { useState } from 'react';
-import MinhasVagasLista from './minhas-vagas-lista';
 import MinhasVagasEncerradas from './encerradas/minhas-vagas-encerradas';
+import MinhasVagasLista from './minhas-vagas-list';
+
 
 export const MinhasVagasTabs = () => {
     const [tabs, setTabs] = useState<string>('home');

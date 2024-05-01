@@ -201,7 +201,7 @@ const Header = () => {
                                 btnClassName="relative group block"
                                 button={
                                     <>
-                                        <img className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100 lg:hidden" src="/assets/images/auth/login.svg" />
+                                        {/* <img className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100 lg:hidden" src="/assets/images/auth/login.svg" /> */}
                                         <div className="flex flex-row gap-2 rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60">
                                             <h4 className="hidden lg:block">{user}</h4>
                                         </div>

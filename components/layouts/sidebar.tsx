@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { toggleSidebar } from '@/store/themeConfigSlice';
 import AnimateHeight from 'react-animate-height';
 import { IRootState } from '@/store';
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import IconCaretsDown from '@/components/icon/icon-carets-down';
 import IconCaretDown from '@/components/icon/icon-caret-down';
 import IconMenuUsers from '@/components/icon/menu/icon-menu-users';
@@ -15,7 +15,6 @@ import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
 import { AuthenticationManager } from '../login';
 import { useAuth } from '../../presentation/contexts/authContext';
-
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -30,7 +29,7 @@ const Sidebar = () => {
         });
     };
 
-    const { openModal} = useAuth();
+    const { isAuthenticated, openModal } = useAuth();
 
     useEffect(() => {
         const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
@@ -75,12 +74,12 @@ const Sidebar = () => {
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
                             {/* <img className="ml-[5px] w-8 flex-none" src="/assets/images/logo.svg" alt="logo" /> */}
-                            <span className="align-middle text-2xl font-semibold ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light lg:inline">JOBSNOW</span>
+                            <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">JOBSNOW</span>
                         </Link>
 
                         <button
                             type="button"
-                            className="collapse-icon flex h-8 w-8 items-center rounded-full transition duration-300 hover:bg-gray-500/10 rtl:rotate-180 dark:text-white-light dark:hover:bg-dark-light/10"
+                            className="collapse-icon flex h-8 w-8 items-center rounded-full transition duration-300 hover:bg-gray-500/10 dark:text-white-light dark:hover:bg-dark-light/10 rtl:rotate-180"
                             onClick={() => dispatch(toggleSidebar())}
                         >
                             <IconCaretsDown className="m-auto rotate-90" />
@@ -88,12 +87,11 @@ const Sidebar = () => {
                     </div>
                     <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
-
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'users' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('users')}>
                                     <div className="flex items-center">
                                         <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('My Data')}</span>
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('My Data')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'users' ? '-rotate-90 rtl:rotate-90' : ''}>
@@ -123,7 +121,7 @@ const Sidebar = () => {
                                 <button type="button" className={`${currentMenu === 'page' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('page')}>
                                     <div className="flex items-center">
                                         <IconMenuPages className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Ninjas')}</span>
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Ninjas')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'page' ? '-rotate-90 rtl:rotate-90' : ''}>
@@ -137,14 +135,10 @@ const Sidebar = () => {
                                             <Link href="/maintenence">{t('Seja um Ninja')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/maintenence">
-                                                {t('Contrate um Ninja')}
-                                            </Link>
+                                            <Link href="/maintenence">{t('Contrate um Ninja')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/maintenence">
-                                                {t('Conflitos')}
-                                            </Link>
+                                            <Link href="/maintenence">{t('Conflitos')}</Link>
                                         </li>
                                     </ul>
                                 </AnimateHeight>
@@ -154,7 +148,7 @@ const Sidebar = () => {
                                 <button type="button" className={`${currentMenu === 'auth' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('auth')}>
                                     <div className="flex items-center">
                                         <IconMenuAuthentication className="shrink-0 group-hover:!text-primary" />
-                                        <span className="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">{t('Meu Recrutamento')}</span>
+                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">{t('Meu Recrutamento')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'auth' ? '-rotate-90 rtl:rotate-90' : ''}>
@@ -165,19 +159,13 @@ const Sidebar = () => {
                                 <AnimateHeight duration={300} height={currentMenu === 'auth' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <Link href="/maintenence">
-                                                {t('Buscar currículos')}
-                                            </Link>
+                                            <Link href="/maintenence">{t('Buscar currículos')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/meu-recrutamento/curriculos-visualizados">
-                                                {t('Cvs visualizados')}
-                                            </Link>
+                                            <Link href="/meu-recrutamento/curriculos-visualizados">{t('Cvs visualizados')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/maintenence">
-                                                {t('Comentários')}
-                                            </Link>
+                                            <Link href="/maintenence">{t('Comentários')}</Link>
                                         </li>
                                         <li>
                                             <Link href="/meu-recrutamento/minhas-vagas">{t('Minhas vagas')}</Link>
@@ -188,17 +176,28 @@ const Sidebar = () => {
                         </ul>
                         <div className="flex flex-col items-center justify-center">
                             <div className="m-3 w-full max-w-md rounded p-4">
-                                <div className='w-full'>
-                                <button onClick={() => openModal('login')} className="btn btn-primary mb-3 w-full">Ganhe Dinheiro Conosco</button>
+                                <div className="w-full">
+                                    <button
+                                        onClick={() => {
+                                            if (!isAuthenticated) {
+                                                openModal('login');
+                                                return;
+                                            }
+                                            //acesso o menu, se o usuário estiver logado
+                                        }}
+                                        className="btn btn-primary mb-3 w-full"
+                                    >
+                                        Ganhe Dinheiro Conosco
+                                    </button>
                                 </div>
-                                <div className='w-full'>
-                                <button onClick={() => openModal('login')} className="btn btn-secondary mb-3 w-full">Ganhe Indicando</button>
+                                <div className="w-full">
+                                    <button className="btn btn-secondary mb-3 w-full">Ganhe Indicando</button>
                                 </div>
-                                <div className='w-full'>
-                                <button onClick={() => openModal('login')} className="btn btn-info mb-3 w-full">Seja nosso sócio</button>
+                                <div className="w-full">
+                                    <button className="btn btn-info mb-3 w-full">Seja nosso sócio</button>
                                 </div>
-                                <div className='w-full'>
-                                <button onClick={() => openModal('login')} className="btn btn-warning w-full">Skills que mais pagam</button>
+                                <div className="w-full">
+                                    <button className="btn btn-warning w-full">Skills que mais pagam</button>
                                 </div>
                             </div>
                         </div>

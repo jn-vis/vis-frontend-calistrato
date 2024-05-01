@@ -343,7 +343,7 @@ const MeusCurriculosLista = () => {
                                     </Tippy>
 
                                     <Tippy content="Visualizar" delay={[1000, 0]}>
-                                        <Link href="" className="flex hover:text-primary">
+                                        <Link href={`/meu-recrutamento/minhas-vagas/curriculo/preview-candidato`} className="flex hover:text-primary">
                                             <IconEye />
                                         </Link>
                                     </Tippy>

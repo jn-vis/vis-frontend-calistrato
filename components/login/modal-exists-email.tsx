@@ -18,8 +18,7 @@ export const ModalExistsEmail = () => {
     };
 
     return (
-        <>
-            <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">
+        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <div className="relative">
@@ -39,6 +38,5 @@ export const ModalExistsEmail = () => {
                     <p className="cursor-pointer text-center text-sm text-white-dark dark:text-white-dark/70">Informe o seu e-mail, mesmo que seja seu primeiro acesso</p>
                 </div>
             </Modal>
-        </>
     );
 };

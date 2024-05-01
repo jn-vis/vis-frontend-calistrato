@@ -3,8 +3,8 @@ import App from '@/App';
 import store from '@/store';
 import { Provider } from 'react-redux';
 import React, { ReactNode, Suspense } from 'react';
-import { appWithI18Next } from 'ni18n';
-import { ni18nConfig } from 'ni18n.config.ts';
+// import { appWithI18Next } from 'ni18n';
+// import { ni18nConfig } from 'ni18n.config.ts';
 import Loading from '@/components/layouts/loading';
 import { AuthProvider } from '../../presentation/contexts/authContext';
 

@@ -9,13 +9,13 @@ export const ModalQuestionsAndAnswers = () => {
     const comoNosConheceu = [
         { value: 'linkedin', label: 'Por alguém ou por anúncio no linkedin' },
         { value: 'telegram', label: 'Grupos de vagas no telegram' },
-        { value: 'indicacao', label: 'Indicação de amigos' },
-        { value: 'outros', label: 'outros' },
+        { value: 'friends', label: 'Indicação de amigos' },
+        { value: 'others', label: 'outros' },
     ];
 
     const qualObjetivo = [
-        { value: 'salarios', label: 'Salários e Empregos' },
-        { value: 'curriculos', label: 'Ver currículos' },
+        { value: 'jobs', label: 'Salários e Empregos' },
+        { value: 'recruiting', label: 'Ver currículos' },
     ];
 
     const [selectComoNosConheceu, setSelectComoNosConheceu] = useState(comoNosConheceu[0].value);
@@ -39,7 +39,7 @@ export const ModalQuestionsAndAnswers = () => {
     };
 
     return (
-        <>
+
             <Modal isOpen={modal === 'registration'} onClose={() => setModal(null)} title="Perguntas para te conhecer">
                 <form onSubmit={handleSubmit}>
                     <h5>Como você nos conheceu?</h5>
@@ -55,6 +55,6 @@ export const ModalQuestionsAndAnswers = () => {
                     </button>
                 </form>
             </Modal>
-        </>
+
     );
 };

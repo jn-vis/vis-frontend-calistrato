@@ -1,8 +1,8 @@
 import { capitalize } from "./capitalize";
 
-const col = ['id', 'vagas', 'descricao', 'datalimite'];
-export const exportTable = <T,>(type: string, rowData: T[]) => {
-    let columns: any = col;
+// const col = ['id', 'vagas', 'descricao', 'datalimite'];
+export const exportTable = <T,>(type: string, col: string[], rowData: T[]) => {
+    let columns = col;
     let records = rowData;
     let filename = 'table';
 

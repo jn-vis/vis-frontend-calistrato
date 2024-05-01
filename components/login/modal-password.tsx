@@ -42,7 +42,7 @@ export const ModalPassword = () => {
             <div className="border-t border-[#ebe9f1] p-5 dark:border-white/10">
                 <p className="text-center text-sm text-white-dark dark:text-white-dark/70">
                     Esqueceu a senha?
-                    <button type="button" className="text-[#515365] hover:underline ltr:ml-1 rtl:mr-1 dark:text-white-dark">
+                    <button onClick={() => setModal('register')} type="button" className="text-[#515365] hover:underline ltr:ml-1 rtl:mr-1 dark:text-white-dark">
                         recupere aqui
                     </button>
                 </p>

@@ -2,7 +2,7 @@
 import IconHome from '@/components/icon/icon-home';
 import IconUser from '@/components/icon/icon-user';
 import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ComponentsTablesValorServico from './components-tables-valor-servico';
 import IconNotesEdit from '@/components/icon/icon-notes-edit';
 import IconDollarSignCircle from '@/components/icon/icon-dollar-sign-circle';
@@ -16,6 +16,10 @@ import { useRouter } from 'next/navigation';
 import { getEstados } from '@/services/estados-service';
 import { getDeficiencia } from '@/services/pcd-service';
 import IconTrashLines from '@/components/icon/icon-trash-lines';
+import IconInfoCircle from '@/components/icon/icon-info-circle';
+import Tippy from '@tippyjs/react';
+import SimpleMdeReact from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
 
 interface Estados {
     id: string;
@@ -44,15 +48,63 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 const CadastrarNovaVaga = () => {
     const [activeTab4, setActiveTab4] = useState<any>(1);
-    const [checkHomeOffice, setCheckHomeOffice] = useState(true);
-    const [checkPcd, setCheckPcd] = useState(false);
+    const [checks, setChecks] = useState({
+        clt: false,
+        pj: false,
+        btc: false,
+        remoto: true,
+        hibrido: false,
+        presencial: false,
+        pcd: false,
+    });
 
-    const handleChangeHome = () => {
-        setCheckHomeOffice(!checkHomeOffice);
+    const handleChangeClt = () => {
+        setChecks({
+            ...checks,
+            clt: !checks.clt,
+        });
+    };
+
+    const handleChangePj = () => {
+        setChecks({
+            ...checks,
+            pj: !checks.pj,
+        });
+    };
+
+    const handleChangeBtc = () => {
+        setChecks({
+            ...checks,
+            btc: !checks.btc,
+        });
+    };
+
+    const handleChangeRemoto = () => {
+        setChecks({
+            ...checks,
+            remoto: !checks.remoto,
+        });
+    };
+
+    const handleChangeHibrido = () => {
+        setChecks({
+            ...checks,
+            hibrido: !checks.hibrido,
+        });
+    };
+
+    const handleChangePresencial = () => {
+        setChecks({
+            ...checks,
+            presencial: !checks.presencial,
+        });
     };
 
     const handleChangePcd = () => {
-        setCheckPcd(!checkPcd);
+        setChecks({
+            ...checks,
+            pcd: !checks.pcd,
+        });
     };
 
     const items = [
@@ -102,14 +154,15 @@ const CadastrarNovaVaga = () => {
         'PHP',
         'Laravel',
         'C#',
+        'C++',
         '.NET',
         'Angular',
         'Vue',
         'TypeScript',
         'Swift',
         'Kotlin',
-        'Docker'
-      ];
+        'Docker',
+    ];
     localStorage.setItem('techKeywords', JSON.stringify(techJobsnow));
 
     const [obrigatorios, setObrigatorios] = useState<any[]>([]);
@@ -142,13 +195,12 @@ const CadastrarNovaVaga = () => {
     };
 
     function removerDaListaObrigatorios(id) {
-        setObrigatorios(obrigatorios.filter(item => item.id !== id));
+        setObrigatorios(obrigatorios.filter((item) => item.id !== id));
     }
 
     function removerDaListaDesejaveis(id) {
-        setDesejaveis(desejaveis.filter(item => item.id !== id));
+        setDesejaveis(desejaveis.filter((item) => item.id !== id));
     }
-
 
     const router = useRouter();
 
@@ -242,19 +294,17 @@ const CadastrarNovaVaga = () => {
         2: 'w-[30%]',
         3: 'w-[50%]',
         4: 'w-[70%]',
-        default: 'w-[90%]'
-      };
+        default: 'w-[90%]',
+    };
 
-      const width = widthMap[activeTab4 as keyof typeof widthMap] || widthMap.default;
+    const width = widthMap[activeTab4 as keyof typeof widthMap] || widthMap.default;
 
     return (
         <PanelCodeHighlight title="Cadastro de vaga">
             <div className="mb-5">
                 <div className="inline-block w-full">
                     <div className="relative z-[1] overflow-x-auto">
-                        <div
-                            className={`${width} absolute top-[30px] -z-[1] m-auto h-1 w-[15%] bg-primary transition-[width] ltr:left-0 rtl:right-0`}
-                        ></div>
+                        <div className={`${width} absolute top-[30px] -z-[1] m-auto h-1 w-[15%] bg-primary transition-[width] ltr:left-0 rtl:right-0`}></div>
                         <ul className="mb-5 grid min-w-[500px] grid-cols-5">
                             <li className="mx-auto flex flex-col items-center">
                                 <button
@@ -317,22 +367,26 @@ const CadastrarNovaVaga = () => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-5">
                                 {activeTab4 === 1 && (
-                                    <>
+                                    <div>
                                         <div className="mt-2">
-                                            <label htmlFor="vaga" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Título da Vaga</label>
+                                            <label htmlFor="vaga" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Título da Vaga
+                                            </label>
                                             <input
                                                 {...register('vaga')}
                                                 type="text"
                                                 name="vaga"
                                                 id="vaga"
                                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                                placeholder="vaga.example"
+                                                placeholder="Vaga para Desenvolvedor Full Stack"
                                                 required
                                             />
                                             {errors.vaga && <p className="mt-1 text-red-500">{errors.vaga.message}</p>}
                                         </div>
                                         <div className="mt-2">
-                                            <label  htmlFor="datelimite" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Data limite da vaga</label>
+                                            <label htmlFor="datelimite" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Data limite da vaga
+                                            </label>
                                             <input
                                                 {...register('datelimite')}
                                                 type="date"
@@ -345,84 +399,238 @@ const CadastrarNovaVaga = () => {
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <label  htmlFor="contato" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Contato</label>
+                                            <label htmlFor="contato" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Contato
+                                            </label>
                                             <input
                                                 {...register('contato')}
                                                 type="number"
                                                 name="contato"
                                                 id="contato"
                                                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                                placeholder="name@company.com"
+                                                placeholder="11999999999"
                                                 required
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <label  htmlFor="descricao" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Descrição da vaga</label>
+                                            <label htmlFor="descricao" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                                                Descrição da vaga
+                                            </label>
                                             <textarea
                                                 {...register('descricao')}
                                                 name="descricao"
                                                 id="descricao"
-                                                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                                                placeholder="name@company.com"
+                                                className="block h-[250px] w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                                                placeholder="Escreva as informações sobre a vaga...."
                                                 required
                                             />
                                             {errors.descricao && <p className="mt-1 text-red-500">{errors.descricao.message}</p>}
                                         </div>
-                                    </>
+                                    </div>
                                 )}
                             </div>
 
                             <div className="mb-5">
                                 {activeTab4 === 2 && (
                                     <div>
-                                         <div className="mb-5">
+                                        <div className="mb-5">
+                                            <label htmlFor="web" className="font-bold">
+                                                Sistema da vaga
+                                            </label>
+                                            <div className="mb-5 flex flex-row gap-6">
+                                                <div>
+                                                    <span className="relative text-white-dark checked:bg-none">Remoto</span>
+                                                    <div className="relative h-6 w-12">
+                                                        <input
+                                                            {...register('homeoffice')}
+                                                            checked={checks.remoto}
+                                                            onChange={handleChangeRemoto}
+                                                            type="checkbox"
+                                                            className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                            id="custom_switch_checkbox1"
+                                                        />
+                                                        <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <span className="relative text-white-dark checked:bg-none">Híbrido</span>
+                                                    <div className="relative h-6 w-12">
+                                                        <input
+                                                            {...register('homeoffice')}
+                                                            checked={checks.hibrido}
+                                                            onChange={handleChangeHibrido}
+                                                            type="checkbox"
+                                                            className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                            id="custom_switch_checkbox1"
+                                                        />
+                                                        <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <span className="relative text-white-dark checked:bg-none">Presencial</span>
+                                                    <div className="relative h-6 w-12">
+                                                        <input
+                                                            checked={checks.presencial}
+                                                            onChange={handleChangePresencial}
+                                                            type="checkbox"
+                                                            className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                            id="custom_switch_checkbox1"
+                                                        />
+                                                        <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {checks.presencial || checks.hibrido ? (
+                                                <>
+                                                    <label htmlFor="estado_id">Selecione a região da Vaga anunciada</label>
+                                                    <select {...register('estado_id')} id="estado_id" className="form-select text-white-dark" name="estado_id">
+                                                        {estados.map((estado) => {
+                                                            return (
+                                                                <option key={estado.id} value={estado.nome}>
+                                                                    {estado.nome}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                    </select>
+                                                </>
+                                            ) : (
+                                                false
+                                            )}
+                                        </div>
+                                        <div className="mb-5">
                                             <div className="mb-5">
-                                                <label className="inline-flex cursor-pointer">
-                                                    <input {...register('homeoffice')} type="checkbox" className="form-checkbox" onChange={handleChangeHome} checked={checkHomeOffice} />
-                                                    <span className="relative text-white-dark checked:bg-none">Somente Home Office</span>
-                                                </label>
+                                                <label className="relative mb-2 font-bold checked:bg-none">Vaga exclusiva (PCD)</label>
+                                                <div className="relative h-6 w-12">
+                                                    <input
+                                                        checked={checks.pcd}
+                                                        onChange={handleChangePcd}
+                                                        type="checkbox"
+                                                        className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                        id="custom_switch_checkbox1"
+                                                    />
+                                                    <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                </div>
                                             </div>
-                                            <label htmlFor="estado_id">Selecione a região da Vaga anunciada</label>
-                                            <select {...register('estado_id')} disabled={checkHomeOffice} id="estado_id" className="form-select text-white-dark" name="estado_id">
-                                                {estados.map((estado) => {
-                                                    return (
-                                                        <option key={estado.id} value={estado.nome}>
-                                                            {estado.nome}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </select>
+                                            {checks.pcd && (
+                                                <div>
+                                                    <label htmlFor="deficiencia_id">Selecione a deficiência</label>
+                                                    <select {...register('deficiencia_id')} id="deficiencia_id" className="form-select text-white-dark" name="deficiencia_id">
+                                                        {deficiencia.map((pcd) => {
+                                                            return (
+                                                                <option key={pcd.id} value={pcd.nome}>
+                                                                    {pcd.nome}
+                                                                </option>
+                                                            );
+                                                        })}
+                                                    </select>
+                                                </div>
+                                            )}
                                         </div>
+
                                         <div className="mb-5">
-                                           <div className="mb-5">
-                                                <label className="inline-flex cursor-pointer">
-                                                    <input {...register('pcd')} checked={checkPcd} onChange={handleChangePcd} type="checkbox" className="form-checkbox" />
-                                                    <span className="relative text-white-dark checked:bg-none">Vaga exclusiva (PCD)</span>
-                                                </label>
+                                            <label className="relative mb-2 font-bold checked:bg-none">Tipo de Contrato</label>
+                                            <div className="flex flex-row gap-8">
+                                                <div className="mb-5 text-center">
+                                                    <span className="relative text-center text-white-dark checked:bg-none">CLT</span>
+                                                    <div className="relative h-6 w-12">
+                                                        <input
+                                                            checked={checks.clt}
+                                                            onChange={handleChangeClt}
+                                                            type="checkbox"
+                                                            className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                            id="custom_switch_checkbox1"
+                                                        />
+                                                        <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                    </div>
+                                                </div>
+                                                <div className="mb-5 text-center">
+                                                    <span className="relative text-white-dark checked:bg-none">PJ</span>
+                                                    <div className="relative h-6 w-12">
+                                                        <input
+                                                            checked={checks.pj}
+                                                            onChange={handleChangePj}
+                                                            type="checkbox"
+                                                            className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                            id="custom_switch_checkbox1"
+                                                        />
+                                                        <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <label htmlFor="deficiencia_id">Selecione a deficiência</label>
-                                            <select {...register('deficiencia_id')} disabled={!checkPcd} id="deficiencia_id" className="form-select text-white-dark" name="deficiencia_id">
-                                                {deficiencia.map((pcd) => {
-                                                    return (
-                                                        <option key={pcd.id} value={pcd.nome}>
-                                                            {pcd.nome}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </select>
+
+                                            {checks.pj && (
+                                                <div className="mb-5">
+                                                    <div className="mb-2 flex flex-row items-center gap-2">
+                                                        Pretensão PJ
+                                                        <Tippy content="Esse campo é opcional, caso deixe em branco é entendido que o valor será à combinar." theme="primary">
+                                                            <button>
+                                                                <IconInfoCircle className="h-5 w-5" />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                    <input {...register('pagamentopj')} id="web" type="number" placeholder="Ex. R$15.000,00" className="form-input" />
+                                                    {errors.pagamentopj && <p>{errors.pagamentopj.message}</p>}
+                                                </div>
+                                            )}
+
+                                            {checks.clt && (
+                                                <div className="mb-5">
+                                                    <div className="mb-2 flex flex-row items-center gap-2">
+                                                        Pretensão CLT
+                                                        <Tippy content="Esse campo é opcional, caso deixe em branco é entendido que o valor será à combinar." theme="primary">
+                                                            <button>
+                                                                <IconInfoCircle className="h-5 w-5" />
+                                                            </button>
+                                                        </Tippy>
+                                                    </div>
+                                                    <input {...register('pagamentoclt')} id="web" type="number" placeholder="Ex. R$10.000,00" className="form-input" />
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="mb-5">
-                                            <label htmlFor="web">Pretensão PJ</label>
-                                            <input {...register('pagamentopj')} id="web" type="number" placeholder="Ex. R$15.000,00" className="form-input" />
-                                            {errors.pagamentopj && <p>{errors.pagamentopj.message}</p>}
-                                        </div>
-                                        <div className="mb-5">
-                                            <label htmlFor="web">Pretensão CLT</label>
-                                            <input {...register('pagamentoclt')} id="web" type="number" placeholder="Ex. R$10.000,00" className="form-input" />
-                                        </div>
-                                        <div className="mb-5">
-                                            <label htmlFor="web">Pretensão BTC</label>
-                                            <input {...register('pagamentobtc')} id="web" type="number" placeholder="Ex. 0,039฿ " className="form-input" />
+                                            <div className="flex flex-row items-center gap-2">
+                                                <p className="font-bold">Deseja pagar em Lightning Network?</p>
+                                                <Tippy
+                                                    content={
+                                                        <>
+                                                            A Lightning Network é uma rede de pagamentos instantâneos construída sobre o Bitcoin, permitindo transações mais rápidas e baratas.
+                                                            <a
+                                                                href="https://lightning.network/lightning-network-summary.pdf"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="ml-1 text-blue-500 hover:underline"
+                                                            >
+                                                                Saiba mais
+                                                            </a>
+                                                        </>
+                                                    }
+                                                    theme="primary"
+                                                    interactive={true}
+                                                >
+                                                    <button>
+                                                        <IconInfoCircle className="h-5 w-5" />
+                                                    </button>
+                                                </Tippy>
+                                            </div>
+                                            <div className="mb-5 flex flex-row gap-2">
+                                                <div className="relative h-6 w-12">
+                                                    <input
+                                                        checked={checks.btc}
+                                                        onChange={handleChangeBtc}
+                                                        type="checkbox"
+                                                        className="custom_switch peer absolute z-10 h-full w-full cursor-pointer opacity-0"
+                                                        id="custom_switch_checkbox1"
+                                                    />
+                                                    <span className="block h-full rounded-full bg-[#ebedf2] before:absolute before:bottom-1 before:left-1 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-all before:duration-300 peer-checked:bg-primary peer-checked:before:left-7 dark:bg-dark dark:before:bg-white-dark dark:peer-checked:before:bg-white"></span>
+                                                </div>
+                                            </div>
+                                            {checks.btc && (
+                                                <div className="mb-5">
+                                                    <input {...register('pagamentobtc')} id="web" type="number" placeholder="Ex. 0,039฿ " className="form-input" />
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -467,7 +675,7 @@ const CadastrarNovaVaga = () => {
                                                                                             </div>
                                                                                             <div>
                                                                                                 <button onClick={() => removerDaListaObrigatorios(item.id)}>
-                                                                                                   <IconTrashLines />
+                                                                                                    <IconTrashLines />
                                                                                                 </button>
                                                                                             </div>
                                                                                         </div>
@@ -513,10 +721,10 @@ const CadastrarNovaVaga = () => {
                                                                                             <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
                                                                                         </div>
                                                                                         <div>
-                                                                                                <button onClick={() => removerDaListaDesejaveis(item.id)}>
-                                                                                                   <IconTrashLines />
-                                                                                                </button>
-                                                                                            </div>
+                                                                                            <button onClick={() => removerDaListaDesejaveis(item.id)}>
+                                                                                                <IconTrashLines />
+                                                                                            </button>
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </li>
@@ -534,35 +742,33 @@ const CadastrarNovaVaga = () => {
                             </div>
                             <div className="mb-5">
                                 {activeTab4 === 4 && (
-                                        <div className="panel">
-                                            <div className="mb-5 text-lg font-semibold">Ordenar critérios candidatos</div>
-                                            <div className="gap-x-12 sm:grid-cols-2">
-                                                <ul id="example1">
-                                                    <ReactSortable list={sortable} setList={setSortable} animation={200} delay={2} ghostClass="gu-transit" group="shared">
-                                                        {sortable.map((item) => {
-                                                            return (
-                                                                <li key={item.id} className="mb-2.5 cursor-grab">
-                                                                    <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
-                                                                        <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
-                                                                            <div className="my-3 font-semibold md:my-0">
-                                                                                <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
-                                                                            </div>
-                                                                            <div></div>
+                                    <div className="panel">
+                                        <div className="mb-5 text-lg font-semibold">Ordenar critérios candidatos</div>
+                                        <div className="gap-x-12 sm:grid-cols-2">
+                                            <ul id="example1">
+                                                <ReactSortable list={sortable} setList={setSortable} animation={200} delay={2} ghostClass="gu-transit" group="shared">
+                                                    {sortable.map((item) => {
+                                                        return (
+                                                            <li key={item.id} className="mb-2.5 cursor-grab">
+                                                                <div className="items-md-center flex flex-col rounded-md border border-white-light bg-white px-6 py-3.5 text-center dark:border-dark dark:bg-[#1b2e4b] md:flex-row ltr:md:text-left rtl:md:text-right">
+                                                                    <div className="flex flex-1 flex-col items-center justify-between md:flex-row">
+                                                                        <div className="my-3 font-semibold md:my-0">
+                                                                            <div className="text-base text-dark dark:text-[#bfc9d4]">{item.text}</div>
                                                                         </div>
+                                                                        <div></div>
                                                                     </div>
-                                                                </li>
-                                                            );
-                                                        })}
-                                                    </ReactSortable>
-                                                </ul>
-                                            </div>
+                                                                </div>
+                                                            </li>
+                                                        );
+                                                    })}
+                                                </ReactSortable>
+                                            </ul>
                                         </div>
+                                    </div>
                                 )}
                             </div>
 
-                            <div className="mb-5">
-                                {activeTab4 === 5 && (<ComponentsTablesValorServico />)}
-                            </div>
+                            <div className="mb-5">{activeTab4 === 5 && <ComponentsTablesValorServico />}</div>
                             <div className="flex justify-between">
                                 <button type="button" className={`btn btn-primary ${activeTab4 === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab4(activeTab4 > 1 ? activeTab4 - 1 : 1)}>
                                     Voltar

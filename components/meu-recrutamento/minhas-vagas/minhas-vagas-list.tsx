@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
@@ -15,11 +15,17 @@ import { useRouter } from 'next/navigation';
 import IconCircleCheck from '@/components/icon/icon-circle-check';
 import { exportTable } from '@/presentation/utils/export-table';
 import getVagas from '@/services/vagas-service';
+import IconEye from '@/components/icon/icon-eye';
+import IconFacebook from '@/components/icon/icon-facebook';
+import IconInstagram from '@/components/icon/icon-instagram';
+import IconLinkedin from '@/components/icon/icon-linkedin';
 import IconListCheck from '@/components/icon/icon-list-check';
 import IconLayoutGrid from '@/components/icon/icon-layout-grid';
+import { ReactSortable } from 'react-sortablejs';
 import IconFolderPlus from '@/components/icon/icon-folder-plus';
 import IconNotes from '@/components/icon/icon-notes';
 import IconUsersGroup from '@/components/icon/icon-users-group';
+import IconRestore from '@/components/icon/icon-restore';
 import Dropdown from '@/components/utils/dropdown';
 import { IRootState } from '@/store';
 import { useSelector } from 'react-redux';
@@ -31,7 +37,7 @@ type Sortable = {
     selected: boolean;
 };
 
-export interface RowData {
+interface RowData {
     id: number;
     vaga: string;
     descricao: string;
@@ -48,7 +54,7 @@ export interface RowData {
     estado: null;
 }
 
-const MinhasVagasEncerradas = () => {
+const MinhasVagasLista = () => {
     const col = ['vaga', 'descricao', 'datelimite'];
     const [rowData, setRowData] = useState<RowData[]>([]);
     const [page, setPage] = useState(1);
@@ -119,14 +125,13 @@ const MinhasVagasEncerradas = () => {
     };
 
     const router = useRouter();
-
     const currentDate = new Date();
 
     const fetchData = async () => {
         try {
             const data = await getVagas();
-            const vagasEncerradas = data.filter((item: RowData) => new Date(item.datelimite) < currentDate)
-            setRowData(vagasEncerradas);
+            const vagasAtivas = data.filter((item: RowData) => new Date(item.datelimite) >= currentDate)
+            setRowData(vagasAtivas);
             setInitialRecords(sortBy(data, 'id'));
             setRecordsData([...sortBy(data, 'id').slice(0, pageSize)]);
         } catch (error) {
@@ -406,4 +411,4 @@ const MinhasVagasEncerradas = () => {
     );
 };
 
-export default MinhasVagasEncerradas;
+export default MinhasVagasLista;

@@ -27,16 +27,15 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
         setModal(modalType);
     };
 
+
     useEffect(() => {
         const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
         const user = localStorage.getItem('user');
 
+        console.log("Token lido:", accessToken);
+
         if (accessToken) {
-            try {
-                setAccessToken(JSON.parse(accessToken));
-            } catch (error) {
-                console.error('Error parsing access token:', error);
-            }
+            setAccessToken(accessToken);
         } else {
             setAccessToken(undefined);
         }
@@ -125,8 +124,8 @@ const { mutate: savePreRegistration } = useSavePreRegistration({
     },
 });
 
-const handleRegistration = async (option1: any, option2: any): Promise<void> => {
-    const saveAnswers = JSON.stringify({ option1, option2 });
+const handleRegistration = async (channel: string, goal: string, ): Promise<void> => {
+    const saveAnswers = JSON.stringify({ channel, goal });
     savePreRegistration({ email: emailUsuario, data: saveAnswers });
     console.log('Chamada de savePreRegistration realizada com sucesso');
 };
