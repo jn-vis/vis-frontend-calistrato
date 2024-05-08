@@ -1,5 +1,5 @@
 
-import { MeusCurriculosVisualizadosTabs } from '@/components/meu-recrutamento/curriculos-vis/meus-curriculos-visualizados-tabs';
+import { MeusCurriculosVisualizadosTabs } from '@/presentation/components/meu-recrutamento/curriculo-vis/meus-curriculos-visualizados-tabs';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';

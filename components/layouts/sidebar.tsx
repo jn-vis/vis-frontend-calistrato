@@ -13,7 +13,7 @@ import IconMenuPages from '@/components/icon/menu/icon-menu-pages';
 import IconMenuAuthentication from '@/components/icon/menu/icon-menu-authentication';
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { AuthenticationManager } from '../login';
+import { AuthenticationManager } from '../../presentation/components/login';
 import { useAuth } from '../../presentation/contexts/authContext';
 
 const Sidebar = () => {
@@ -117,7 +117,7 @@ const Sidebar = () => {
                                 </AnimateHeight>
                             </li>
 
-                            <li className="menu nav-item">
+                            {/* <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'page' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('page')}>
                                     <div className="flex items-center">
                                         <IconMenuPages className="shrink-0 group-hover:!text-primary" />
@@ -142,7 +142,7 @@ const Sidebar = () => {
                                         </li>
                                     </ul>
                                 </AnimateHeight>
-                            </li>
+                            </li> */}
 
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'auth' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('auth')}>

@@ -1,5 +1,5 @@
 
-import CadastrarNovaVaga from '@/components/meu-recrutamento/minhas-vagas/nova-vaga/cadastrar-nova-vaga';
+import CadastrarNovaVaga from '@/presentation/components/meu-recrutamento/minhas-vagas/nova-vaga/cadastrar-nova-vaga';
 import { Metadata } from 'next';
 import React from 'react';
 

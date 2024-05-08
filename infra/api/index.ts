@@ -5,4 +5,5 @@ export * from './createLoginToken';
 export * from './existsLogin';
 export * from './savePreRegistration';
 export * from './updatePassword';
+export * from './createTokenLanguage';
 

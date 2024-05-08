@@ -12,7 +12,9 @@ export const getCreateLoginTokenMutationOptions = <TError = ErrorType<void | Cre
     const mutationFn: MutationFunction<Awaited<ReturnType<typeof createLoginToken>>, { email: string; language: string }> = (props) => {
         const { email, language } = props ?? {};
 
-        return createLoginToken(email, language);
+        // return createLoginToken(email, language);
+        return createLoginToken(email);
+
     };
 
     return { mutationFn, ...mutationOptions };

@@ -1,5 +1,5 @@
 
-import EditarVagaExistente from '@/components/meu-recrutamento/minhas-vagas/edita-vaga/editar-vaga';
+import EditarVagaExistente from '@/presentation/components/meu-recrutamento/minhas-vagas/editar-vaga/editar-vaga';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
