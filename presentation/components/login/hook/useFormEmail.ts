@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TFormData, schemaForm } from '@/domain/schemas/login';
+import { TFormData, emailSchema} from '@/domain/schemas/login-email';
+import { useAuth } from '@/presentation/contexts/authContext';
 
-
-export const useFormAll = () => {
+export const useFormEmail = () => {
+    const { handleEmail} = useAuth();
     const {
         register,
         handleSubmit,
@@ -12,12 +13,11 @@ export const useFormAll = () => {
         setError,
         formState: { errors,isSubmitting },
       } = useForm<TFormData>({
-        resolver: zodResolver(schemaForm),
+        resolver: zodResolver(emailSchema),
         criteriaMode: "all",
         mode: "all",
         defaultValues: {
           email: "",
-
         },
       });
 
@@ -27,8 +27,11 @@ export const useFormAll = () => {
         }
     }, []);
 
-
-
+    const handleFormSubmit = async (data: TFormData) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        handleEmail(data.email, setError);
+        handleSetData({ email: '' });
+    };
 
     return {
         register,
@@ -37,7 +40,8 @@ export const useFormAll = () => {
         handleSetData,
         errors,
         isSubmitting,
-        setError
+        setError,
+        handleFormSubmit
     }
 }
 

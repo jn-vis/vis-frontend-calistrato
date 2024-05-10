@@ -1,21 +1,13 @@
 'use client';
-import { useState } from 'react';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
 import IconLoader from '../../../components/icon/icon-loader';
 import IconUser from '@/components/icon/icon-user';
-import { useFormAll } from './hook/useFormAll';
-import { TFormData } from '@/domain/schemas/login';
+import { useFormEmail } from './hook/useFormEmail';
 
 export const ModalExistsEmail = () => {
-    const { handleEmail, setModal, modal } = useAuth();
-    const { register, handleSubmit, errors, isSubmitting, handleSetData, setError } = useFormAll();
-
-    const handleFormSubmit = async (data: TFormData) => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        handleEmail(data.email, setError);
-        handleSetData({ email: '' });
-    };
+    const { setModal, modal } = useAuth();
+    const { register, handleSubmit, errors, isSubmitting,handleFormSubmit } = useFormEmail();
 
     return (
         <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">

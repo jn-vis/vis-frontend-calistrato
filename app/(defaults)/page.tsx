@@ -1,13 +1,14 @@
-import HomePage from '@/components/home/home-page-componente';
+
+import HomePage from '@/presentation/components/home/home-page-componente';
 import { Metadata } from 'next';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Home',
+title: 'Home',
 };
 
 const Home = () => {
-    return <HomePage />;
+return <HomePage />;
 };
 
 export default Home;

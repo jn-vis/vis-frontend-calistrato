@@ -1,5 +1,7 @@
 import { EmailNaoConfirmadoError } from "@/components/shared/errors/email-nao-confirmado.error";
 import { Either } from "@/core/either";
+import { TFormData } from "@/domain/schemas/login-email";
+import { UseFormSetError } from "react-hook-form";
 
 export interface IAuthContextData {
     isAuthenticated: boolean;
@@ -9,12 +11,12 @@ export interface IAuthContextData {
     closeModal: () => void;
     modal: 'login' | 'confirmLogin' | 'register' | 'password' | 'registration' | null;
     setModal: React.Dispatch<React.SetStateAction<'login' | 'confirmLogin' | 'register' | 'password' | 'registration' | null>>;
-    handleEmail: (email: string) => Promise<void>;
+    handleEmail: any
     handleConfirmaEmail: (email: string) => Promise<Either<EmailNaoConfirmadoError, unknown> | undefined>;
-    handleRegister: (token: string, password: string, confirmPassword: string) => Promise<Either<EmailNaoConfirmadoError, unknown> | undefined>
+    handleRegister: any
     handleRegistration: any
     user: string | null;
-    emailUsuario: string | null;
+    emailUsuario: string
 
 }
 
