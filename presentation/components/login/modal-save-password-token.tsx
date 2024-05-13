@@ -9,12 +9,12 @@ export const ModalSavePasswordToken = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [token, setToken] = useState('');
-    const {handleRegister, setModal, modal} = useAuth();
+    const {handleTokenPasswordSubmission, setModal, modal} = useAuth();
 
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleRegister(token, password, confirmPassword);
+        handleTokenPasswordSubmission(token, password, confirmPassword);
     };
 
     return (

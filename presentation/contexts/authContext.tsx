@@ -1,25 +1,47 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { IAuthContextData, IAuthProviderProps } from '../../infra/auth/interface';
-import { EmailNaoConfirmadoError } from '@/components/shared/errors/email-nao-confirmado.error';
-import { Either, left } from '@/core/either';
+import axios from 'axios';
+import { IAuthContextData, IAuthProviderProps, ModalType } from '../../infra/auth/interface';
 import { useRouter } from 'next/navigation';
-import { createLoginToken} from '@/infra/api';
-import { useUpdatePassword, useSavePreRegistration,useExecuteLogin, useExecuteLogout, useExistsLoginToken } from '@/infra/hooks';
-import { UseFormSetError } from 'react-hook-form';
-
-import { useCreateTokenLanguage } from '@/infra/hooks/useCreateTokenLanguage';
-import { TFormData } from '@/domain/schemas/login-email';
 import { HttpStatusCode } from '@/data/protocols/http';
+import { AxiosHttpClient } from '@/infra/http/axios-http-client/axios-http-client';
+import { RemoteEmailExists } from '@/data/authentication/remote-email-exists';
+import { EmailService } from '@/domain/service/email-service';
+import { RemoteConfirmEmail } from '@/data/authentication/remote-confirm-email';
+import { ConfirmEmailService } from '@/domain/service/confirmar-email-service';
+import { RemoteTokenLanguage } from '@/data/authentication/remote-token-language';
+import { TokenLanguageService } from '@/domain/service/token-language-service';
+import { RemotePreRegistration } from '@/data/authentication/remote-pre-registration';
+import { RemoteTokenPassword } from '@/data/authentication/remote-token-password';
+import { TokenPasswordService } from '@/domain/service/token-password';
+import { RemoteLogout } from '@/data/authentication/remote-logout';
+import { LogoutService } from '@/domain/service/logout-service';
+import { RemoteAuthentication} from '@/data/authentication/remote-authentication';
+import { AuthService } from '@/domain/service/auth-service';
 
 
 const LOCAL_STORAGE_KEY_ACCESS_TOKEN = 'sessionToken';
 
-interface SessionTokenResponse {
-    sessionToken: string;
-  }
 
-type ModalType = 'login' | 'password' | 'register' | 'confirmLogin' | 'registration' | null;
+
+// Criação do cliente HTTP e do repositório
+const httpClient = new AxiosHttpClient();
+const emailExistsRepository = new RemoteEmailExists('http://localhost:8080', httpClient);
+const confirmEmailRepository = new RemoteConfirmEmail('http://localhost:8080', httpClient);
+const tokenServiceRepository = new RemoteTokenLanguage('http://localhost:8080', httpClient);
+const preRegistrationRepository = new RemotePreRegistration('http://localhost:8080', httpClient);
+const tokenPasswordRepository = new RemoteTokenPassword('http://localhost:8080', httpClient);
+const logoutRepository = new RemoteLogout('http://localhost:8080', httpClient);
+const authRepository = new RemoteAuthentication('http://localhost:8080', httpClient);
+
+
+// Instância do serviço
+const emailService = new EmailService(emailExistsRepository);
+const confirmService = new ConfirmEmailService(confirmEmailRepository);
+const tokenservice = new TokenLanguageService(tokenServiceRepository);
+const tokenPasswordService = new TokenPasswordService(tokenPasswordRepository);
+const logoutService = new LogoutService(logoutRepository)
+const authService = new AuthService(authRepository);
+
 
 
 export const AuthContext = React.createContext({} as IAuthContextData);
@@ -31,6 +53,8 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     const openModal = (modalType: ModalType) => {
         setModal(modalType);
     };
+
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -48,129 +72,86 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
         }
     }, []);
 
+    const handleEmailSubmission = async (email: string) => {
+        try {
+            const result = await emailService.verifyEmail(email);
 
-
-    const { mutate: existsLoginToken } = useExistsLoginToken({
-        mutation: {
-            onSuccess: (response) => {
-                setModal(response.status === HttpStatusCode.ok ? 'password' : null);
-            },
-            onError: (error, variables) => {
-                const { setError } = variables;
-                if (!axios.isAxiosError(error)) {
-                    console.error('Erro desconhecido:', error);
-                    setModal(null);
-                    return;
+            if (result && result.status) {
+                switch (result.status) {
+                    case HttpStatusCode.ok:
+                        setModal('password');
+                        setEmailUsuario(email);
+                        break;
+                    case HttpStatusCode.created:
+                        setModal('registration');
+                        break;
+                    case HttpStatusCode.accepted:
+                        setModal('register');
+                        break;
+                    default:
+                        setModal(null);
                 }
-
-                const axiosError = error as AxiosError;
-                const status = axiosError.response?.status;
-
-                if (status === HttpStatusCode.notFound) {
-                    setModal('confirmLogin');
-                    return;
-                }
-
-                if (status === HttpStatusCode.created) {
-                    setModal('registration');
-                    return;
-                }
-
-                if (status === undefined) {
-                    console.error('Erro na requisição com status desconhecido:', error);
-                    setModal(null);
-                    return;
-                }
-
-                const errorMessages: { [key: number]: string } = {
-                    [HttpStatusCode.badRequest]: 'E-mail inválido',
-                    [HttpStatusCode.unauthorized]: 'Senha bloqueada',
-                    [HttpStatusCode.forbidden]: 'Token bloqueado',
-                    [HttpStatusCode.conflict]: 'Usuário já logado no sistema',
-                    [HttpStatusCode.accepted]: 'Senha ausente',
-                    [HttpStatusCode.created]: 'Respostas ausentes'
-                };
-
-                const message = errorMessages[status];
-                if (message && setError) {
-                    setError('email', { type: 'manual', message });
-                } else {
-                    console.error('Erro na requisição:', error);
-                    setModal(null);
-                }
-            },
-        },
-    });
-
-const handleEmail = (email: string, setError: UseFormSetError<TFormData>) => {
-    setEmailUsuario(email);
-
-    existsLoginToken({
-        email,
-        setError: (field, error) => setError(field as "email" | "setError", error),
-    });
-};
-
-const handleConfirmaEmail = async (email: string) => {
-    try {
-        const response: AxiosResponse<void> = await createLoginToken(email);
-
-        response.status === 202 && setEmailUsuario(email);
-        setModal(response.status === 202 ? 'registration' : null);
-
-    } catch (error) {
-        if (!axios.isAxiosError(error)) {
-            console.error('Erro desconhecido:', error);
-            setModal(null);
-            return;
+            } else {
+                setModal(null);
+            }
+        } catch (error) {
+            console.error('Failed to verify email:', error);
+            if (axios.isAxiosError(error) && error.response && error.response.status === HttpStatusCode.notFound) {
+                setModal('confirmLogin');
+            } else {
+                setModal(null);
+            }
         }
+    };
 
-        const axiosError = error as AxiosError;
-        axiosError.response?.status === 409 && axiosError.response.data && typeof axiosError.response.data === 'object' && 'message' in axiosError.response.data
-            ? left(new EmailNaoConfirmadoError(axiosError.response.data.message))
-            : console.error('Erro na requisição:', error);
-        setModal(null);
-    }
-};
 
-const { mutate: tokenLanguage } = useCreateTokenLanguage({
-    mutation: {
-        onSuccess: (data) => {
-            console.log('Dados recebidos:', data);
-            setModal('register');
-        },
-        onError: (error) => {
-            console.error('Erro ao buscar dados adicionais:', error);
+    const handleConfirmEmailSubmission = async (email: string) => {
+        try {
+            const result = await confirmService.verifyConfirmEmail(email);
+            if (result && result.status === HttpStatusCode.accepted) {
+                setModal('registration');
+                setEmailUsuario(email);
+            } else {
+                setModal(null);
+            }
+        } catch (error) {
+            console.error('Failed to verify email:', error);
             setModal(null);
-        },
-    },
-});
+        }
+    };
 
+    const handleTokenLanguageSubmission = async (email: string, language: string) => {
+        try {
+            const result = await tokenservice.token(email, language);
 
-const { mutate: savePreRegistration } = useSavePreRegistration({
-    mutation: {
-        onSuccess: (data) => {
-            data?.status === 202
-            ? tokenLanguage({ email: emailUsuario, language: 'portuguese' })
-            : setModal(null);
-        },
-        onError: (error) => {
-            console.error('Erro ao salvar pré-registro:', error);
+            if (result && result.status === HttpStatusCode.ok) {
+                setModal('register');
+            } else {
+                setModal(null);
+            }
+        } catch (error) {
+            console.error('Failed to verify email:', error);
             setModal(null);
-            return left(new EmailNaoConfirmadoError(error));
-        },
-    },
-});
+        }
+    };
 
+    const handleSavePreRegistrationSubmission = async (channel: string, goal: string) => {
+        try {
+            const result = await preRegistrationRepository.registration({ email: emailUsuario,channel, goal });
+            if (result && result.status === HttpStatusCode.accepted) {
+                handleTokenLanguageSubmission(emailUsuario, 'portuguese')
+            } else {
+                setModal(null);
+            }
+        } catch (error) {
+            console.error('Failed to verify email:', error);
+            setModal(null);
+        }
+    };
 
-const handleRegistration = async (channel: string, goal: string, ): Promise<void> => {
-    const saveAnswers = JSON.stringify({ channel, goal });
-    savePreRegistration({ email: emailUsuario, data: saveAnswers });
-};
-
-const { mutate: updatePassword} = useUpdatePassword<AxiosResponse<SessionTokenResponse, any>>({
-    mutation: {
-        onSuccess: (response) => {
+    const handleTokenPasswordSubmission = async (token: string, password: string, confirmPassword: string) => {
+        try {
+            const response = await tokenPasswordService.token(emailUsuario, token, password, confirmPassword);
             if (response.data && typeof response.data === 'object') {
                 const { sessionToken } = response.data;
                 if (sessionToken) {
@@ -183,73 +164,43 @@ const { mutate: updatePassword} = useUpdatePassword<AxiosResponse<SessionTokenRe
                     console.error('O token de acesso não foi retornado corretamente pela API.');
                 }
             }
-        },
-        onError: (error) => {
-            console.error('Erro na requisição de atualização de senha:', error);
+        } catch (error) {
+            console.error('Failed to verify email:', error);
             setModal(null);
-        },
-    },
-});
-
-
-const handleRegister = async (token: string, password: string, confirmPassword: string): Promise<void> => {
-    const updatePasswordBody = JSON.stringify({ password, confirmPassword, token });
-    const params = {
-        wordsHash: token
+        }
     };
-    updatePassword({ email: emailUsuario, data: updatePasswordBody, params });
-};
 
-const { mutate: executeLogin } = useExecuteLogin<AxiosResponse<SessionTokenResponse, any>>({
-    mutation: {
-        onSuccess: (response) => {
-            if (typeof response.data === 'object' && response.data !== null) {
-                const data = response.data as SessionTokenResponse;
-                if ('sessionToken' in data) {
-                    const token = data.sessionToken;
-                    localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, token);
+    const handleLoginSubmission = async (password: string) => {
+        try {
+            const response = await authService.auth(emailUsuario, password);
+            if (response.data && typeof response.data === 'object') {
+                const { sessionToken } = response.data;
+                if (sessionToken) {
+                    localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, sessionToken);
                     localStorage.setItem('user', JSON.stringify(emailUsuario));
-                    setAccessToken(token);
+                    setAccessToken(sessionToken);
                     setUser(emailUsuario);
                     setModal(null);
                 } else {
                     console.error('O token de acesso não foi retornado corretamente pela API.');
                 }
             }
-        },
-        onError: (error) => {
-            console.error('Erro ao executar o login:', error);
+        } catch (error) {
+            console.error('Failed to verify email:', error);
             setModal(null);
-        },
-    },
-});
+        }
+    };
 
-const login = useCallback((password: string) => {
-    const loginData = { password: password };
-    executeLogin({ email: emailUsuario, data: JSON.stringify(loginData) });
-}, [emailUsuario, executeLogin]);
 
-   const router = useRouter();
 
-const { mutate: executeLogout } = useExecuteLogout<AxiosResponse<void, any>>({
-    mutation: {
-        onSuccess: () => {
+    const handleLogoutSubmission = async (email: string) => {
+            await logoutService.verifyEmailDelete(email);
             localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
             localStorage.removeItem('user');
             setAccessToken(undefined);
             setUser(null);
             router.push('/');
-        },
-        onError: (error) => {
-            console.error('Erro ao executar o logout:', error);
-        },
-    },
-});
-
-const logout = useCallback(async (email: string) => {
-    executeLogout({ email });
-}, [executeLogout]);
-
+    };
 
     function closeModal() {
         setModal(null);
@@ -260,17 +211,17 @@ const logout = useCallback(async (email: string) => {
     const value = useMemo(() => ({
         user,
         emailUsuario,
-        login,
-        logout,
+        handleLoginSubmission,
         isAuthenticated,
         openModal,
         closeModal,
         modal,
         setModal,
-        handleEmail,
-        handleConfirmaEmail,
-        handleRegister,
-        handleRegistration
+        handleEmailSubmission,
+        handleConfirmEmailSubmission,
+        handleLogoutSubmission,
+        handleSavePreRegistrationSubmission,
+        handleTokenPasswordSubmission
     }), [user, isAuthenticated, modal]);
 
     return (

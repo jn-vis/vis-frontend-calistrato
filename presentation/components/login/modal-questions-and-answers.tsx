@@ -5,7 +5,7 @@ import { useAuth } from '@/presentation/contexts/authContext';
 import Select from 'react-select';
 
 export const ModalQuestionsAndAnswers = () => {
-    const { handleRegistration, setModal, modal } = useAuth();
+    const { handleSavePreRegistrationSubmission, setModal, modal } = useAuth();
     const comoNosConheceu = [
         { value: 'linkedin', label: 'Por alguém ou por anúncio no linkedin' },
         { value: 'telegram', label: 'Grupos de vagas no telegram' },
@@ -35,7 +35,7 @@ export const ModalQuestionsAndAnswers = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleRegistration(selectComoNosConheceu, selectQualObjetivo);
+        handleSavePreRegistrationSubmission(selectComoNosConheceu, selectQualObjetivo);
     };
 
     return (

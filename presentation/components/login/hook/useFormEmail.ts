@@ -5,12 +5,11 @@ import { TFormData, emailSchema} from '@/domain/schemas/login-email';
 import { useAuth } from '@/presentation/contexts/authContext';
 
 export const useFormEmail = () => {
-    const { handleEmail} = useAuth();
+    const { handleEmailSubmission} = useAuth();
     const {
         register,
         handleSubmit,
         setValue,
-        setError,
         formState: { errors,isSubmitting },
       } = useForm<TFormData>({
         resolver: zodResolver(emailSchema),
@@ -29,7 +28,7 @@ export const useFormEmail = () => {
 
     const handleFormSubmit = async (data: TFormData) => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        handleEmail(data.email, setError);
+        handleEmailSubmission(data.email);
         handleSetData({ email: '' });
     };
 
@@ -40,7 +39,6 @@ export const useFormEmail = () => {
         handleSetData,
         errors,
         isSubmitting,
-        setError,
         handleFormSubmit
     }
 }

@@ -9,14 +9,14 @@ import IconLoader from "../../../components/icon/icon-loader";
 
 export const ModalPassword = () => {
     const [password, setPassword] = useState('');
-    const {login, setModal, modal} = useAuth();
+    const {handleLoginSubmission, setModal, modal} = useAuth();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         setIsSubmitting(true);
         setTimeout(() => {
-            login(password);
+            handleLoginSubmission(password);
             setIsSubmitting(false);
         }, 1000);
     };

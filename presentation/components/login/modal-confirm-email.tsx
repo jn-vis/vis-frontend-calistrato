@@ -5,12 +5,12 @@ import { useAuth } from '@/presentation/contexts/authContext';
 import IconUser from '@/components/icon/icon-user';
 
 export const ModalConfirmEmail = () => {
-    const { handleConfirmaEmail, setModal, modal } = useAuth();
+    const { handleConfirmEmailSubmission, setModal, modal } = useAuth();
     const [confirmarEmail, setConfirmarEmail] = useState('');
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        handleConfirmaEmail(confirmarEmail);
+        handleConfirmEmailSubmission(confirmarEmail);
         setConfirmarEmail('');
     };
 
