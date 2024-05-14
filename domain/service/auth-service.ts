@@ -1,4 +1,4 @@
-import { AuthRepository } from "../usecases/password";
+import { AuthRepository } from "../usecases/authentication";
 
 
 export class AuthService {

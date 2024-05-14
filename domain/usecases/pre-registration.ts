@@ -1,13 +1,13 @@
+export interface PreRegistrationRepository {
+    registration: (params: PreRegistrationRepository.Params) => Promise<PreRegistrationRepository.Model>
+}
 
-
-export type PreRegistrationParams = {
+export namespace PreRegistrationRepository {
+  export type Params = {
     email: string
     goal: string
     channel: string
+  }
+
+  export type Model = any
 }
-
-
-export interface PreRegistrationRepository {
-    registration(params: PreRegistrationParams): Promise<any>
-}
-

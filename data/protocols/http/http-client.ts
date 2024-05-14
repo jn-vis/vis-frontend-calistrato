@@ -9,7 +9,7 @@ export interface HttpClient<R = any> {
   request: (data: HttpRequest) => Promise<HttpResponse<R>>
 }
 
-export type HttpMethod = 'post' | 'get' | 'put' | 'delete'
+export type HttpMethod = 'head' | 'post' | 'get' | 'put' | 'delete'
 
 export enum HttpStatusCode {
     ok = 200,
@@ -19,7 +19,8 @@ export enum HttpStatusCode {
     unauthorized = 401,
     forbidden = 403,
     notFound = 404,
-    conflict = 409
+    conflict = 409,
+    serverError = 500
 }
 
 

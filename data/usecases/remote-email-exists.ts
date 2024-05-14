@@ -1,16 +1,15 @@
-import { EmailExistsRepository, EmailParams } from "@/domain/usecases/exists-email";
-import { HttpPostClient, HttpStatusCode } from "@/data/protocols/http";
+import { EmailExistsRepository} from "@/domain/usecases/exists-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
-import { AccountModel } from "@/domain/models";
-import { HttpHeadClient } from "../protocols/http/http-head-client";
+import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
 
 export class RemoteEmailExists implements EmailExistsRepository {
-    constructor(private readonly url: string, private readonly httpHeadClient: HttpHeadClient<EmailParams, any>) {}
+    constructor(private readonly url: string, private readonly httpClient: HttpClient<EmailExistsRepository.Model>) {}
 
-    async email(params: EmailParams): Promise<any> {
-        const fullUrl = `${this.url}/login/${params.email}/token`;
-        const httpResponse = await this.httpHeadClient.head({
-            url: fullUrl,
+    async email(params: EmailExistsRepository.Params): Promise<EmailExistsRepository.Model> {
+        const httpResponse = await this.httpClient.request({
+            url: this.url,
+            method: 'head',
+            body: params
         });
         switch (httpResponse.statusCode) {
             case HttpStatusCode.ok:
@@ -19,6 +18,8 @@ export class RemoteEmailExists implements EmailExistsRepository {
                 return { status: HttpStatusCode.created, data: httpResponse.body };
             case HttpStatusCode.accepted:
                 return { status: HttpStatusCode.accepted, data: httpResponse.body };
+            case HttpStatusCode.notFound:
+                return { status: HttpStatusCode.notFound, data: httpResponse.body };
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
             case HttpStatusCode.badRequest:

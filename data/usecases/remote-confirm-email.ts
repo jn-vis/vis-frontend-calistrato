@@ -1,15 +1,17 @@
-import { EmailParams } from "@/domain/usecases/exists-email";
-import { HttpPostClient, HttpStatusCode } from "@/data/protocols/http";
+
 import { ConfirmEmailRepository } from "@/domain/usecases/confirm-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
+import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
 
 export class RemoteConfirmEmail implements ConfirmEmailRepository {
-    constructor(private readonly url: string, private readonly httpPostClient: HttpPostClient<EmailParams, any>) {}
+    constructor(private readonly url: string, private readonly httpClient: HttpClient<ConfirmEmailRepository.Model>) {}
 
-    async confirmEmail(params: EmailParams): Promise<any> {
-        const fullUrl = `${this.url}/login/${params.email}/token`;
-        const httpResponse = await this.httpPostClient.post({
-            url: fullUrl,
+    async confirmEmail(params: ConfirmEmailRepository.Params): Promise<ConfirmEmailRepository.Model> {
+
+        const httpResponse = await this.httpClient.request({
+            url: this.url,
+            method: 'post',
+            body: params
         });
         switch (httpResponse.statusCode) {
             case HttpStatusCode.accepted:

@@ -1,11 +1,13 @@
-// import { AccountModel } from "../models";
+export interface TokenLanguageRepository {
+    tokenLanguage: (params: TokenLanguageRepository.Params) => Promise<TokenLanguageRepository.Model>
+}
 
-export interface TokenLanguageParams {
+export namespace TokenLanguageRepository {
+  export type Params = {
     email: string;
     language: string;
     signal?: AbortSignal;
-}
+  }
 
-export interface TokenLanguageRepository {
-    tokenLanguage(params: TokenLanguageParams): Promise<any>;
+  export type Model = any
 }

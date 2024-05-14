@@ -1,8 +1,13 @@
-export interface EmailParams {
-    email: string;
-    signal?: AbortSignal;
-}
 
 export interface EmailExistsRepository {
-    email(params: EmailParams): Promise<any>;
+    email: (params: EmailExistsRepository.Params) => Promise<EmailExistsRepository.Model>
+}
+
+export namespace EmailExistsRepository {
+  export type Params = {
+    email: string
+    signal?: AbortSignal;
+  }
+
+  export type Model = any
 }

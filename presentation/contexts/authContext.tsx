@@ -1,48 +1,17 @@
-import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useMemo, useState } from 'react';
 import { IAuthContextData, IAuthProviderProps, ModalType } from '../../infra/auth/interface';
 import { useRouter } from 'next/navigation';
-import { HttpStatusCode } from '@/data/protocols/http';
-import { AxiosHttpClient } from '@/infra/http/axios-http-client/axios-http-client';
-import { RemoteEmailExists } from '@/data/authentication/remote-email-exists';
-import { EmailService } from '@/domain/service/email-service';
-import { RemoteConfirmEmail } from '@/data/authentication/remote-confirm-email';
-import { ConfirmEmailService } from '@/domain/service/confirmar-email-service';
-import { RemoteTokenLanguage } from '@/data/authentication/remote-token-language';
-import { TokenLanguageService } from '@/domain/service/token-language-service';
-import { RemotePreRegistration } from '@/data/authentication/remote-pre-registration';
-import { RemoteTokenPassword } from '@/data/authentication/remote-token-password';
-import { TokenPasswordService } from '@/domain/service/token-password';
-import { RemoteLogout } from '@/data/authentication/remote-logout';
-import { LogoutService } from '@/domain/service/logout-service';
-import { RemoteAuthentication} from '@/data/authentication/remote-authentication';
-import { AuthService } from '@/domain/service/auth-service';
+import { HttpStatusCode } from '@/data/protocols/http/http-client';
+import { makeRemoteEmailExists } from '@/main/factories/usecases/remote-exists-login-factory';
+import { makeRemoteConfirmEmail } from '@/main/factories/usecases/remote-confirm-email-factory';
+import { makeRemotePreRegistration } from '@/main/factories/usecases/remote-pre-registration-factory';
+import { makeRemoteTokenLanguage } from '@/main/factories/usecases/remote-token-language-factory';
+import { makeRemoteTokenPassword } from '@/main/factories/usecases/remote-token-password';
+import { makeRemoteAuthentication } from '@/main/factories/usecases/remote-authentication-factory';
+import { makeRemoteLogout } from '@/main/factories/usecases/remote-logout-factory';
 
 
 const LOCAL_STORAGE_KEY_ACCESS_TOKEN = 'sessionToken';
-
-
-
-// Criação do cliente HTTP e do repositório
-const httpClient = new AxiosHttpClient();
-const emailExistsRepository = new RemoteEmailExists('http://localhost:8080', httpClient);
-const confirmEmailRepository = new RemoteConfirmEmail('http://localhost:8080', httpClient);
-const tokenServiceRepository = new RemoteTokenLanguage('http://localhost:8080', httpClient);
-const preRegistrationRepository = new RemotePreRegistration('http://localhost:8080', httpClient);
-const tokenPasswordRepository = new RemoteTokenPassword('http://localhost:8080', httpClient);
-const logoutRepository = new RemoteLogout('http://localhost:8080', httpClient);
-const authRepository = new RemoteAuthentication('http://localhost:8080', httpClient);
-
-
-// Instância do serviço
-const emailService = new EmailService(emailExistsRepository);
-const confirmService = new ConfirmEmailService(confirmEmailRepository);
-const tokenservice = new TokenLanguageService(tokenServiceRepository);
-const tokenPasswordService = new TokenPasswordService(tokenPasswordRepository);
-const logoutService = new LogoutService(logoutRepository)
-const authService = new AuthService(authRepository);
-
-
 
 export const AuthContext = React.createContext({} as IAuthContextData);
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
@@ -55,6 +24,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const router = useRouter();
+
 
 
     useEffect(() => {
@@ -73,8 +43,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     }, []);
 
     const handleEmailSubmission = async (email: string) => {
+        const emailExistsRepository = makeRemoteEmailExists(email);
+
         try {
-            const result = await emailService.verifyEmail(email);
+            const result = await emailExistsRepository.email({email});
 
             if (result && result.status) {
                 switch (result.status) {
@@ -88,26 +60,28 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
                     case HttpStatusCode.accepted:
                         setModal('register');
                         break;
+                    case HttpStatusCode.notFound:
+                        setModal('confirmLogin');
+                        break;
                     default:
                         setModal(null);
                 }
             } else {
                 setModal(null);
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Failed to verify email:', error);
-            if (axios.isAxiosError(error) && error.response && error.response.status === HttpStatusCode.notFound) {
-                setModal('confirmLogin');
-            } else {
-                setModal(null);
-            }
+            setModal(null);
+
         }
     };
 
 
     const handleConfirmEmailSubmission = async (email: string) => {
+        const confirmEmailRepository = makeRemoteConfirmEmail(email);
         try {
-            const result = await confirmService.verifyConfirmEmail(email);
+            const result = await confirmEmailRepository.confirmEmail({email});
+
             if (result && result.status === HttpStatusCode.accepted) {
                 setModal('registration');
                 setEmailUsuario(email);
@@ -121,8 +95,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const handleTokenLanguageSubmission = async (email: string, language: string) => {
+        const tokenLanguageRepository = makeRemoteTokenLanguage(email, language);
+
         try {
-            const result = await tokenservice.token(email, language);
+            const result = await tokenLanguageRepository.tokenLanguage({email: email, language: language});
 
             if (result && result.status === HttpStatusCode.ok) {
                 setModal('register');
@@ -136,8 +112,10 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const handleSavePreRegistrationSubmission = async (channel: string, goal: string) => {
+        const preRegistrationRepository = makeRemotePreRegistration(emailUsuario);
+
         try {
-            const result = await preRegistrationRepository.registration({ email: emailUsuario,channel, goal });
+            const result = await preRegistrationRepository.registration({ email: emailUsuario, channel, goal });
             if (result && result.status === HttpStatusCode.accepted) {
                 handleTokenLanguageSubmission(emailUsuario, 'portuguese')
             } else {
@@ -150,10 +128,13 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const handleTokenPasswordSubmission = async (token: string, password: string, confirmPassword: string) => {
+        const tokenPasswordRepository = makeRemoteTokenPassword(emailUsuario);
+
         try {
-            const response = await tokenPasswordService.token(emailUsuario, token, password, confirmPassword);
+            const response = await tokenPasswordRepository.tokenPassword({email: emailUsuario, token, password, confirmPassword});
             if (response.data && typeof response.data === 'object') {
                 const { sessionToken } = response.data;
+
                 if (sessionToken) {
                     localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, sessionToken);
                     localStorage.setItem('user', JSON.stringify(emailUsuario));
@@ -171,8 +152,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
     };
 
     const handleLoginSubmission = async (password: string) => {
+        const authRepository = makeRemoteAuthentication(emailUsuario);
         try {
-            const response = await authService.auth(emailUsuario, password);
+            const response = await authRepository.login({email: emailUsuario, password: password});
             if (response.data && typeof response.data === 'object') {
                 const { sessionToken } = response.data;
                 if (sessionToken) {
@@ -194,7 +176,8 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
 
     const handleLogoutSubmission = async (email: string) => {
-            await logoutService.verifyEmailDelete(email);
+        const logoutRepository = makeRemoteLogout(email);
+            await logoutRepository.logout({email: emailUsuario});
             localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
             localStorage.removeItem('user');
             setAccessToken(undefined);
