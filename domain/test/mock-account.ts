@@ -1,5 +1,5 @@
 
-import { AuthenticationParams } from '@/domain/usecases/'
+
 import { AccountModel } from '../models'
 import casual from 'casual'
 
@@ -11,6 +11,7 @@ export const mockAuthentication = (): AuthenticationParams => ({
 })
 
 export const mockAccountModel = (): AccountModel => ({
-     accessToken: casual.uuid
+     sessionToken: casual.uuid,
+     user: casual.email
 })
 

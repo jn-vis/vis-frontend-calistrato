@@ -11,5 +11,5 @@ export namespace Authentication {
     signal?: AbortSignal;
   }
 
-  export type Model = any
+  export type Model = AccountModel
 }
