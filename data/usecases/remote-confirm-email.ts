@@ -2,6 +2,9 @@
 import { ConfirmEmailRepository } from "@/domain/usecases/confirm-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
 import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { InvalidEmailError } from "@/domain/errors/invalid-email-error";
+import { BlockedTokenError } from "@/domain/errors/blocked-token-error";
+import { UserAlreadyLoggedError } from "@/domain/errors/user-already-logged-error";
 
 export class RemoteConfirmEmail implements ConfirmEmailRepository {
     constructor(private readonly url: string, private readonly httpClient: HttpClient<ConfirmEmailRepository.Model>) {}
@@ -19,11 +22,11 @@ export class RemoteConfirmEmail implements ConfirmEmailRepository {
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
             case HttpStatusCode.badRequest:
-                throw new Error('E-mail inválido');
+                throw new InvalidEmailError();
             case HttpStatusCode.forbidden:
-                throw new Error('Token bloqueado');
+                throw new BlockedTokenError();
             case HttpStatusCode.conflict:
-                throw new Error('Usuário já logado no sistema');
+                throw new UserAlreadyLoggedError();
             default:
                 throw new UnexpectedError();
         }

@@ -1,6 +1,9 @@
 import { EmailExistsRepository} from "@/domain/usecases/exists-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
 import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { InvalidEmailError } from "@/domain/errors/invalid-email-error";
+import { BlockedTokenError } from "@/domain/errors/blocked-token-error";
+import { UserAlreadyLoggedError } from "@/domain/errors/user-already-logged-error";
 
 export class RemoteEmailExists implements EmailExistsRepository {
     constructor(private readonly url: string, private readonly httpClient: HttpClient<EmailExistsRepository.Model>) {}
@@ -22,12 +25,12 @@ export class RemoteEmailExists implements EmailExistsRepository {
                 return { status: HttpStatusCode.notFound, data: httpResponse.body };
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
-            case HttpStatusCode.badRequest:
-                throw new Error('E-mail inválido');
-            case HttpStatusCode.forbidden:
-                throw new Error('Token bloqueado');
-            case HttpStatusCode.conflict:
-                throw new Error('Usuário já logado no sistema');
+                case HttpStatusCode.badRequest:
+                    throw new InvalidEmailError();
+                case HttpStatusCode.forbidden:
+                    throw new BlockedTokenError();
+                case HttpStatusCode.conflict:
+                    throw new UserAlreadyLoggedError();
             default:
                 throw new UnexpectedError();
         }
