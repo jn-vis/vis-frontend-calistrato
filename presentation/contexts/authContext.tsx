@@ -9,6 +9,7 @@ import { makeRemoteTokenLanguage } from '@/main/factories/usecases/remote-token-
 import { makeRemoteTokenPassword } from '@/main/factories/usecases/remote-token-password';
 import { makeRemoteAuthentication } from '@/main/factories/usecases/remote-authentication-factory';
 import { makeRemoteLogout } from '@/main/factories/usecases/remote-logout-factory';
+import { getCurrentAccountAdapter, setCurrentAccountAdapter } from '@/main/adapters';
 
 
 const LOCAL_STORAGE_KEY_ACCESS_TOKEN = 'sessionToken';
@@ -25,22 +26,13 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 
     const router = useRouter();
 
-
-
     useEffect(() => {
-        const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-        const user = localStorage.getItem('user');
-
-        setAccessToken(accessToken ?? undefined);
-
-        if (user) {
-            try {
-                setUser(JSON.parse(user));
-            } catch (error) {
-                console.error('Error parsing user:', error);
-            }
-        }
-    }, []);
+    const account = getCurrentAccountAdapter();
+    if (account && account.sessionToken) {
+        setAccessToken(account.sessionToken);
+        setUser(account.user);
+    }
+}, []);
 
     const handleEmailSubmission = async (email: string) => {
         const emailExistsRepository = makeRemoteEmailExists(email);
@@ -136,8 +128,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
                 const { sessionToken } = response.data;
 
                 if (sessionToken) {
-                    localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, sessionToken);
-                    localStorage.setItem('user', JSON.stringify(emailUsuario));
+                    setCurrentAccountAdapter({ sessionToken: sessionToken, user: emailUsuario });
                     setAccessToken(sessionToken);
                     setUser(emailUsuario);
                     setModal(null);
@@ -151,27 +142,26 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
         }
     };
 
-    const handleLoginSubmission = async (password: string) => {
-        const authRepository = makeRemoteAuthentication(emailUsuario);
-        try {
-            const response = await authRepository.login({email: emailUsuario, password: password});
-            if (response.data && typeof response.data === 'object') {
-                const { sessionToken } = response.data;
-                if (sessionToken) {
-                    localStorage.setItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN, sessionToken);
-                    localStorage.setItem('user', JSON.stringify(emailUsuario));
-                    setAccessToken(sessionToken);
-                    setUser(emailUsuario);
-                    setModal(null);
-                } else {
-                    console.error('O token de acesso não foi retornado corretamente pela API.');
-                }
+const handleLoginSubmission = async (password: string) => {
+    const authRepository = makeRemoteAuthentication(emailUsuario);
+    try {
+        const response = await authRepository.login({email: emailUsuario, password: password});
+        if (response.data && typeof response.data === 'object') {
+            const { sessionToken } = response.data;
+            if (sessionToken) {
+                setCurrentAccountAdapter({ sessionToken: sessionToken, user: emailUsuario });
+                setAccessToken(sessionToken);
+                setUser(emailUsuario);
+                setModal(null);
+            } else {
+                console.error('O token de acesso não foi retornado corretamente pela API.');
             }
-        } catch (error) {
-            console.error('Failed to verify email:', error);
-            setModal(null);
         }
-    };
+    } catch (error) {
+        console.error('Failed to verify email:', error);
+        setModal(null);
+    }
+};
 
 
 
