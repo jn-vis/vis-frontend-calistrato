@@ -20,6 +20,8 @@ export enum HttpStatusCode {
     forbidden = 403,
     notFound = 404,
     conflict = 409,
+    lockedPassword = 423,
+    tokenLockedRecently = 429,
     serverError = 500
 }
 

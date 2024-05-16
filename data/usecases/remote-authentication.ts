@@ -1,5 +1,8 @@
 import { HttpClient, HttpStatusCode } from '../protocols/http/http-client';
-import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
+import { BlockedTokenError, InvalidEmailError, UnexpectedError, UserAlreadyLoggedError } from "@/domain/errors";
+import { MissingEmailError } from '@/domain/errors/missing-email-error';
+import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
+import { WrongPasswordError } from '@/domain/errors/wrong-password-error';
 import { Authentication } from "@/domain/usecases/authentication";
 
 
@@ -17,7 +20,17 @@ export class RemoteAuthentication implements Authentication {
             case HttpStatusCode.ok:
                 return { status: httpResponse.statusCode, data: httpResponse.body };
                 case HttpStatusCode.unauthorized:
-                    throw new InvalidCredentialsError();
+                    throw new WrongPasswordError();
+                case HttpStatusCode.badRequest:
+                    throw new InvalidEmailError();
+                case HttpStatusCode.forbidden:
+                    throw new BlockedTokenError();
+                case HttpStatusCode.notFound:
+                    throw new MissingEmailError();
+                case HttpStatusCode.lockedPassword:
+                    throw new PasswordLockedRecentlyError();
+                case HttpStatusCode.conflict:
+                    throw new UserAlreadyLoggedError();
                     default:
                 throw new UnexpectedError();
         }

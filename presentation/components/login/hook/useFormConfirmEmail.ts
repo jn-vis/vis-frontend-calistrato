@@ -1,13 +1,12 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { TFormData, emailSchema} from '@/domain/schemas/login-email';
 import { useAuth } from '@/presentation/contexts/authContext';
-import { TFormData, emailSchema } from '@/domain/schemas';
 import { BlockedTokenError, InvalidCredentialsError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
 
-
-export const useFormEmail = () => {
-    const { handleEmailSubmission} = useAuth();
+export const useFormConfirmEmail = () => {
+    const { handleConfirmEmailSubmission} = useAuth();
     const {
         register,
         handleSubmit,
@@ -31,9 +30,9 @@ export const useFormEmail = () => {
 
     const handleFormSubmit = async (data: TFormData) => {
         try {
-            await handleEmailSubmission(data.email);
+            await handleConfirmEmailSubmission(data.email);
             handleSetData({ email: '' });
-        } catch (error: any) {
+        } catch (error:any) {
             const errorMap = {
                 [InvalidCredentialsError.name]: 'Credenciais inválidas',
                 [InvalidEmailError.name]: 'Email inválido',

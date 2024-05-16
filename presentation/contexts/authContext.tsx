@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { IAuthContextData, IAuthProviderProps, ModalType } from '../../infra/auth/interface';
+import { IAuthContextData, IAuthProviderProps, ModalType } from '../components/login/interface/interface';
 import { useRouter } from 'next/navigation';
 import { HttpStatusCode } from '@/data/protocols/http/http-client';
 import { makeRemoteEmailExists } from '@/main/factories/usecases/remote-exists-login-factory';
@@ -63,8 +63,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } catch (error: any) {
             console.error('Failed to verify email:', error);
-            setModal(null);
-
+            throw error;
         }
     };
 
@@ -82,7 +81,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error('Failed to verify email:', error);
-            setModal(null);
+            throw error;
         }
     };
 
@@ -99,7 +98,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error('Failed to verify email:', error);
-            setModal(null);
+            throw error;
         }
     };
 
@@ -115,7 +114,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error('Failed to verify email:', error);
-            setModal(null);
+            throw error;
         }
     };
 
@@ -138,7 +137,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
             }
         } catch (error) {
             console.error('Failed to verify email:', error);
-            setModal(null);
+            throw error;
         }
     };
 
@@ -147,6 +146,9 @@ const handleLoginSubmission = async (password: string) => {
     try {
         const response = await authRepository.login({email: emailUsuario, password: password});
         if (response.data && typeof response.data === 'object') {
+            console.log(response)
+            console.log(response.data)
+
             const { sessionToken } = response.data;
             if (sessionToken) {
                 setCurrentAccountAdapter({ sessionToken: sessionToken, user: emailUsuario });
@@ -159,7 +161,7 @@ const handleLoginSubmission = async (password: string) => {
         }
     } catch (error) {
         console.error('Failed to verify email:', error);
-        setModal(null);
+        throw error;
     }
 };
 
@@ -194,7 +196,8 @@ const handleLoginSubmission = async (password: string) => {
         handleConfirmEmailSubmission,
         handleLogoutSubmission,
         handleSavePreRegistrationSubmission,
-        handleTokenPasswordSubmission
+        handleTokenPasswordSubmission,
+        handleTokenLanguageSubmission
     }), [user, isAuthenticated, modal]);
 
     return (

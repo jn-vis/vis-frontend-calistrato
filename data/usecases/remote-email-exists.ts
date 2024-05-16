@@ -25,6 +25,8 @@ export class RemoteEmailExists implements EmailExistsRepository {
                 return { status: HttpStatusCode.notFound, data: httpResponse.body };
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
+            // case HttpStatusCode.lockedPassword:
+            //      new InvalidCredentialsError();
                 case HttpStatusCode.badRequest:
                     throw new InvalidEmailError();
                 case HttpStatusCode.forbidden:

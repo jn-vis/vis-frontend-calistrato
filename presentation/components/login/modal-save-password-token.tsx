@@ -1,78 +1,69 @@
 'use client';
-import { useState } from 'react';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
-import IconUser from '@/components/icon/icon-user';
 import IconLockDots from '../../../components/icon/icon-lock-dots';
+import { useFormSavePasswordToken } from './hook/useFormSavePasswordToken';
+import IconLoader from '@/components/icon/icon-loader';
+import PasswordRequirements from '@/domain/schemas/regex-password';
+import { useTogglePassword } from './hook/useTogglePassword';
+import IconEye from '@/components/icon/icon-eye';
 
 export const ModalSavePasswordToken = () => {
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [token, setToken] = useState('');
-    const {handleTokenPasswordSubmission, setModal, modal} = useAuth();
-
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        handleTokenPasswordSubmission(token, password, confirmPassword);
-    };
+    const { setModal, modal } = useAuth();
+    const { register, handleSubmit,watch, handleFormSubmit, errors, isSubmitting } = useFormSavePasswordToken();
+    const password = watch('password', '');
+    const { showPassword, togglePasswordVisibility } = useTogglePassword();
 
     return (
-        <>
+
             <Modal isOpen={modal === 'register'} onClose={() => setModal(null)} title="Informe o token enviado por e-mail e crie uma senha">
-            <form onSubmit={handleSubmit}>
-                <div className="relative mb-4">
-                    <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
-                        <IconUser className="h-5 w-5" />
+                <form onSubmit={handleSubmit(handleFormSubmit)}>
+                    <div className="relative mb-4">
+                        <span className="absolute top-1/2 -translate-y-1/2 dark:text-white-dark ltr:left-3 rtl:right-3">
+                           <IconLockDots fill={true} />
+                        </span>
+                        <span className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer" onClick={togglePasswordVisibility}>
+                        {showPassword ? <IconEye /> : <IconEye />}
                     </span>
-                    <input
-                        value={token}
-                        onChange={(event) => setToken(event.target.value)}
-                        type="password"
-                        placeholder="Token Enviado por E-mail"
-                        className="form-input ltr:pl-10 rtl:pr-10"
-                        id="token"
-                    />
-                </div>
-                <div className="relative mb-4">
-                    <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
-                    <IconLockDots fill={true} />
+                        <input {...register('token')} type={showPassword ? "text" : "password"} placeholder="Token Enviado por E-mail" className="form-input ltr:pl-10 rtl:pr-10" id="token" />
+                    </div>
+                        {errors.token && <p className="text-red-500">{errors.token.message}</p>}
+                    <div className="relative mb-2">
+                        <span className="absolute top-1/2 -translate-y-1/2 dark:text-white-dark ltr:left-3 rtl:right-3">
+                            <IconLockDots fill={true} />
+                        </span>
+                        <span className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer" onClick={togglePasswordVisibility}>
+                        {showPassword ? <IconEye /> : <IconEye />}
+                        </span>
+
+                        <input {...register('password')} type={showPassword ? "text" : "password"} placeholder="Digite sua Senha" className="form-input ltr:pl-10 rtl:pr-10" id="password" />
+                    </div>
+                        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                        <PasswordRequirements password={password} />
+                    <div className="relative mb-2">
+                        <span className="absolute top-1/2 -translate-y-1/2 dark:text-white-dark ltr:left-3 rtl:right-3">
+                            <IconLockDots fill={true} />
+                        </span>
+                        <span className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer" onClick={togglePasswordVisibility}>
+                        {showPassword ? <IconEye /> : <IconEye />}
                     </span>
-                    <input
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        type="password"
-                        placeholder="Digite sua Senha"
-                        className="form-input ltr:pl-10 rtl:pr-10"
-                        id="password"
-                    />
-                </div>
-                <div className="relative mb-4">
-                    <span className="absolute top-1/2 -translate-y-1/2 ltr:left-3 rtl:right-3 dark:text-white-dark">
-                    <IconLockDots fill={true} />
-                    </span>
-                    <input
-                        value={confirmPassword}
-                        onChange={(event) => setConfirmPassword(event.target.value)}
-                        type="password"
-                        placeholder="Confirmar Senha"
-                        className="form-input ltr:pl-10 rtl:pr-10"
-                        id="confirm_password"
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary w-full">
-                    Validar
-                </button>
-            </form>
-            <div className="border-t border-[#ebe9f1] p-5 dark:border-white/10">
-                <p className="text-center text-sm text-white-dark dark:text-white-dark/70">
-                    Não recebeu o Token?
-                    <button type="button" className="text-[#515365] hover:underline ltr:ml-1 rtl:mr-1 dark:text-white-dark">
-                        reenvie aqui
+                        <input {...register('confirmPassword')} type={showPassword ? "text" : "password"} placeholder="Confirmar Senha" className="form-input ltr:pl-10 rtl:pr-10" id="confirm_password" />
+                    </div>
+                        {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+                    <button type="submit" className="btn btn-primary w-full" disabled={isSubmitting}>
+                        {isSubmitting ? <IconLoader className="inline-block shrink-0 animate-[spin_2s_linear_infinite] align-middle ltr:mr-2 rtl:ml-2" /> : null}
+                        Validar
                     </button>
-                </p>
-            </div>
+                </form>
+                <div className="border-t border-[#ebe9f1] p-5 dark:border-white/10">
+                    <p className="text-center text-sm text-white-dark dark:text-white-dark/70">
+                        Não recebeu o Token?
+                        <button type="button" className="text-[#515365] hover:underline dark:text-white-dark ltr:ml-1 rtl:mr-1">
+                            reenvie aqui
+                        </button>
+                    </p>
+                </div>
             </Modal>
-        </>
+
     );
 };

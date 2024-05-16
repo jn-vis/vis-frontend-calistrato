@@ -12,6 +12,7 @@ export interface IAuthContextData {
     handleEmailSubmission: (email: string) => Promise<void>;
     handleConfirmEmailSubmission: (email: string) => Promise<void>;
     handleLogoutSubmission: (email: string) => Promise<void>;
+    handleTokenLanguageSubmission: (email: string, language: string) => Promise<void>;
     handleSavePreRegistrationSubmission: (channel: string, goal: string) => Promise<void>;
     handleTokenPasswordSubmission: (token: string, password: string, confirmPassword: string) => Promise<void>;
 }
