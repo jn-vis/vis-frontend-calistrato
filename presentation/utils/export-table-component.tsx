@@ -1,6 +1,6 @@
 import { exportTable } from "@/presentation/utils/export-table"
-import IconFile from "../../components/icon/icon-file"
-import IconPrinter from "../../components/icon/icon-printer"
+import IconFile from "../icons/icon-file"
+import IconPrinter from "../icons/icon-printer"
 
 const ExportTableComponent = <T,>({ rowData, col }: { rowData: T[], col: string[] }) => {
     return (

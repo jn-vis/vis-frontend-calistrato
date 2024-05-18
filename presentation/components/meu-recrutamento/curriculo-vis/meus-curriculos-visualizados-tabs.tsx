@@ -1,5 +1,5 @@
 'use client';
-import IconHome from '@/components/icon/icon-home';
+import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
 import MeusCurriculosVisualizados from './meus-curriculos-visualizados';
 

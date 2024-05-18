@@ -1,11 +1,11 @@
-import ContentAnimation from '@/components/layouts/content-animation';
-import Footer from '@/components/layouts/footer';
-import Header from '@/components/layouts/header';
-import MainContainer from '@/components/layouts/main-container';
-import Overlay from '@/components/layouts/overlay';
-import ScrollToTop from '@/components/layouts/scroll-to-top';
-import Setting from '@/components/layouts/setting';
-import Sidebar from '@/components/layouts/sidebar';
+import ContentAnimation from '@/presentation/layouts/content-animation';
+import Footer from '@/presentation/layouts/footer';
+import Header from '@/presentation/layouts/header';
+import MainContainer from '@/presentation/layouts/main-container';
+import Overlay from '@/presentation/layouts/overlay';
+import ScrollToTop from '@/presentation/layouts/scroll-to-top';
+import Setting from '@/presentation/layouts/setting';
+import Sidebar from '@/presentation/layouts/sidebar';
 
 
 export default function DefaultLayout({ children }: { children: React.ReactNode }) {

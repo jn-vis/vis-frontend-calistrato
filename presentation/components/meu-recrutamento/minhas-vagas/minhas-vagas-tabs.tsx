@@ -1,5 +1,5 @@
 'use client';
-import IconHome from '@/components/icon/icon-home';
+import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
 import MinhasVagasEncerradas from './encerradas/lista-vagas-encerradas';
 import MinhasVagasLista from './ativas/lista-vagas-ativas';

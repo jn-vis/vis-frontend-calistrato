@@ -3,9 +3,9 @@ import useListVagas from '../../hooks/useListVagas';
 import formatDate from '@/presentation/utils/format-date';
 import Tippy from '@tippyjs/react';
 import Link from 'next/link';
-import IconNotesEdit from '@/components/icon/icon-notes-edit';
-import IconPencil from '@/components/icon/icon-pencil';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
+import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
+import IconPencil from '@/presentation/icons/icon-pencil';
+import IconTrashLines from '@/presentation/icons/icon-trash-lines';
 import Modal from '@/presentation/components/modal-composition';
 import { RowData } from '@/presentation/interfaces/vagas';
 

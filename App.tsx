@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import { toggleRTL, toggleTheme, toggleMenu, toggleLayout, toggleAnimation, toggleNavbar, toggleSemidark } from '@/store/themeConfigSlice';
-import Loading from '@/components/layouts/loading';
+import Loading from '@/presentation/layouts/loading';
 import { getTranslation } from '@/i18n';
 
 function App({ children }: PropsWithChildren) {

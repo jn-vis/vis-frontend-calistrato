@@ -1,8 +1,8 @@
-import IconCalendar from '@/components/icon/icon-calendar';
-import IconCoffee from '@/components/icon/icon-coffee';
-import IconMail from '@/components/icon/icon-mail';
-import IconMapPin from '@/components/icon/icon-map-pin';
-import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import IconCalendar from '@/presentation/icons/icon-calendar';
+import IconCoffee from '@/presentation/icons/icon-coffee';
+import IconMail from '@/presentation/icons/icon-mail';
+import IconMapPin from '@/presentation/icons/icon-map-pin';
+import IconPencilPaper from '@/presentation/icons/icon-pencil-paper';
 import Link from 'next/link';
 
 const MeuPerfil = () => {

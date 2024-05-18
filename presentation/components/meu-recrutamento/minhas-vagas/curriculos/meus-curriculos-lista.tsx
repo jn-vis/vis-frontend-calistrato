@@ -2,19 +2,19 @@
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
-import IconFile from '@/components/icon/icon-file';
-import IconPrinter from '@/components/icon/icon-printer';
+import IconFile from '@/presentation/icons/icon-file';
+import IconPrinter from '@/presentation/icons/icon-printer';
 import Link from 'next/link';
-import IconEye from '@/components/icon/icon-eye';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
+import IconEye from '@/presentation/icons/icon-eye';
+import IconTrashLines from '@/presentation/icons/icon-trash-lines';
 import Tippy from '@tippyjs/react';
-import IconPencil from '@/components/icon/icon-pencil';
+import IconPencil from '@/presentation/icons/icon-pencil';
 import VerMaisGeneric from '../ver-mais-generic';
 import { useSelector } from 'react-redux';
 import { IRootState } from '@/store';
-import IconLink from '@/components/icon/icon-link';
-import Dropdown from '@/components/utils/dropdown';
-import IconStar from '@/components/icon/icon-star';
+import IconLink from '@/presentation/icons/icon-link';
+import Dropdown from '@/presentation/utils/dropdown';
+import IconStar from '@/presentation/icons/icon-star';
 
 const rowData = [
     {

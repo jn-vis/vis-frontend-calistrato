@@ -1,8 +1,8 @@
 'use client';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
-import IconLoader from '../../../components/icon/icon-loader';
-import IconUser from '@/components/icon/icon-user';
+import IconLoader from '../../icons/icon-loader';
+import IconUser from '@/presentation/icons/icon-user';
 import { useFormEmail } from './hook/useFormEmail';
 
 export const ModalExistsEmail = () => {

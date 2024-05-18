@@ -1,5 +1,5 @@
 'use client';
-import CodeHighlight from '@/components/utils/highlight';
+import CodeHighlight from '@/presentation/utils/highlight';
 import React, { useState, ReactNode } from 'react';
 
 interface PanelCodeHighlightProps {

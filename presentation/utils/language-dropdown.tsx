@@ -1,6 +1,6 @@
 'use client';
-import Dropdown from '@/components/utils/dropdown';
-import IconCaretDown from '@/components/icon/icon-caret-down';
+import Dropdown from '@/presentation/utils/dropdown';
+import IconCaretDown from '@/presentation/icons/icon-caret-down';
 import { getTranslation } from '@/i18n';
 import { IRootState } from '@/store';
 import { toggleRTL } from '@/store/themeConfigSlice';

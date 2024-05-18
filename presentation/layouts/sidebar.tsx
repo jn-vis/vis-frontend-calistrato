@@ -6,15 +6,15 @@ import { toggleSidebar } from '@/store/themeConfigSlice';
 import AnimateHeight from 'react-animate-height';
 import { IRootState } from '@/store';
 import { useState, useEffect } from 'react';
-import IconCaretsDown from '@/components/icon/icon-carets-down';
-import IconCaretDown from '@/components/icon/icon-caret-down';
-import IconMenuUsers from '@/components/icon/menu/icon-menu-users';
-import IconMenuPages from '@/components/icon/menu/icon-menu-pages';
-import IconMenuAuthentication from '@/components/icon/menu/icon-menu-authentication';
+import IconCaretsDown from '@/presentation/icons/icon-carets-down';
+import IconCaretDown from '@/presentation/icons/icon-caret-down';
+import IconMenuUsers from '@/presentation/icons/menu/icon-menu-users';
+import IconMenuPages from '@/presentation/icons/menu/icon-menu-pages';
+import IconMenuAuthentication from '@/presentation/icons/menu/icon-menu-authentication';
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { AuthenticationManager } from '../../presentation/components/login';
-import { useAuth } from '../../presentation/contexts/authContext';
+import { AuthenticationManager } from '../components/login';
+import { useAuth } from '../contexts/authContext';
 
 const Sidebar = () => {
     const dispatch = useDispatch();

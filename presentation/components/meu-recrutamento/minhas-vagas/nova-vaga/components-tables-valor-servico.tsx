@@ -1,5 +1,5 @@
 'use client';
-import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
+import PanelCodeHighlight from '@/presentation/utils/panel-code-highlight';
 import 'tippy.js/dist/tippy.css';
 import React from 'react';
 

@@ -1,9 +1,9 @@
-import IconFolderPlus from '@/components/icon/icon-folder-plus';
-import IconListCheck from '@/components/icon/icon-list-check';
-import IconNotes from '@/components/icon/icon-notes';
-import IconNotesEdit from '@/components/icon/icon-notes-edit';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
-import IconUsersGroup from '@/components/icon/icon-users-group';
+import IconFolderPlus from '@/presentation/icons/icon-folder-plus';
+import IconListCheck from '@/presentation/icons/icon-list-check';
+import IconNotes from '@/presentation/icons/icon-notes';
+import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
+import IconTrashLines from '@/presentation/icons/icon-trash-lines';
+import IconUsersGroup from '@/presentation/icons/icon-users-group';
 import formatDate from '@/presentation/utils/format-date';
 import Link from 'next/link';
 import { RowData } from '../../../../../interfaces/vagas';

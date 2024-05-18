@@ -1,12 +1,12 @@
 'use client'
-import IconFile from '@/components/icon/icon-file';
-import IconPrinter from '@/components/icon/icon-printer';
+import IconFile from '@/presentation/icons/icon-file';
+import IconPrinter from '@/presentation/icons/icon-printer';
 import Link from 'next/link';
-import IconCircleCheck from '@/components/icon/icon-circle-check';
+import IconCircleCheck from '@/presentation/icons/icon-circle-check';
 import { exportTable } from '@/presentation/utils/export-table';
-import IconListCheck from '@/components/icon/icon-list-check';
-import IconLayoutGrid from '@/components/icon/icon-layout-grid';
-import Dropdown from '@/components/utils/dropdown';
+import IconListCheck from '@/presentation/icons/icon-list-check';
+import IconLayoutGrid from '@/presentation/icons/icon-layout-grid';
+import Dropdown from '@/presentation/utils/dropdown';
 import useListVagas from '../hooks/useListVagas';
 import ListTableVagas from '../components/vaga/list-table-vagas';
 import { ListGridVagas } from '../components/vaga/list-grid-vagas';

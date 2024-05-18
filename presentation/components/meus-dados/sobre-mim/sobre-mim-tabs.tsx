@@ -1,5 +1,5 @@
 'use client';
-import IconHome from '@/components/icon/icon-home';
+import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
 import { SobreMimComponente } from './sobre-mim-componente';
 import MeuPerfil from './meu-perfil';

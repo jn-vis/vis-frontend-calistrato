@@ -1,4 +1,4 @@
-import IconX from '@/components/icon/icon-x';
+import IconX from '@/presentation/icons/icon-x';
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 

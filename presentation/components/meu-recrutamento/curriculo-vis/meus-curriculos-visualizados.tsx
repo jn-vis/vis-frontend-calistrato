@@ -2,15 +2,15 @@
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useEffect, useState } from 'react';
 import sortBy from 'lodash/sortBy';
-import IconFile from '@/components/icon/icon-file';
-import IconPrinter from '@/components/icon/icon-printer';
+import IconFile from '@/presentation/icons/icon-file';
+import IconPrinter from '@/presentation/icons/icon-printer';
 import Link from 'next/link';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
+import IconTrashLines from '@/presentation/icons/icon-trash-lines';
 import Tippy from '@tippyjs/react';
-import IconNotesEdit from '@/components/icon/icon-notes-edit';
-import IconPencil from '@/components/icon/icon-pencil';
+import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
+import IconPencil from '@/presentation/icons/icon-pencil';
 
-import IconCircleCheck from '@/components/icon/icon-circle-check';
+import IconCircleCheck from '@/presentation/icons/icon-circle-check';
 import VerMaisGeneric from '../minhas-vagas/ver-mais-generic';
 
 const rowData = [

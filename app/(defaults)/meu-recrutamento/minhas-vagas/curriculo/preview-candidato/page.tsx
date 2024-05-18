@@ -1,8 +1,8 @@
 'use client';
 
-import IconGithub from '@/components/icon/icon-github';
-import IconPencilPaper from '@/components/icon/icon-pencil-paper';
-import IconPrinter from '@/components/icon/icon-printer';
+import IconGithub from '@/presentation/icons/icon-github';
+import IconPencilPaper from '@/presentation/icons/icon-pencil-paper';
+import IconPrinter from '@/presentation/icons/icon-printer';
 import Modal from '@/presentation/components/modal-composition';
 import Tippy from '@tippyjs/react';
 import { useState } from 'react';

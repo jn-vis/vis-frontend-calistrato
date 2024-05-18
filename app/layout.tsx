@@ -1,6 +1,6 @@
 'use client';
 
-import ProviderComponent from '@/components/layouts/provider-component';
+import ProviderComponent from '@/presentation/layouts/provider-component';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import '../styles/tailwind.css';
 import { Metadata } from 'next';

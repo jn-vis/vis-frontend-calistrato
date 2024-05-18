@@ -1,12 +1,12 @@
 'use client';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
-import IconLockDots from '../../../components/icon/icon-lock-dots';
+import IconLockDots from '../../icons/icon-lock-dots';
 import { useFormSavePasswordToken } from './hook/useFormSavePasswordToken';
-import IconLoader from '@/components/icon/icon-loader';
+import IconLoader from '@/presentation/icons/icon-loader';
 import PasswordRequirements from '@/domain/schemas/regex-password';
 import { useTogglePassword } from './hook/useTogglePassword';
-import IconEye from '@/components/icon/icon-eye';
+import IconEye from '@/presentation/icons/icon-eye';
 
 export const ModalSavePasswordToken = () => {
     const { setModal, modal } = useAuth();

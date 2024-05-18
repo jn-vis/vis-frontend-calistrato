@@ -1,8 +1,8 @@
 'use client';
-import IconFile from '@/components/icon/icon-file';
-import IconPrinter from '@/components/icon/icon-printer';
-import IconListCheck from '@/components/icon/icon-list-check';
-import IconLayoutGrid from '@/components/icon/icon-layout-grid';
+import IconFile from '@/presentation/icons/icon-file';
+import IconPrinter from '@/presentation/icons/icon-printer';
+import IconListCheck from '@/presentation/icons/icon-list-check';
+import IconLayoutGrid from '@/presentation/icons/icon-layout-grid';
 import { ListGridCurriculo } from '../components/curriculo/list-grid-curriculos';
 import ListTableCurriculo from '../components/curriculo/list-table-curriculos';
 import useListCurriculo from '../hooks/useListCurriculo';

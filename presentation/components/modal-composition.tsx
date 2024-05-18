@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
-import IconX from '@/components/icon/icon-x';
+import IconX from '@/presentation/icons/icon-x';
 
 interface ModalProps {
     isOpen: boolean;

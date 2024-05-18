@@ -1,8 +1,8 @@
 'use client';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
-import IconUser from '@/components/icon/icon-user';
-import IconLoader from '@/components/icon/icon-loader';
+import IconUser from '@/presentation/icons/icon-user';
+import IconLoader from '@/presentation/icons/icon-loader';
 import { useFormConfirmEmail } from './hook';
 
 

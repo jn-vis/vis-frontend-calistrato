@@ -1,4 +1,4 @@
-import Loading from '@/components/layouts/loading';
+import Loading from '@/presentation/layouts/loading';
 import React from 'react';
 
 const loading = () => {

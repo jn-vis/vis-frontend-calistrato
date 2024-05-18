@@ -1,12 +1,12 @@
 'use client';
-import IconHome from '@/components/icon/icon-home';
-import IconUser from '@/components/icon/icon-user';
-import PanelCodeHighlight from '@/components/utils/panel-code-highlight';
+import IconHome from '@/presentation/icons/icon-home';
+import IconUser from '@/presentation/icons/icon-user';
+import PanelCodeHighlight from '@/presentation/utils/panel-code-highlight';
 import React, { useEffect, useMemo, useState } from 'react';
 import ComponentsTablesValorServico from './components-tables-valor-servico';
-import IconNotesEdit from '@/components/icon/icon-notes-edit';
-import IconDollarSignCircle from '@/components/icon/icon-dollar-sign-circle';
-import IconListCheck from '@/components/icon/icon-list-check';
+import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
+import IconDollarSignCircle from '@/presentation/icons/icon-dollar-sign-circle';
+import IconListCheck from '@/presentation/icons/icon-list-check';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,8 +15,8 @@ import { postVagas } from '@/services/vagas-service';
 import { useRouter } from 'next/navigation';
 import { getEstados } from '@/services/estados-service';
 import { getDeficiencia } from '@/services/pcd-service';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
-import IconInfoCircle from '@/components/icon/icon-info-circle';
+import IconTrashLines from '@/presentation/icons/icon-trash-lines';
+import IconInfoCircle from '@/presentation/icons/icon-info-circle';
 import Tippy from '@tippyjs/react';
 
 

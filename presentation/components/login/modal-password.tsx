@@ -2,10 +2,10 @@
 
 import Modal from "../modal-composition";
 import { useAuth } from "@/presentation/contexts/authContext";
-import IconLockDots from "../../../components/icon/icon-lock-dots";
-import IconLoader from "../../../components/icon/icon-loader";
+import IconLockDots from "../../icons/icon-lock-dots";
+import IconLoader from "../../icons/icon-loader";
 import { useFormPassword } from "./hook";
-import IconEye from "@/components/icon/icon-eye";
+import IconEye from "@/presentation/icons/icon-eye";
 import { useTogglePassword } from "./hook/useTogglePassword";
 
 
