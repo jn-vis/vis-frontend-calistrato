@@ -37,7 +37,7 @@ export const useFormEmail = () => {
             const errorMap = {
                 [InvalidCredentialsError.name]: 'Credenciais inválidas',
                 [InvalidEmailError.name]: 'Email inválido',
-                [BlockedTokenError.name]: 'Token bloqueado',
+                [BlockedTokenError.name]: 'Token bloqueado. Por favor, envie um e-mail para onias@ccpjobsnow.com para desbloquear ou tente com outro e-mail. Verifique também sua caixa de spam.',
                 [UserAlreadyLoggedError.name]: 'Usuário já logado',
             };
 

@@ -19,7 +19,9 @@ export class RemoteAuthentication implements Authentication {
         switch (httpResponse.statusCode) {
             case HttpStatusCode.ok:
                 return { status: httpResponse.statusCode, data: httpResponse.body };
-                case HttpStatusCode.unauthorized:
+            // case HttpStatusCode.passwordError:
+            //     return { status: httpResponse.statusCode, data: httpResponse.body };
+                case HttpStatusCode.passwordError:
                     throw new WrongPasswordError();
                 case HttpStatusCode.badRequest:
                     throw new InvalidEmailError();
@@ -31,6 +33,9 @@ export class RemoteAuthentication implements Authentication {
                     throw new PasswordLockedRecentlyError();
                 case HttpStatusCode.conflict:
                     throw new UserAlreadyLoggedError();
+                case HttpStatusCode.tokenLockedRecently:
+                    throw new PasswordLockedRecentlyError();
+
                     default:
                 throw new UnexpectedError();
         }

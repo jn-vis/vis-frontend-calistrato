@@ -7,12 +7,18 @@ interface ModalProps {
     onClose: () => void;
     title: string;
     children: ReactNode;
+    closeOnOverlayClick?: boolean;
 }
 
-const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, title, children,closeOnOverlayClick }: ModalProps) => {
+    const handleOverlayClick = () => {
+        if (closeOnOverlayClick) {
+          onClose();
+        }
+      };
     return (
                 <Transition appear show={isOpen} as={Fragment}>
-                    <Dialog as="div" open={isOpen} onClose={onClose}>
+                    <Dialog as="div" open={isOpen} onClose={closeOnOverlayClick ? onClose : () => {}}>
                         <Transition.Child
                             as={Fragment}
                             enter="ease-out duration-300"
@@ -22,7 +28,7 @@ const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
                             leaveFrom="opacity-100"
                             leaveTo="opacity-0"
                         >
-                            <div className="fixed inset-0" />
+                            <div className="fixed inset-0"  onClick={handleOverlayClick}/>
                         </Transition.Child>
                         <div className="fixed inset-0 z-[999] overflow-y-auto bg-[black]/60">
                             <div className="flex min-h-screen items-start justify-center px-4">

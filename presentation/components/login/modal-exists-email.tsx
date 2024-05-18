@@ -10,7 +10,7 @@ export const ModalExistsEmail = () => {
     const { register, handleSubmit, errors, isSubmitting,handleFormSubmit } = useFormEmail();
 
     return (
-        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">
+        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail" closeOnOverlayClick={false}>
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <div className="relative">

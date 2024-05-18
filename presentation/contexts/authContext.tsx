@@ -146,8 +146,12 @@ const handleLoginSubmission = async (password: string) => {
     try {
         const response = await authRepository.login({email: emailUsuario, password: password});
         if (response.data && typeof response.data === 'object') {
-            console.log(response)
+            console.log(response.status)
             console.log(response.data)
+
+            if(response.status === HttpStatusCode.lockedPassword) {
+                setModal('register');
+            }
 
             const { sessionToken } = response.data;
             if (sessionToken) {
@@ -167,15 +171,19 @@ const handleLoginSubmission = async (password: string) => {
 
 
 
-    const handleLogoutSubmission = async (email: string) => {
-        const logoutRepository = makeRemoteLogout(email);
-            await logoutRepository.logout({email: emailUsuario});
-            localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-            localStorage.removeItem('user');
-            setAccessToken(undefined);
-            setUser(null);
-            router.push('/');
-    };
+const handleLogoutSubmission = async (email: string) => {
+    const logoutRepository = makeRemoteLogout(email);
+    try {
+        await logoutRepository.logout({email: emailUsuario});
+    } catch (error) {
+        console.error('Failed to logout:', error);
+    } finally {
+        setCurrentAccountAdapter(null);
+        setAccessToken(undefined);
+        setUser(null);
+        router.push('/');
+    }
+};
 
     function closeModal() {
         setModal(null);
