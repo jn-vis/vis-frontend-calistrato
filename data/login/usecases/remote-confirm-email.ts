@@ -1,7 +1,7 @@
 
 import { ConfirmEmailRepository } from "@/domain/usecases/confirm-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 import { InvalidEmailError } from "@/domain/errors/invalid-email-error";
 import { BlockedTokenError } from "@/domain/errors/blocked-token-error";
 import { UserAlreadyLoggedError } from "@/domain/errors/user-already-logged-error";

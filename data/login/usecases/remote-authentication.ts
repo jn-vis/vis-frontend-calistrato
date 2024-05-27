@@ -1,4 +1,4 @@
-import { HttpClient, HttpStatusCode } from '../protocols/http/http-client';
+import { HttpClient, HttpStatusCode } from '../../protocols/http/http-client';
 import { BlockedTokenError, InvalidEmailError, UnexpectedError, UserAlreadyLoggedError } from "@/domain/errors";
 import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
@@ -33,8 +33,8 @@ export class RemoteAuthentication implements Authentication {
                     throw new PasswordLockedRecentlyError();
                 case HttpStatusCode.conflict:
                     throw new UserAlreadyLoggedError();
-                case HttpStatusCode.tokenLockedRecently:
-                    throw new PasswordLockedRecentlyError();
+                // case HttpStatusCode.tokenLockedRecently:
+                //     throw new PasswordLockedRecentlyError();
 
                     default:
                 throw new UnexpectedError();

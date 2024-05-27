@@ -1,6 +1,6 @@
 import { InvalidCredentialsError,UnexpectedError } from "@/domain/errors";
 import { TokenPasswordRepository } from "@/domain/usecases/token-password";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 
 
 export class RemoteTokenPassword implements TokenPasswordRepository {

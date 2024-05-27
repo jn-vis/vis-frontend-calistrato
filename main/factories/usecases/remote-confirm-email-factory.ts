@@ -1,4 +1,4 @@
-import { RemoteConfirmEmail } from '@/data/usecases/remote-confirm-email'
+import { RemoteConfirmEmail } from '@/data/login/usecases/remote-confirm-email'
 import { ConfirmEmailRepository } from '@/domain/usecases/confirm-email'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 

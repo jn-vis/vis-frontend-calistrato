@@ -36,7 +36,9 @@ export const useFormPassword = () => {
         try {
             await handleLoginSubmission(data.password);
             handleSetData({ password: '' });
+            console.log('deucerto')
         } catch (error: any) {
+            console.log('deu erro')
             const errorMap = {
                 [WrongPasswordError.name]: 'Ops! A senha digitada está errada. Tente novamente.',
                 [BlockedTokenError.name]: 'Token bloqueado',

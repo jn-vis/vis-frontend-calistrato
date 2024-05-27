@@ -1,6 +1,6 @@
 import { InvalidCredentialsError,UnexpectedError } from "@/domain/errors";
 import { TokenLanguageRepository } from "@/domain/usecases/token-language";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 
 
 export class RemoteTokenLanguage implements TokenLanguageRepository {

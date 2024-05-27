@@ -1,6 +1,6 @@
 import { EmailExistsRepository} from "@/domain/usecases/exists-email";
 import { InvalidCredentialsError, UnexpectedError } from "@/domain/errors";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 import { InvalidEmailError } from "@/domain/errors/invalid-email-error";
 import { BlockedTokenError } from "@/domain/errors/blocked-token-error";
 import { UserAlreadyLoggedError } from "@/domain/errors/user-already-logged-error";
@@ -23,6 +23,8 @@ export class RemoteEmailExists implements EmailExistsRepository {
                 return { status: HttpStatusCode.accepted, data: httpResponse.body };
             case HttpStatusCode.notFound:
                 return { status: HttpStatusCode.notFound, data: httpResponse.body };
+            case HttpStatusCode.passwordError:
+                return { status: HttpStatusCode.passwordError, data: httpResponse.body };
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
             // case HttpStatusCode.lockedPassword:

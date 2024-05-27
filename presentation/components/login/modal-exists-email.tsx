@@ -1,16 +1,17 @@
 'use client';
 import Modal from '../modal-composition';
 import { useAuth } from '@/presentation/contexts/authContext';
-import IconLoader from '../../icons/icon-loader';
-import IconUser from '@/presentation/icons/icon-user';
+
 import { useFormEmail } from './hook/useFormEmail';
+import IconUser from '@/presentation/icons/icon-user';
+import IconLoader from '@/presentation/icons/icon-loader';
 
 export const ModalExistsEmail = () => {
     const { setModal, modal } = useAuth();
     const { register, handleSubmit, errors, isSubmitting,handleFormSubmit } = useFormEmail();
 
     return (
-        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail" closeOnOverlayClick={false}>
+        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <div className="relative">

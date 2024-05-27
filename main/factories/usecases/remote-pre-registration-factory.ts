@@ -1,4 +1,4 @@
-import { RemotePreRegistration } from '@/data/usecases/remote-pre-registration'
+import { RemotePreRegistration } from '@/data/login/usecases/remote-pre-registration'
 import { PreRegistrationRepository } from '@/domain/usecases/pre-registration'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 

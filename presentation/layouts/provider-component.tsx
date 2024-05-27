@@ -7,6 +7,7 @@ import React, { ReactNode, Suspense } from 'react';
 // import { ni18nConfig } from 'ni18n.config.ts';
 import Loading from '@/presentation/layouts/loading';
 import { AuthProvider } from '../contexts/authContext';
+import { VagasProvider } from '../contexts/vagasContex';
 
 
 interface IProps {
@@ -18,7 +19,9 @@ const ProviderComponent = ({ children }: IProps) => {
         <Provider store={store}>
             <Suspense fallback={<Loading />}>
                 <AuthProvider>
-                <App>{children} </App>
+                    <VagasProvider>
+                        <App>{children} </App>
+                    </VagasProvider>
                 </AuthProvider>
             </Suspense>
         </Provider>

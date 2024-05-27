@@ -1,4 +1,4 @@
-import { RemoteTokenLanguage } from '@/data/usecases/remote-token-language'
+import { RemoteTokenLanguage } from '@/data/login/usecases/remote-token-language'
 import { TokenLanguageRepository } from '@/domain/usecases/token-language'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 

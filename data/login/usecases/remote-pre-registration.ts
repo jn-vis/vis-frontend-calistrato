@@ -1,7 +1,7 @@
 
 import { InvalidCredentialsError,UnexpectedError } from "@/domain/errors";
 import { PreRegistrationRepository } from "@/domain/usecases/pre-registration";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 
 
 export class RemotePreRegistration implements PreRegistrationRepository {

@@ -55,6 +55,9 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
                     case HttpStatusCode.notFound:
                         setModal('confirmLogin');
                         break;
+                    case HttpStatusCode.passwordError:
+                        setModal('register');
+                        break;
                     default:
                         setModal(null);
                 }
@@ -144,14 +147,14 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
 const handleLoginSubmission = async (password: string) => {
     const authRepository = makeRemoteAuthentication(emailUsuario);
     try {
-        const response = await authRepository.login({email: emailUsuario, password: password});
+        const response = await authRepository.login({password: password});
         if (response.data && typeof response.data === 'object') {
             console.log(response.status)
             console.log(response.data)
 
-            if(response.status === HttpStatusCode.lockedPassword) {
-                setModal('register');
-            }
+            // if(response.status === HttpStatusCode.lockedPassword) {
+            //     setModal('register');
+            // }
 
             const { sessionToken } = response.data;
             if (sessionToken) {

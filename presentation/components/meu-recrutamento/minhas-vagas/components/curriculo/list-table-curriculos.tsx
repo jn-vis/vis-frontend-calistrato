@@ -1,5 +1,4 @@
 import { DataTable } from 'mantine-datatable';
-import useListVagas from '../../hooks/useListVagas';
 import formatDate from '@/presentation/utils/format-date';
 import Tippy from '@tippyjs/react';
 import Link from 'next/link';

@@ -1,6 +1,6 @@
 import {  LogoutRepository } from "@/domain/usecases/logout";
 import { UnexpectedError } from "@/domain/errors";
-import { HttpClient, HttpStatusCode } from "../protocols/http/http-client";
+import { HttpClient, HttpStatusCode } from "../../protocols/http/http-client";
 
 export class RemoteLogout implements LogoutRepository {
     constructor(private readonly url: string, private readonly httpClient: HttpClient<LogoutRepository.Model>) {}
