@@ -39,7 +39,11 @@ export const VagasProvider: React.FC<VagasProviderProps> = ({ children }) => {
         console.error(error, 'Erro ao buscar vagas');
     }
 
-    return <VagasContext.Provider value={{ recordsData, currentDate}}>{children}</VagasContext.Provider>;
+    const findVagaById = (id: number) => {
+        return data?.find(vaga => vaga.id === id);
+    };
+
+    return <VagasContext.Provider value={{ recordsData, currentDate, findVagaById}}>{children}</VagasContext.Provider>;
 };
 
 export const useVagas = () => {

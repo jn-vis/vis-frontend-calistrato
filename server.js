@@ -88,7 +88,7 @@ app.patch('/vagas/:id', async (req, res) => {
                 id,
             ]
         );
-        res.status(200).json({ message: 'Dados atualizados com sucesso' });
+        res.status(200).json({ message:'Dados atualizados com sucesso' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Erro ao atualizar dados', error: error.toString() });

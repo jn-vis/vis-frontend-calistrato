@@ -67,7 +67,7 @@ const EditarVagaExistente = ({id}:any) => {
         } catch (error) {
           console.error('Erro ao buscar pcds:', error);
         }
-      }
+    }
 
       useEffect(() => {
         getTesteEdit()

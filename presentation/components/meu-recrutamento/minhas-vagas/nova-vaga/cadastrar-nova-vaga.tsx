@@ -18,6 +18,8 @@ import { getDeficiencia } from '@/services/pcd-service';
 import IconTrashLines from '@/presentation/icons/icon-trash-lines';
 import IconInfoCircle from '@/presentation/icons/icon-info-circle';
 import Tippy from '@tippyjs/react';
+import { useVagas } from '@/presentation/contexts/vagasContex';
+import { makeRemoteEditVagas } from '@/main/factories/usecases/vagas/remote-edit-vagas-factory';
 
 
 interface Estados {
@@ -44,8 +46,12 @@ const schema = z.object({
     contato: z.string().nullable(),
 });
 
+interface CadastrarNovaVagaProps {
+    vagaId?: string; // `vagaId` é opcional. Se presente, estamos editando uma vaga existente.
+}
+
 type FormData = z.infer<typeof schema>;
-const CadastrarNovaVaga = () => {
+const CadastrarNovaVaga: React.FC<CadastrarNovaVagaProps> = ({ vagaId }) => {
     const [activeTab4, setActiveTab4] = useState<any>(1);
     const [checks, setChecks] = useState({
         clt: false,
@@ -207,23 +213,56 @@ const CadastrarNovaVaga = () => {
         register,
         handleSubmit,
         getValues,
+        setValue,
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(schema),
         mode: 'onChange',
     });
 
+      const { findVagaById } = useVagas();
+
+    useEffect(() => {
+        if (vagaId) {
+            const vagaData = findVagaById(Number(vagaId));
+            if (vagaData) {
+                // Use setValue do React Hook Form para preencher os dados do formulário
+                Object.keys(vagaData).forEach(key => {
+                    setValue(key, vagaData[key]);
+                });
+            }
+        }
+    }, [vagaId, setValue, findVagaById]);
+
     const onSubmit = async (data: FormData) => {
         const formData = {
-            ...data,
-            estado_id: data.estado_id || null,
-            deficiencia_id: data.deficiencia_id || null,
+            id: Number(vagaId), // Garantindo que o id é passado como número
+            vaga: data.vaga,
+            descricao: data.descricao,
+            homeoffice: data.homeoffice,
             sortable: sortable,
+            datelimite: data.datelimite,
             obrigatorios: obrigatorios,
             desejaveis: desejaveis,
+            estado_id: data.estado_id || null,
+            deficiencia_id: data.deficiencia_id || null,
+            pcd: data.pcd,
+            pagamentopj: data.pagamentopj || '',
+            pagamentoclt: data.pagamentoclt || '',
+            pagamentobtc: data.pagamentobtc || '',
+            contato: data.contato || '',
         };
 
-        const response = await postVagas(formData);
+        let response;
+        const editarVaga = makeRemoteEditVagas(Number(vagaId));
+        if (vagaId) {
+            // Atualizar a vaga existente
+            response = await editarVaga.edit(formData);
+        } else {
+            // Criar uma nova vaga
+            response = await postVagas(formData);
+        }
+
         router.push('/meu-recrutamento/minhas-vagas');
         return response;
     };

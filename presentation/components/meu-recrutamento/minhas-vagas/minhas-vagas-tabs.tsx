@@ -2,7 +2,7 @@
 import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
 
-import ListaDeVagas from './lista-vagas/lista-vagas-ativas';
+import ListaDeVagas from './lista-vagas/lista-vagas';
 import { Tabs } from '@mantine/core';
 import { useVagas } from '@/presentation/contexts/vagasContex';
 

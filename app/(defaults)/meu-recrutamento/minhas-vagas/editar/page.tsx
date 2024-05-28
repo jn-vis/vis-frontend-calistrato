@@ -1,5 +1,6 @@
 
 import EditarVagaExistente from '@/presentation/components/meu-recrutamento/minhas-vagas/editar-vaga/editar-vaga';
+import CadastrarNovaVaga from '@/presentation/components/meu-recrutamento/minhas-vagas/nova-vaga/cadastrar-nova-vaga';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 const EditarVaga = () => {
 
-    return <EditarVagaExistente  />;
+    return <CadastrarNovaVaga />;
   };
 
   export default EditarVaga;

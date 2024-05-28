@@ -23,5 +23,6 @@ export type ViewVagasModel = {
     pagamentoclt: string,
     pagamentobtc: string,
     contato: string,
+    message?: string
 }
 
