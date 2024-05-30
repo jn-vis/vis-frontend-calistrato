@@ -1,15 +1,15 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '@/presentation/contexts/authContext';
 import { BlockedTokenError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
 import { TFormDataPassword, passwordSchema } from '@/domain/schemas';
 import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
 import { WrongPasswordError } from '@/domain/errors/wrong-password-error';
+import { usePassword } from '../hooks/usePassword';
 
 export const useFormPassword = () => {
-    const { handleLoginSubmission} = useAuth();
+    const { handlePasswordSubmission} = usePassword();
     const {
         register,
         handleSubmit,
@@ -33,8 +33,9 @@ export const useFormPassword = () => {
     }, []);
 
     const handleFormSubmit = async (data: TFormDataPassword) => {
+        console.log('Chamando handleFormSubmit')
         try {
-            await handleLoginSubmission(data.password);
+            await handlePasswordSubmission(data.password);
             handleSetData({ password: '' });
             console.log('deucerto')
         } catch (error: any) {

@@ -5,7 +5,7 @@ export interface ConfirmEmailRepository {
 
 export namespace ConfirmEmailRepository {
   export type Params = {
-    email: string
+    email: string | null
     signal?: AbortSignal;
   }
 

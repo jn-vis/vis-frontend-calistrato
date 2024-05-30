@@ -1,7 +1,7 @@
 'use client';
 import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
-import MeusCurriculosVisualizados from './meus-curriculos-visualizados';
+import MeusCurriculosVisualizados from '../meus-curriculos-visualizados';
 
 export const MeusCurriculosVisualizadosTabs = () => {
     const [tabs, setTabs] = useState<string>('home');

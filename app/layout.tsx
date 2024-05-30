@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
+import { RecoilRoot } from 'recoil';
 
 // export const metadata: Metadata = {
 //     title: {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const [queryClient] = React.useState(() => new QueryClient());
 
     return (
+    <RecoilRoot>
         <QueryClientProvider client={queryClient}>
             <html lang="en">
                 <body className={nunito.variable}>
@@ -33,5 +35,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </body>
             </html>
         </QueryClientProvider>
+    </RecoilRoot>
     );
 }

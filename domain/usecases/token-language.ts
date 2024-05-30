@@ -4,7 +4,7 @@ export interface TokenLanguageRepository {
 
 export namespace TokenLanguageRepository {
   export type Params = {
-    email: string;
+    email: string | null
     language: string;
     signal?: AbortSignal;
   }

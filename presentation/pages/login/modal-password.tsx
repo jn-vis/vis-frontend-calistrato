@@ -1,18 +1,21 @@
 'use client'
-
-import Modal from "../modal-composition";
-import { useAuth } from "@/presentation/contexts/authContext";
 import IconLockDots from "../../icons/icon-lock-dots";
 import IconLoader from "../../icons/icon-loader";
-import { useFormPassword } from "./hook";
 import IconEye from "@/presentation/icons/icon-eye";
-import { useTogglePassword } from "./hook/useTogglePassword";
+import { useTogglePassword } from "@/presentation/pages/login/hooks/useTogglePassword";
+import Modal from "@/presentation/components/modal-composition";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
+import { useSendTokenLanguage } from "./hooks/useSendTokenLanguage";
+import { useFormPassword } from "./validators/useFormPassword";
 
 
 export const ModalPassword = () => {
-    const {setModal, modal, handleTokenLanguageSubmission, emailUsuario} = useAuth();
+    const [modal, setModal] = useRecoilState(modalState);
+    const emailUsuario = useRecoilValue(emailUsuarioState);
     const { register, handleSubmit,errors, isSubmitting,handleFormSubmit } = useFormPassword();
     const { showPassword, togglePasswordVisibility } = useTogglePassword();
+    const {handleTokenLanguageSubmission} = useSendTokenLanguage()
 
     return (
       <Modal isOpen={modal === 'password'} onClose={() => setModal(null)} title="Password">

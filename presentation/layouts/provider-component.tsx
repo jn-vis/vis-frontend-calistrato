@@ -2,12 +2,15 @@
 import App from '@/App';
 import store from '@/store';
 import { Provider } from 'react-redux';
-import React, { ReactNode, Suspense } from 'react';
+import React, { ReactNode, Suspense, useEffect } from 'react';
 // import { appWithI18Next } from 'ni18n';
 // import { ni18nConfig } from 'ni18n.config.ts';
 import Loading from '@/presentation/layouts/loading';
-import { AuthProvider } from '../contexts/authContext';
+
 import { VagasProvider } from '../contexts/vagasContex';
+import {  useSetRecoilState,  } from 'recoil';
+import { userState } from '../pages/login/atom/atom';
+import { getCurrentAccountAdapter } from '@/main/adapters';
 
 
 interface IProps {
@@ -15,14 +18,24 @@ interface IProps {
 }
 
 const ProviderComponent = ({ children }: IProps) => {
+
+    const setUser = useSetRecoilState(userState);
+
+    useEffect(() => {
+        const storedAccount = getCurrentAccountAdapter();
+        if (storedAccount && storedAccount.user) {
+            setUser(storedAccount.user);
+        }
+    }, [setUser]);
+
     return (
         <Provider store={store}>
             <Suspense fallback={<Loading />}>
-                <AuthProvider>
+
                     <VagasProvider>
                         <App>{children} </App>
                     </VagasProvider>
-                </AuthProvider>
+
             </Suspense>
         </Provider>
     );
@@ -31,3 +44,7 @@ const ProviderComponent = ({ children }: IProps) => {
 export default ProviderComponent;
 // todo
 // export default appWithI18Next(ProviderComponent, ni18nConfig);
+
+
+
+

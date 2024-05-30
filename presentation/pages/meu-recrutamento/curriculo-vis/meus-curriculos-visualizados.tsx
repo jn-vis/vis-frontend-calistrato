@@ -11,7 +11,7 @@ import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
 import IconPencil from '@/presentation/icons/icon-pencil';
 
 import IconCircleCheck from '@/presentation/icons/icon-circle-check';
-import VerMaisGeneric from '../minhas-vagas/ver-mais-generic';
+import VerMaisGeneric from '../../../components/meu-recrutamento/minhas-vagas/ver-mais-generic';
 
 const rowData = [
     {

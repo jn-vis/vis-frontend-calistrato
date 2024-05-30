@@ -268,6 +268,6 @@ app.get('/logout/:email', async (req, res) => {
     }
 });
 
-app.listen(3333, () => {
-    console.log('Servidor rodando na porta 3333');
+app.listen(8080, () => {
+    console.log('Servidor rodando na porta 8080');
 });

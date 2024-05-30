@@ -1,17 +1,21 @@
 'use client';
-import Modal from '../modal-composition';
-import { useAuth } from '@/presentation/contexts/authContext';
 
-import { useFormEmail } from './hook/useFormEmail';
 import IconUser from '@/presentation/icons/icon-user';
 import IconLoader from '@/presentation/icons/icon-loader';
+import Modal from '@/presentation/components/modal-composition';
+import { useFormEmail } from './validators/useFormEmail';
+import {useRecoilValue, useSetRecoilState } from 'recoil';
+import { modalState } from '@/presentation/pages/login/atom/atom';
 
 export const ModalExistsEmail = () => {
-    const { setModal, modal } = useAuth();
+
     const { register, handleSubmit, errors, isSubmitting,handleFormSubmit } = useFormEmail();
 
+    const setModal = useSetRecoilState(modalState);
+    const modal = useRecoilValue(modalState);
+
     return (
-        <Modal isOpen={modal === 'login'} onClose={() => setModal(null)} title="Informe o seu e-mail">
+        <Modal isOpen={modal === "login"} onClose={() => setModal(null)} title="Informe o seu e-mail">
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <div className="relative">

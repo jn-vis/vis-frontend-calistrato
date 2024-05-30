@@ -9,12 +9,12 @@ import { useState, useEffect } from 'react';
 import IconCaretsDown from '@/presentation/icons/icon-carets-down';
 import IconCaretDown from '@/presentation/icons/icon-caret-down';
 import IconMenuUsers from '@/presentation/icons/menu/icon-menu-users';
-import IconMenuPages from '@/presentation/icons/menu/icon-menu-pages';
 import IconMenuAuthentication from '@/presentation/icons/menu/icon-menu-authentication';
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { AuthenticationManager } from '../components/login';
-import { useAuth } from '../contexts/authContext';
+import { AuthenticationManager } from '../pages/login';
+import {  useRecoilValue, useSetRecoilState } from 'recoil';
+import { accessTokenState, modalState } from '../pages/login/atom/atom';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -29,7 +29,13 @@ const Sidebar = () => {
         });
     };
 
-    const { isAuthenticated, openModal } = useAuth();
+    const setModal = useSetRecoilState(modalState);
+    const accessToken = useRecoilValue(accessTokenState);
+    const handleOpenModal = () => {
+        if (!accessToken) {
+            setModal('login');
+        }
+      };
 
     useEffect(() => {
         const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
@@ -178,13 +184,9 @@ const Sidebar = () => {
                             <div className="m-3 w-full max-w-md rounded p-4">
                                 <div className="w-full">
                                     <button
-                                        onClick={() => {
-                                            if (!isAuthenticated) {
-                                                openModal('login');
-                                                return;
-                                            }
-                                            //acesso o menu, se o usuário estiver logado
-                                        }}
+                                        onClick={
+                                            () => handleOpenModal()
+                                        }
                                         className="btn btn-primary mb-3 w-full"
                                     >
                                         Ganhe Dinheiro Conosco

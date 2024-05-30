@@ -4,7 +4,7 @@ export interface PreRegistrationRepository {
 
 export namespace PreRegistrationRepository {
   export type Params = {
-    email: string
+    email: string | null
     goal: string
     channel: string
   }

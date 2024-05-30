@@ -5,7 +5,7 @@ export interface EmailExistsRepository {
 
 export namespace EmailExistsRepository {
   export type Params = {
-    email: string
+    email: string | null
     signal?: AbortSignal;
   }
 

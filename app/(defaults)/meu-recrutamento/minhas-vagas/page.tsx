@@ -1,4 +1,4 @@
-import { MinhasVagasTabs } from '@/presentation/components/meu-recrutamento/minhas-vagas/minhas-vagas-tabs';
+import { MinhasVagasTabs } from '@/presentation/pages/meu-recrutamento/minhas-vagas/components/minhas-vagas-tabs';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';

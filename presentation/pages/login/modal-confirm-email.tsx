@@ -1,15 +1,14 @@
 'use client';
-import Modal from '../modal-composition';
-import { useAuth } from '@/presentation/contexts/authContext';
 import IconUser from '@/presentation/icons/icon-user';
 import IconLoader from '@/presentation/icons/icon-loader';
-import { useFormConfirmEmail } from './hook';
-
+import { useFormConfirmEmail } from './validators/useFormConfirmEmail';
+import Modal from '@/presentation/components/modal-composition';
+import { modalState } from '@/presentation/pages/login/atom/atom';
+import { useRecoilState } from 'recoil';
 
 export const ModalConfirmEmail = () => {
-    const { setModal, modal } = useAuth();
+    const [modal, setModal] = useRecoilState(modalState);
     const { register, handleSubmit, errors, isSubmitting, handleFormSubmit } = useFormConfirmEmail();
-
 
     return (
 
@@ -20,7 +19,7 @@ export const ModalConfirmEmail = () => {
                             <IconUser className="h-5 w-5" />
                         </span>
                         <input
-                           {...register('email')}
+                        {...register('email')}
                             type="email"
                             placeholder="Email"
                             className="form-input ltr:pl-10 rtl:pr-10"

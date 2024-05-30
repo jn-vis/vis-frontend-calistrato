@@ -7,9 +7,14 @@ import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
 import { WrongPasswordError } from '@/domain/errors/wrong-password-error';
 import { TFormTokenPassword, tokenPasswordSchema } from '@/domain/schemas/token-password';
+import { useSendTokenLanguage } from '../hooks/useSendTokenLanguage';
+import { useSavePasswordToken } from '../hooks/useSavePasswordToken';
+import { useRecoilValue } from 'recoil';
+import { emailUsuarioState } from '@/presentation/pages/login/atom/atom';
 
 export const useFormSavePasswordToken = () => {
-    const { handleTokenPasswordSubmission} = useAuth();
+    const emailUsuario = useRecoilValue(emailUsuarioState);
+    const { handleTokenPasswordSubmission} = useSavePasswordToken()
     const {
         register,
         handleSubmit,
@@ -36,7 +41,8 @@ export const useFormSavePasswordToken = () => {
 
     const handleFormSubmit = async (data: TFormTokenPassword) => {
         try {
-            await handleTokenPasswordSubmission(data.token,data.password, data.confirmPassword);
+            const { token, password, confirmPassword } = data;
+            await handleTokenPasswordSubmission(token, password, confirmPassword, emailUsuario);
             handleSetData({ token: '', password: '', confirmPassword: '' });
         } catch (error: any) {
             const errorMap = {

@@ -18,14 +18,18 @@ import IconCaretDown from '@/presentation/icons/icon-caret-down';
 import IconMenuPages from '@/presentation/icons/menu/icon-menu-pages';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { useAuth } from '../contexts/authContext';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../pages/login/atom/atom';
+import { useLogout } from '../pages/login/hooks/useLogout';
 
 const Header = () => {
     const pathname = usePathname();
     const dispatch = useDispatch();
     const router = useRouter();
     const { t, i18n } = getTranslation();
-    const { user, handleLogoutSubmission } = useAuth();
+
+    const user = useRecoilValue(userState)
+    const { handleLogoutSubmission } = useLogout()
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');

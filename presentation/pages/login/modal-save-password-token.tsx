@@ -1,15 +1,16 @@
 'use client';
-import Modal from '../modal-composition';
-import { useAuth } from '@/presentation/contexts/authContext';
 import IconLockDots from '../../icons/icon-lock-dots';
-import { useFormSavePasswordToken } from './hook/useFormSavePasswordToken';
 import IconLoader from '@/presentation/icons/icon-loader';
 import PasswordRequirements from '@/domain/schemas/regex-password';
-import { useTogglePassword } from './hook/useTogglePassword';
 import IconEye from '@/presentation/icons/icon-eye';
+import { useFormSavePasswordToken } from './validators/useFormSavePasswordToken';
+import { useTogglePassword } from '@/presentation/pages/login/hooks/useTogglePassword';
+import Modal from '@/presentation/components/modal-composition';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/presentation/pages/login/atom/atom';
 
 export const ModalSavePasswordToken = () => {
-    const { setModal, modal } = useAuth();
+    const [modal, setModal] = useRecoilState(modalState)
     const { register, handleSubmit,watch, handleFormSubmit, errors, isSubmitting } = useFormSavePasswordToken();
     const password = watch('password', '');
     const { showPassword, togglePasswordVisibility } = useTogglePassword();
@@ -20,7 +21,7 @@ export const ModalSavePasswordToken = () => {
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <span className="absolute top-1/2 -translate-y-1/2 dark:text-white-dark ltr:left-3 rtl:right-3">
-                           <IconLockDots fill={true} />
+                        <IconLockDots fill={true} />
                         </span>
                         <span className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer" onClick={togglePasswordVisibility}>
                         {showPassword ? <IconEye /> : <IconEye />}

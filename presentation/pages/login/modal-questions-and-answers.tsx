@@ -1,11 +1,17 @@
 'use client';
 import { useState } from 'react';
-import Modal from '../modal-composition';
-import { useAuth } from '@/presentation/contexts/authContext';
 import Select from 'react-select';
+import Modal from '@/presentation/components/modal-composition';
+import { usePreRegistration } from './hooks/usePreRegistration';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/presentation/pages/login/atom/atom';
 
 export const ModalQuestionsAndAnswers = () => {
-    const { handleSavePreRegistrationSubmission, setModal, modal } = useAuth();
+
+    const {handleSavePreRegistrationSubmission} = usePreRegistration()
+    const [modal, setModal] = useRecoilState(modalState)
+
+
     const comoNosConheceu = [
         { value: 'linkedin', label: 'Por alguém ou por anúncio no linkedin' },
         { value: 'telegram', label: 'Grupos de vagas no telegram' },

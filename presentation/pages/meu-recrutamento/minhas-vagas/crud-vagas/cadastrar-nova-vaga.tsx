@@ -3,7 +3,7 @@ import IconHome from '@/presentation/icons/icon-home';
 import IconUser from '@/presentation/icons/icon-user';
 import PanelCodeHighlight from '@/presentation/utils/panel-code-highlight';
 import React, { useEffect, useMemo, useState } from 'react';
-import ComponentsTablesValorServico from './components-tables-valor-servico';
+import ComponentsTablesValorServico from '../../../../components/meu-recrutamento/minhas-vagas/nova-vaga/components-tables-valor-servico';
 import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
 import IconDollarSignCircle from '@/presentation/icons/icon-dollar-sign-circle';
 import IconListCheck from '@/presentation/icons/icon-list-check';

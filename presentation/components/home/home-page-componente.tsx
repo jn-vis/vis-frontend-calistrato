@@ -1,5 +1,11 @@
+'use client';
+
+import IconX from '@/presentation/icons/icon-x';
+// import { useInitializeAuth } from '@/presentation/pages/login/hooks/useAccount';
 import Link from 'next/link';
+import { useState } from 'react';
 const HomePage = () => {
+
     return (
         <>
             <div>
