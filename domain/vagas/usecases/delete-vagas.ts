@@ -4,7 +4,7 @@ export interface DeleteVagas {
 
 export namespace DeleteVagas {
   export type Params = {
-    id: number | null
+    id: string | null
   }
 
   export type Model = any

@@ -1,4 +1,5 @@
-import { ViewVagasModel } from "@/domain/models/view-vagas-model"
+import { Sortable, ViewVagasModel } from "@/domain/models/view-vagas-model"
+import { Estados } from "./edit-vagas"
 
 export interface ViewVagas {
     findAll: () => Promise<ViewVagas.Model[]>
@@ -6,21 +7,24 @@ export interface ViewVagas {
 
 export namespace ViewVagas {
   export type Params = {
-    id: number,
+    id: string,
     vaga: string,
     descricao: string,
-    homeoffice: boolean,
-    sortable: any[],
+    remoto: boolean,
+    presencial: boolean,
+    hibrido: boolean,
+    pj: boolean,
+    clt: boolean,
+    btc: boolean,
+    sortable: Sortable[],
     datelimite: string,
-    obrigatorios: any[],
-    desejaveis: any[],
-    estado_id: any,
-    deficiencia_id: any,
+    obrigatorios: string[],
+    desejaveis: string[],
+    estados: Estados[],
     pcd: boolean,
     pagamentopj: string,
     pagamentoclt: string,
-    pagamentobtc: string,
-    contato: string,
+    pagamentobtc: string
   }
 
   export type Model = ViewVagasModel

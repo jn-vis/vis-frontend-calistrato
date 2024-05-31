@@ -1,3 +1,5 @@
+import { Estados } from "../vagas/usecases/edit-vagas";
+
 export interface Sortable {
     id: number;
     text: string;
@@ -8,21 +10,23 @@ export interface Sortable {
 
 
 export type ViewVagasModel = {
-    id: number,
+    id: string,
     vaga: string,
     descricao: string,
-    homeoffice: boolean,
+    remoto: boolean,
+    presencial: boolean,
+    hibrido: boolean,
+    pj: boolean,
+    clt: boolean,
+    btc: boolean,
     sortable: Sortable[],
     datelimite: string,
     obrigatorios: string[],
     desejaveis: string[],
-    estado_id: any,
-    deficiencia_id: any,
+    estados: Estados[],
     pcd: boolean,
     pagamentopj: string,
     pagamentoclt: string,
-    pagamentobtc: string,
-    contato: string,
-    message?: string
+    pagamentobtc: string
 }
 

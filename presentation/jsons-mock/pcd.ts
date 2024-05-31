@@ -1,4 +1,4 @@
-export const pcd = [
+export const deficiencia = [
     {
       id: 1,
       nome: "Cegueira",

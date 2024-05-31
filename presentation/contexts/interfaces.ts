@@ -1,4 +1,5 @@
 import { ViewVagasModel } from "@/domain/models/view-vagas-model";
+import {Estados } from "@/domain/vagas/usecases/edit-vagas";
 
 export interface VagasContextType {
     recordsData: {
@@ -6,7 +7,7 @@ export interface VagasContextType {
         encerradas: ViewVagasModel[];
     };
     currentDate: Date;
-    findVagaById: (id: number) => ViewVagasModel | undefined;
+    findVagaById: (id: string) => ViewVagasModel | undefined;
 }
 
 export interface VagasProviderProps {

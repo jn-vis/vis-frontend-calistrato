@@ -46,29 +46,29 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
     const records = tipo === 'ativas' ? vagasFiltradasAtivas : vagasFiltradasEncerradas;
 
     const [modalOpenExcluirVaga, setModalOpenExcluirVaga] = useState(false);
-    const [confirmExclusao, setConfirmExclusao] = useState<number | null>(null);
+    const [confirmExclusao, setConfirmExclusao] = useState<string | null>(null);
 
-    const handleOpenModalExcluirVaga = (id: number) => {
+    const handleOpenModalExcluirVaga = (id: string) => {
         setModalOpenExcluirVaga(true);
         setConfirmExclusao(id);
     };
 
     const queryClient = useQueryClient();
 
-    const excluirVaga = async (id: number | null) => {
+    const excluirVaga = async (id: string | null) => {
         const excluirVaga = makeRemoteDeleteVagas(id);
-            try {
-                const response = await excluirVaga.deleteVaga({ id });
-                if (response.success) {
-                    setModalOpenExcluirVaga(false);
-                    setConfirmExclusao(null);
-                } else {
-                    console.error('Erro ao excluir vaga:', response.error);
-                }
-                queryClient.invalidateQueries({ queryKey: ['vagas'] });
-            } catch (error) {
-                console.error('Erro na requisição:', error);
+        try {
+            const response = await excluirVaga.deleteVaga({ id });
+            if (response.success) {
+                setModalOpenExcluirVaga(false);
+                setConfirmExclusao(null);
+            } else {
+                console.error('Erro ao excluir vaga:', response.error);
             }
+            queryClient.invalidateQueries({ queryKey: ['vagas'] });
+        } catch (error) {
+            console.error('Erro na requisição:', error);
+        }
     };
 
     return (
@@ -191,7 +191,7 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                 <div className="mt-5 grid w-full grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {records.map((item: ViewVagasModel) => {
                         return (
-                            <div className="relative overflow-hidden rounded-md bg-white text-center shadow dark:bg-[#1c232f]" key={item.contato}>
+                            <div className="relative overflow-hidden rounded-md bg-white text-center shadow dark:bg-[#1c232f]" key={item.id}>
                                 <div className="relative overflow-hidden rounded-md bg-white text-center shadow dark:bg-[#1c232f]">
                                     <div className="rounded-t-md bg-white/40 bg-[url('/assets/images/notification-bg.png')] bg-cover bg-center p-6 pb-0"></div>
                                     <div className="relative -mt-10 px-6 pb-24">
@@ -200,8 +200,11 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                                             <div className={`relative mt-10 flex-auto md:mt-4`}>
                                                 <h3>Data Limite:</h3>
                                                 <div className="relative flex items-center justify-center">
-                                                    <div className={currentDate > new Date(item.datelimite) ? 'text-danger' : 'text-info'}>{formatDate(item.datelimite)}</div>
-                                                    {currentDate > new Date(item.datelimite) && (
+                                                    {/* Ajuste para garantir que a data seja interpretada no fuso horário local */}
+                                                    <div className={currentDate > new Date(item.datelimite + 'T00:00:00') ? 'text-danger' : 'text-info'}>
+                                                        {formatDate(new Date(item.datelimite + 'T00:00:00'))}
+                                                    </div>
+                                                    {currentDate > new Date(item.datelimite + 'T00:00:00') && (
                                                         <div className="ml-2 cursor-pointer">
                                                             <span className="badge badge-outline-danger absolute -bottom-1 right-2 md:right-12">Renovar</span>
                                                         </div>
@@ -243,13 +246,9 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                                             <div className="flex items-center">
                                                 <h2 className="flex-none ltr:mr-2 rtl:ml-2">Sistema da Vaga:</h2>
                                                 <div className="flex flex-row items-center justify-between">
-                                                    <p className="truncate text-white-dark">{item.homeoffice ? 'Remoto' : 'Hibrido'}</p>
+                                                    <p className="truncate text-white-dark">{item.remoto ? 'Remoto' : 'Hibrido'}</p>
                                                     <span className="badge badge-outline-info absolute right-3">CLT</span>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center">
-                                                <h2 className="flex-none ltr:mr-2 rtl:ml-2">Contato:</h2>
-                                                <p className="text-white-dark">{item.contato}</p>
                                             </div>
                                             <div className="flex items-center">
                                                 <h2 className="flex-none ltr:mr-2 rtl:ml-2">Pretensão Salarial:</h2>
