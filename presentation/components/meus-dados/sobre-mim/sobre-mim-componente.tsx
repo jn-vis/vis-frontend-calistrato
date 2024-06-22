@@ -68,9 +68,9 @@ export const SobreMimComponente = () => {
                                     </div>
                                     <label htmlFor="country">Selecione a região da Vaga requerida</label>
                                     <select disabled={checkHomeOffice} id="country" className="form-select text-white-dark" name="country" defaultValue="United States">
-                                        {estados.map((estado) => {
+                                        {/* {estados.map((estado) => {
                                             return <option value={estado.id}>{estado.nome}</option>;
-                                        })}
+                                        })} */}
                                     </select>
                                 </div>
                                 <div>
@@ -82,9 +82,9 @@ export const SobreMimComponente = () => {
                                     </div>
                                     <label htmlFor="country">Selecione a deficiência</label>
                                     <select disabled={!checkPcd} id="country" className="form-select text-white-dark" name="country" defaultValue="United States">
-                                        {pcd.map((pcd) => {
+                                        {/* {pcd.map((pcd) => {
                                             return <option value={pcd.id}>{pcd.nome}</option>;
-                                        })}
+                                        })} */}
                                     </select>
                                 </div>
                                 {/* <div>

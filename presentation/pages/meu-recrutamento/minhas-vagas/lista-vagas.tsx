@@ -11,10 +11,12 @@ import usePagination from '../../../components/meu-recrutamento/minhas-vagas/hoo
 import useSort from '../../../components/meu-recrutamento/minhas-vagas/hooks/useSort';
 import useListVagas from '../../../components/meu-recrutamento/minhas-vagas/hooks/useListVagas';
 import { IconLayoutGrid, IconListCheck, IconPencil, IconTrashLines, IconNotesEdit, IconFolderPlus, IconUsersGroup, IconNotes, IconFile, IconCircleCheck, IconPrinter } from '@/presentation/icons';
-import { deleteVagas } from '@/services/vagas-service';
 import { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { makeRemoteDeleteVagas } from '@/main/factories/usecases/vagas/remote-delete-vagas-factory';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {InativarVagasModel } from '@/domain/models/inativar-vagas-model';
+import { makeRemoteDeletarVagas } from '@/main/factories/usecases/vagas/remote-deletar-vagas-factory';
+import { makeRemoteInativarVagas } from '@/main/factories/usecases/vagas/remote-inativar-vagas-factory';
+import IconMinusCircle from '@/presentation/icons/icon-minus-circle';
 
 interface ListaVagasProps {
     vagas: ViewVagasModel[];
@@ -45,31 +47,70 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
     } = useListVagas();
     const records = tipo === 'ativas' ? vagasFiltradasAtivas : vagasFiltradasEncerradas;
 
-    const [modalOpenExcluirVaga, setModalOpenExcluirVaga] = useState(false);
-    const [confirmExclusao, setConfirmExclusao] = useState<string | null>(null);
+    const [modalAction, setModalAction] = useState<'inativar' | 'deletar' | null>(null);
+    const [openModal, setOpenModal] = useState(false);
+    const [idVaga, setIdVaga] = useState<string>('');
 
-    const handleOpenModalExcluirVaga = (id: string) => {
-        setModalOpenExcluirVaga(true);
-        setConfirmExclusao(id);
-    };
 
     const queryClient = useQueryClient();
+    const mutationKey = ['inativarVaga', 'deletarVaga']
 
-    const excluirVaga = async (id: string | null) => {
-        const excluirVaga = makeRemoteDeleteVagas(id);
-        try {
-            const response = await excluirVaga.deleteVaga({ id });
-            if (response.success) {
-                setModalOpenExcluirVaga(false);
-                setConfirmExclusao(null);
-            } else {
-                console.error('Erro ao excluir vaga:', response.error);
-            }
-            queryClient.invalidateQueries({ queryKey: ['vagas'] });
-        } catch (error) {
-            console.error('Erro na requisição:', error);
+    const inativarVaga = async (idVaga: string): Promise<InativarVagasModel> => {
+        const inativar = makeRemoteInativarVagas(idVaga);
+        return await inativar.inativarVaga({ idVaga });
+    };
+
+    const inativarVagaMutation = useMutation({
+    mutationKey,
+    mutationFn: inativarVaga,
+    onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['vagas'] })
+        setOpenModal(false)
+    },
+    onError: (error: InativarVagasModel) => {
+        console.error('Erro ao excluir vaga:', error)
+        setOpenModal(false)
+    }
+    })
+
+
+    const deletarVaga = async (idVaga: string): Promise<InativarVagasModel> => {
+        const deletar = makeRemoteDeletarVagas(idVaga);
+        return await deletar.deleteVaga({ idVaga });
+    };
+
+    const deletarVagaMutation = useMutation({
+    mutationKey,
+    mutationFn: deletarVaga,
+    onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['vagas'] })
+        setOpenModal(false)
+    },
+    onError: (error: InativarVagasModel) => {
+        console.error('Erro ao excluir vaga:', error)
+        setOpenModal(false)
+    }
+    })
+
+
+    const handleOpenModal = (id: string, action: 'inativar' | 'deletar') => {
+        setIdVaga(id);
+        setModalAction(action);
+        setOpenModal(true);
+    };
+
+    const handleConfirmAction = () => {
+        if (modalAction === 'inativar') {
+            inativarVagaMutation.mutate(idVaga);
+        } else if (modalAction === 'deletar') {
+            deletarVagaMutation.mutate(idVaga);
         }
     };
+
+    const modalTitle = modalAction === 'inativar' ? 'Confirmar Inativação Vaga' : 'Confirmar Deletar Vaga';
+    const modalContent = modalAction === 'inativar' ? 'Tem certeza que deseja inativar esta vaga?' : 'Tem certeza que deseja deletar esta vaga permanentemente?';
+
+
 
     return (
         <div className="panel mt-6">
@@ -165,8 +206,13 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                                                 <IconPencil />
                                             </Link>
                                         </Tippy>
-                                        <Tippy content="Excluir Vaga" delay={[1000, 0]}>
-                                            <button onClick={() => handleOpenModalExcluirVaga(id)} type="button" className="flex hover:text-danger">
+                                        <Tippy content="Inativar Vaga" delay={[1000, 0]}>
+                                            <button onClick={() => handleOpenModal(id, 'inativar')} type="button" className="flex hover:text-danger">
+                                                <IconMinusCircle />
+                                            </button>
+                                        </Tippy>
+                                        <Tippy content="Deletar Vaga" delay={[1000, 0]}>
+                                            <button onClick={() => handleOpenModal(id, 'deletar')} type="button" className="flex hover:text-danger">
                                                 <IconTrashLines />
                                             </button>
                                         </Tippy>
@@ -204,11 +250,7 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                                                     <div className={currentDate > new Date(item.datelimite + 'T00:00:00') ? 'text-danger' : 'text-info'}>
                                                         {formatDate(new Date(item.datelimite + 'T00:00:00'))}
                                                     </div>
-                                                    {currentDate > new Date(item.datelimite + 'T00:00:00') && (
-                                                        <div className="ml-2 cursor-pointer">
-                                                            <span className="badge badge-outline-danger absolute -bottom-1 right-2 md:right-12">Renovar</span>
-                                                        </div>
-                                                    )}
+
                                                 </div>
                                             </div>
                                             <div className="mt-6 flex flex-wrap items-center justify-around gap-3">
@@ -264,17 +306,25 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                                                     Editar
                                                 </Link>
                                             </div>
-                                            <button type="button" className="btn btn-outline-danger flex w-1/2 gap-2">
-                                                <IconTrashLines />
+                                             <div className="btn btn-outline-success w-1/2">
+                                            <Link href="/meu-recrutamento/minhas-vagas/curriculo" className="flex flex-row gap-2">
+                                                    <IconUsersGroup className="h-4.5 w-4.5" />
+                                                    candidatos
+                                                </Link>
+                                            </div>
+
+                                        </div>
+                                        <div className="flex flex-row gap-2">
+                                        <button onClick={() => handleOpenModal(item.id, 'inativar')} type="button" className="btn btn-outline-danger flex w-1/2 gap-2">
+                                        <IconMinusCircle />
                                                 Inativar
                                             </button>
+                                            <button onClick={() => handleOpenModal(item.id, 'deletar')} type="button" className="btn btn-outline-danger flex w-1/2 gap-2">
+                                                <IconTrashLines />
+                                                Deletar
+                                            </button>
                                         </div>
-                                        <div>
-                                            <Link href="/meu-recrutamento/minhas-vagas/curriculo" className="btn btn-outline-success flex w-full gap-2">
-                                                <IconUsersGroup className="h-4.5 w-4.5" />
-                                                candidatos
-                                            </Link>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -314,20 +364,19 @@ const ListaDeVagas: React.FC<ListaVagasProps> = ({ tipo }) => {
                     </button>
                 </div>
             </Modal>
-            <Modal isOpen={modalOpenExcluirVaga} onClose={() => setModalOpenExcluirVaga(false)} title="Confirmar Exclusão de Vaga">
-                <div className="max-h-[400px] min-h-[100px] overflow-auto p-5">Tem Certeza que deseja excluir esta vaga?</div>
+            <Modal isOpen={openModal} onClose={() => setOpenModal(false)} title={modalTitle}>
+                <div className="max-h-[400px] min-h-[100px] overflow-auto p-5">{modalContent}</div>
                 <div className="flex items-center justify-end gap-4 border-t border-[#ebe9f1] p-5 dark:border-white/10">
                     <button
-                        onClick={() => {
-                            excluirVaga(confirmExclusao);
-                            setModalOpenExcluirVaga(false);
-                        }}
+                        onClick={
+                            handleConfirmAction
+                        }
                         type="button"
                         className="btn btn-outline-info"
                     >
                         Sim
                     </button>
-                    <button onClick={() => setModalOpenExcluirVaga(false)} type="button" className="btn btn-outline-danger">
+                    <button onClick={() => setOpenModal(false)} type="button" className="btn btn-outline-danger">
                         Não
                     </button>
                 </div>

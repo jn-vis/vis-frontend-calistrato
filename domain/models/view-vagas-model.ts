@@ -1,9 +1,13 @@
-import { Estados } from "../vagas/usecases/edit-vagas";
-
 export interface Sortable {
     id: number;
     text: string;
     chosen: boolean;
+    selected: boolean;
+}
+
+export interface Estados {
+    id: string;
+    nome: string;
     selected: boolean;
 }
 

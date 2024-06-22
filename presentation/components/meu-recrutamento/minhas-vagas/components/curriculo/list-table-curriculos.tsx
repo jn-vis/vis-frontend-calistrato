@@ -6,7 +6,6 @@ import IconNotesEdit from '@/presentation/icons/icon-notes-edit';
 import IconPencil from '@/presentation/icons/icon-pencil';
 import IconTrashLines from '@/presentation/icons/icon-trash-lines';
 import Modal from '@/presentation/components/modal-composition';
-import { RowData } from '@/presentation/interfaces/vagas';
 import Dropdown from '@/presentation/utils/dropdown';
 import IconStar from '@/presentation/icons/icon-star';
 import IconLink from '@/presentation/icons/icon-link';

@@ -1,10 +1,9 @@
 'use client';
+import { SobreMimComponente } from '@/presentation/components/meus-dados/sobre-mim/sobre-mim-componente';
 import IconHome from '@/presentation/icons/icon-home';
 import React, { useState } from 'react';
-import { SobreMimComponente } from './sobre-mim-componente';
-import MeuPerfil from './meu-perfil';
-import FormularioCandidato from '@/presentation/pages/meus-dados/sobre-mim/formulario-candidato/formulario-candidato';
-import PreviewCandidatoComponent from './preview-candidato-ind';
+// import { SobreMimComponente } from './sobre-mim-componente';
+// import MeuPerfil from './meu-perfil';
 
 
 export const SobreMimTabs = () => {
@@ -27,33 +26,38 @@ export const SobreMimTabs = () => {
                             Meus Dados
                         </button>
                     </li>
-                    <li className="inline-block">
+                    {/* <li className="inline-block">
                         <button
                             onClick={() => toggleTabs('viscurriculo')}
                             className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'viscurriculo' ? '!border-primary text-primary' : ''}`}
                         >
                             Visualizar perfil
                         </button>
-                    </li>
+                    </li> */}
                 </ul>
+                {/* <button
+                            onClick={() => toggleTabs('viscurriculo')}
+                            className={`flex gap-2 border-b border-transparent p-4 hover:border-primary hover:text-primary ${tabs === 'viscurriculo' ? '!border-primary text-primary' : ''}`}
+                        >
+                            Visualizar perfil
+                        </button> */}
             </div>
             {tabs === 'sobremim' ? (
                 <div>
-                    {/* <SobreMimComponente /> */}
-                    <FormularioCandidato />
+                    <SobreMimComponente />
                 </div>
             ) : (
                 ''
             )}
-             {tabs === 'viscurriculo' ? (
+             {/* {tabs === 'viscurriculo' ? (
                 <div>
                     <div className="mt-3 flex flex-row gap-6 pb-4 sm:col-span-2">
                     </div>
-                    <PreviewCandidatoComponent />
+                    <MeuPerfil />
                 </div>
             ) : (
                 ''
-            )}
+            )} */}
         </div>
     );
 };

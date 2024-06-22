@@ -1,19 +1,18 @@
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors';
 import { HttpClient, HttpStatusCode } from '../../protocols/http/http-client';
-import { DeleteVagas } from '@/domain/vagas/usecases/delete-vagas';
+import { DeleteVagas } from '@/domain/vagas/usecases/deletar-vagas';
 
 export class RemoteDeleteVagas implements DeleteVagas {
     constructor(private readonly url: string, private readonly httpClient: HttpClient<DeleteVagas.Model[]>) {}
 
-    async deleteVaga(): Promise<DeleteVagas.Model[]> {
+    async deleteVaga(params: DeleteVagas.Params): Promise<DeleteVagas.Model> {
         const httpResponse = await this.httpClient.request({
             url: this.url,
             method: 'delete',
+            body: params
         });
-        const remoteDeleteVagas = httpResponse.body || [];
         switch (httpResponse.statusCode) {
-            case HttpStatusCode.ok:
-                return remoteDeleteVagas
+            case HttpStatusCode.ok: return httpResponse.body
             case HttpStatusCode.unauthorized:
                 throw new InvalidCredentialsError();
             default:

@@ -15,7 +15,7 @@ export const MinhasVagasTabs = () => {
         <div className="pt-5">
             <Tabs value={activeTab} onTabChange={setActiveTab}>
                 <Tabs.List>
-                    <Tabs.Tab value="ativas" icon={<IconHome />}>
+                    <Tabs.Tab  value="ativas" icon={<IconHome />}>
                         Em aberto
                     </Tabs.Tab>
                     <Tabs.Tab value="encerradas">Encerradas</Tabs.Tab>

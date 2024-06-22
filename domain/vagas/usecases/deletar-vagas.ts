@@ -1,11 +1,14 @@
+import { InativarVagasModel } from "@/domain/models/inativar-vagas-model"
+
+
 export interface DeleteVagas {
     deleteVaga: (params: DeleteVagas.Params) => Promise<DeleteVagas.Model>
 }
 
 export namespace DeleteVagas {
   export type Params = {
-    id: string | null
+    idVaga: string
   }
 
-  export type Model = any
+  export type Model = InativarVagasModel
 }

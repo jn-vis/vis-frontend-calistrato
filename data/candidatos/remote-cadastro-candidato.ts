@@ -1,15 +1,15 @@
 
 import { HttpClient, HttpStatusCode } from '@/data/protocols/http/http-client'
 import { EmailInUseError, UnexpectedError } from '@/domain/errors'
-import { AddVagas } from '@/domain/vagas/usecases/add-vagas'
+import { AddCandidato } from '@/domain/usecases/candidato/add-candidato';
 
-export class RemoteAddVagas implements AddVagas {
+export class RemoteAddCandidato implements AddCandidato {
   constructor (
     private readonly url: string,
-    private readonly httpClient: HttpClient<RemoteAddVagas.Model>
+    private readonly httpClient: HttpClient<RemoteAddCandidato.Model>
   ) {}
 
-  async add (params: AddVagas.Params): Promise<AddVagas.Model> {
+  async add (params: AddCandidato.Params): Promise<AddCandidato.Model> {
     const httpResponse = await this.httpClient.request({
       url: this.url,
       method: 'post',
@@ -27,7 +27,7 @@ export class RemoteAddVagas implements AddVagas {
   }
 }
 
-export namespace RemoteAddVagas {
-  export type Model = AddVagas.Model
+export namespace RemoteAddCandidato {
+  export type Model = AddCandidato.Model
 }
 

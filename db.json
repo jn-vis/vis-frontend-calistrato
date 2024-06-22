@@ -1,9 +1,55 @@
 {
+  "candidatos": [
+    {
+      "id": "89cf",
+      "sobreMim": "                        Sou um desenvolvedor de software altamente motivado e confiável, com formação em tecnologias da informação e mais de 8 anos de vasta experiência em desenvolvimento front-end e\n                        diversas linguagens e tecnologias de programação. Minha experiência reside no desenvolvimento de aplicações web escaláveis ​​e de alto desempenho usando as mais recentes\n                        ferramentas e metodologias. Com profundo conhecimento em HTML, CSS e JavaScript, tenho experiência em aproveitar frameworks como Bootstrap e Zurb. Minha experiência se estende\n                        a bibliotecas e estruturas JavaScript avançadas, principalmente ReactJS, Angular e NextJS. Tenho habilidade em priorizar clientes e ajustar minha agenda para ser eficiente e\n                        atender às necessidades do cliente. Tenho uma forte ética de trabalho, organização, comunicação e habilidades de resolução de problemas. Além disso, sou cofundador de um\n                        estúdio de web design. Então se precisar de ajuda com seu site fique à vontade para conferir nossa página e entrar em contato conosco 2mwebstudio.com. Minhas habilidades entre\n                        outras: 1) JavaScript 2) Angular 3) Reaja 4) Texto datilografado 5) HTML5 6) CSS3 7) Atrevido 8)jQuery 9) Jasmim 10) Git Além de tudo isso, sou criador de conteúdo (Code with\n                        Sloba) e consegui construir uma grande comunidade de desenvolvedores em três mídias sociais (+200K). Investi uma década da minha vida para me tornar um desenvolvedor sênior e\n                        agora estou ajudando desenvolvedores juniores a se tornarem um desenvolvedor sênior em meses. Canal do Youtube: https://youtube.com/c/codewithsloba Site:\n                        https://codewithsloba.com Instagram: https://www.instagram.com/codewithsloba/ Portfólio: https://bobangajicsm.github.io/portfolio/ Se você quiser se conectar e saber mais,\n                        fique à vontade para me seguir! Como tenho no máximo 30k conexões",
+      "empresasExcluidas": "Google, Stefanini",
+      "vagaExclusivaPCD": false,
+      "cargoRecenteAtual": "Desenvolvedor Júnior",
+      "cargoDesejado": "Desenvolvedor Pleno",
+      "experiencia": "2",
+      "estadoSelecionadoId": [
+        {
+          "id": "1",
+          "nome": "Acre",
+          "selected": true
+        },
+        {
+          "id": "2",
+          "nome": "Alagoas",
+          "selected": false
+        },
+        {
+          "id": "3",
+          "nome": "Amapá",
+          "selected": false
+        },
+        {
+          "id": "4",
+          "nome": "Amazonas",
+          "selected": false
+        },
+        {
+          "id": "5",
+          "nome": "Bahia",
+          "selected": false
+        }
+      ],
+      "clt": false,
+      "pj": true,
+      "btc": false,
+      "remoto": true,
+      "hibrido": false,
+      "presencial": false,
+      "pretensaoPJ": "8150.00 - 12820.00",
+      "pretensaoCLT": "7180.00 - 10500.00"
+    }
+  ],
   "vagas": [
     {
       "id": "1",
-      "vaga": "Tech Leader na Empresa JobsNow",
-      "datelimite": "2025-12-31",
+      "vaga": "Tech Leader na Empresa Nestle",
+      "datelimite": "2026-12-31",
       "descricao": "Descrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\nDescrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\n* Atividades e Responsabilidades\n- Manutenção e implementação de novos recursos na aplicação web e mobile desenvolvidos em React Native/JS\n\nInformações:\n- Tipo de contratação: PJ\n- Horário de trabalho: 09:00 às 18:00 seg/sex\n- 100% remoto, porém temos um local na paulista caso interessado queira trabalhar da empresa.\n\nRequisitos\nConhecimentos obrigatório:\n- Mínimo 5 anos como front-end\n- Expertise React Native/JS, HTML5, javascript, css e git\n- Boas práticas de desenvolvimento WEB.\n- Expertise em consumir Api rest.\n- Expertise no gitflow\n- Trabalhar em equipe e se comunicar bem.",
       "pagamentopj": "22000",
       "pagamentoclt": "",
@@ -12,6 +58,10 @@
       "clt": false,
       "pj": true,
       "btc": false,
+      "statusDaVaga": {
+        "id": 1,
+        "nome": "Ativo"
+      },
       "estados": [
         {
           "id": "1",
@@ -102,319 +152,6 @@
       ],
       "presencial": false,
       "hibrido": false
-    },
-    {
-      "id": "741f",
-      "vaga": "Desenvolvedor Pleno 2",
-      "datelimite": "2024-08-25",
-      "descricao": "Descrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\nDescrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\n* Atividades e Responsabilidades\n- Manutenção e implementação de novos recursos na aplicação web e mobile desenvolvidos em React Native/JS\n\nInformações:\n- Tipo de contratação: PJ\n- Horário de trabalho: 09:00 às 18:00 seg/sex\n- 100% remoto, porém temos um local na paulista caso interessado queira trabalhar da empresa.\n\nRequisitos\nConhecimentos obrigatório:\n- Mínimo 5 anos como front-end\n- Expertise React Native/JS, HTML5, javascript, css e git\n- Boas práticas de desenvolvimento WEB.\n- Expertise em consumir Api rest.\n- Expertise no gitflow\n- Trabalhar em equipe e se comunicar bem.",
-      "pagamentopj": "20000",
-      "pagamentoclt": "",
-      "pagamentobtc": "",
-      "remoto": false,
-      "estados": [
-        {
-          "id": "1",
-          "nome": "Acre",
-          "selected": false
-        },
-        {
-          "id": "2",
-          "nome": "Alagoas",
-          "selected": true
-        },
-        {
-          "id": "3",
-          "nome": "Amapá",
-          "selected": false
-        },
-        {
-          "id": "4",
-          "nome": "Amazonas",
-          "selected": false
-        },
-        {
-          "id": "5",
-          "nome": "Bahia",
-          "selected": false
-        }
-      ],
-      "pcd": true,
-      "clt": false,
-      "pj": true,
-      "btc": false,
-      "obrigatorios": [
-        {
-          "id": 0.1979786314408929,
-          "text": "teste",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "desejaveis": [
-        {
-          "id": 1,
-          "text": "react",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 2,
-          "text": "javascript",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "sortable": [
-        {
-          "id": 2,
-          "text": "Pretensão Pj",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 1,
-          "text": "Senioridade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 3,
-          "text": "Pretensão Clt",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 4,
-          "text": "Pretensao Btc",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 5,
-          "text": "Dias de disponibilidade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 6,
-          "text": "Requisitos desejaveis",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 7,
-          "text": "Reputação geral",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "presencial": true,
-      "hibrido": false
-    },
-    {
-      "id": "c8fc",
-      "vaga": "Desenvolvedor Pleno 3",
-      "datelimite": "2024-06-30",
-      "descricao": "Descrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\nDescrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\n* Atividades e Responsabilidades\n- Manutenção e implementação de novos recursos na aplicação web e mobile desenvolvidos em React Native/JS\n\nInformações:\n- Tipo de contratação: PJ\n- Horário de trabalho: 09:00 às 18:00 seg/sex\n- 100% remoto, porém temos um local na paulista caso interessado queira trabalhar da empresa.\n\nRequisitos\nConhecimentos obrigatório:\n- Mínimo 5 anos como front-end\n- Expertise React Native/JS, HTML5, javascript, css e git\n- Boas práticas de desenvolvimento WEB.\n- Expertise em consumir Api rest.\n- Expertise no gitflow\n- Trabalhar em equipe e se comunicar bem.",
-      "pagamentopj": "",
-      "pagamentoclt": "15000",
-      "pagamentobtc": "",
-      "remoto": false,
-      "estados": [
-        {
-          "id": "1",
-          "nome": "Acre",
-          "selected": false
-        },
-        {
-          "id": "2",
-          "nome": "Alagoas",
-          "selected": false
-        },
-        {
-          "id": "3",
-          "nome": "Amapá",
-          "selected": true
-        },
-        {
-          "id": "4",
-          "nome": "Amazonas",
-          "selected": false
-        },
-        {
-          "id": "5",
-          "nome": "Bahia",
-          "selected": false
-        }
-      ],
-      "pcd": false,
-      "clt": true,
-      "pj": false,
-      "btc": false,
-      "obrigatorios": [],
-      "desejaveis": [
-        {
-          "id": 1,
-          "text": "react",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 2,
-          "text": "javascript",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "sortable": [
-        {
-          "id": 1,
-          "text": "Senioridade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 2,
-          "text": "Pretensão Pj",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 3,
-          "text": "Pretensão Clt",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 4,
-          "text": "Pretensao Btc",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 5,
-          "text": "Dias de disponibilidade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 6,
-          "text": "Requisitos desejaveis",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 7,
-          "text": "Reputação geral",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "presencial": true,
-      "hibrido": false
-    },
-    {
-      "id": "d53f",
-      "vaga": "Desenvolvedor Senior",
-      "datelimite": "2024-06-30",
-      "descricao": "Descrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\nDescrição da empresa\nO Sistema Inteegra é uma plataforma 100% brasileira que permite alto grau de customização. Nossos softwares processaram em 2020 cerca de 100.000 eventos, com um volume de spend superior a R$1 BI. Somos uma plataforma totalmente estabilizada e pronta para atender sua demanda.\n\nSomos pioneiros, líderes de mercado e entendemos nosso mercado de ferramentas de gestão em eventos como ninguém.\n\nAtividades e Responsabilidades\n* Atividades e Responsabilidades\n- Manutenção e implementação de novos recursos na aplicação web e mobile desenvolvidos em React Native/JS\n\nInformações:\n- Tipo de contratação: PJ\n- Horário de trabalho: 09:00 às 18:00 seg/sex\n- 100% remoto, porém temos um local na paulista caso interessado queira trabalhar da empresa.\n\nRequisitos\nConhecimentos obrigatório:\n- Mínimo 5 anos como front-end\n- Expertise React Native/JS, HTML5, javascript, css e git\n- Boas práticas de desenvolvimento WEB.\n- Expertise em consumir Api rest.\n- Expertise no gitflow\n- Trabalhar em equipe e se comunicar bem.",
-      "pagamentopj": "",
-      "pagamentoclt": "14999",
-      "pagamentobtc": "",
-      "remoto": false,
-      "estados": [
-        {
-          "id": "1",
-          "nome": "Acre",
-          "selected": false
-        },
-        {
-          "id": "2",
-          "nome": "Alagoas",
-          "selected": false
-        },
-        {
-          "id": "3",
-          "nome": "Amapá",
-          "selected": false
-        },
-        {
-          "id": "4",
-          "nome": "Amazonas",
-          "selected": true
-        },
-        {
-          "id": "5",
-          "nome": "Bahia",
-          "selected": false
-        }
-      ],
-      "pcd": false,
-      "clt": true,
-      "pj": false,
-      "btc": false,
-      "obrigatorios": [],
-      "desejaveis": [
-        {
-          "id": 1,
-          "text": "react",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 2,
-          "text": "javascript",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "sortable": [
-        {
-          "id": 2,
-          "text": "Pretensão Pj",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 1,
-          "text": "Senioridade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 3,
-          "text": "Pretensão Clt",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 4,
-          "text": "Pretensao Btc",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 5,
-          "text": "Dias de disponibilidade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 6,
-          "text": "Requisitos desejaveis",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 7,
-          "text": "Reputação geral",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "presencial": false,
-      "hibrido": true
     },
     {
       "id": "b5ef",
@@ -424,6 +161,10 @@
       "pagamentopj": "12000",
       "pagamentoclt": "",
       "pagamentobtc": "",
+      "statusDaVaga": {
+        "id": 1,
+        "nome": "Ativo"
+      },
       "remoto": false,
       "presencial": false,
       "hibrido": true,
@@ -508,109 +249,6 @@
         {
           "id": 6,
           "text": "Requisitos desejaveis",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 7,
-          "text": "Reputação geral",
-          "chosen": false,
-          "selected": false
-        }
-      ]
-    },
-    {
-      "id": "4aee",
-      "vaga": "Desenvolvedor Backend NodeJs",
-      "datelimite": "2024-06-28",
-      "descricao": "Descrição da vaga:A Confidencial (Apenas para Cadastrados) é a empresa que mais cresce nas Américas e nos orgulhamos disso. Nossos times estão espalhados pelos cinco continentes e somos tão fortes quanto as equipes multiculturais que estão no centro dos negócios.Entregamos soluções de alta complexidade para os nossos clientes, como prezamos pela excelência, contratamos apenas o 1% entre os melhores talentos.Nutrimos o crescimento profissional das nossas equipes engajando-as em projetos desafiadores.Sobre a função: Ser um Desenvolvedor Node Senior em nossa Equipe de Desenvolvimento é como ser um solucionador de problemas em tempo integral.Esperamos que suas habilidades sejam uma combinação de experiência, conhecimento e independência.A inovação também está no centro da estratégia da Confidencial (Apenas para Cadastrados).Portanto, se você estava disposto a assumir as tarefas mais complexas e ser um mestre de sua equipe técnica ou linguagem, Node, então você é provavelmente uma das pessoas únicas que estamos procurando.O que você vai fazer: Arquitetar sistemas backend Bandit usando a melhor prática.Implementar e iterar recursos de forma tática e em ritmo rápido.Trabalhar de forma colaborativa e eficiente entre equipes funcionais em um ambiente de inicialização rápida e em estágio inicial.Projetar, estender e implementar APIs.Manter o alto padrão de qualidade de engenharia através de revisões de código, testes unitários, análises.Criar eficiências de engenharia através da automação e desenvolvimento de ferramentas.Definir processos de engenharia para lançamento e liberação de produtos.Ajudar-nos a aumentar a equipe de engenharia mundialmente através da execução de entrevistas técnicas.Esperamos que você tenha: Experiência no desenvolvimento em Node.Experiência com bancos de dados SQL e NoSQL.Experiência com Microservices e Nuvem.Conhecimento avançado em algoritmos.Conhecimento de infraestrutura de TI.Gestão intermediária de metodologias ágeis.Forte compreensão das melhores práticas, princípios SOLID , CLEAN Code e soluções escaláveis.Conhecimento de Padrões de Design.Experiência no desenvolvimento de aplicações inteiras a partir do zero.Experiência em testes automatizados, pipelines CI/CD.Forte experiência com controle de versão.Nível avançado de inglês.O que oferecemos: 100% trabalho remoto.Configuração do hardware para trabalhar em home office.Horários flexíveis.Licença paternidade, maternidade, férias e feriados remunerados.Ambiente de trabalho diversificado e multicultural.Um ambiente inovador com a estrutura e os recursos de uma multinacional líder.Excelente remuneração acima da média do mercado.Possibilidade de crescimento profissional rápido, compatível com a sua curva de aprendizagem.Nosso pessoal trabalha remotamente com uma cultura consistente e robusta que promove a diversidade e o trabalho em equipe.Para continuar sendo a empresa líder em desenvolvimento de software nas Américas, queremos garantir que cada membro da Confidencial (Apenas para Cadastrados) tenha as melhores oportunidades de crescimento e desenvolvimento profissional em um ambiente diversificado, acolhedor e inovador.Cada pessoa do time traz algo essencial para a Confidencial (Apenas para Cadastrados)! Queremos ouvir a sua história.Candidate-se agora! Acesse nosso website",
-      "pagamentopj": "10000",
-      "pagamentoclt": "",
-      "pagamentobtc": "",
-      "remoto": false,
-      "presencial": false,
-      "hibrido": true,
-      "estados": [
-        {
-          "id": "1",
-          "nome": "Acre",
-          "selected": false
-        },
-        {
-          "id": "2",
-          "nome": "Alagoas",
-          "selected": false
-        },
-        {
-          "id": "3",
-          "nome": "Amapá",
-          "selected": false
-        },
-        {
-          "id": "4",
-          "nome": "Amazonas",
-          "selected": false
-        },
-        {
-          "id": "5",
-          "nome": "Bahia",
-          "selected": true
-        }
-      ],
-      "pcd": false,
-      "clt": false,
-      "pj": true,
-      "btc": false,
-      "obrigatorios": [
-        {
-          "id": 1,
-          "text": "node",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "desejaveis": [
-        {
-          "id": 1,
-          "text": "node",
-          "chosen": false,
-          "selected": false
-        }
-      ],
-      "sortable": [
-        {
-          "id": 3,
-          "text": "Pretensão Clt",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 6,
-          "text": "Requisitos desejaveis",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 1,
-          "text": "Senioridade",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 2,
-          "text": "Pretensão Pj",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 4,
-          "text": "Pretensao Btc",
-          "chosen": false,
-          "selected": false
-        },
-        {
-          "id": 5,
-          "text": "Dias de disponibilidade",
           "chosen": false,
           "selected": false
         },

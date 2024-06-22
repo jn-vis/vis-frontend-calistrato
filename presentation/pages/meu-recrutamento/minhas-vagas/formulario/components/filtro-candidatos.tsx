@@ -1,7 +1,7 @@
 import IconInfoCircle from '@/presentation/icons/icon-info-circle';
 import Tippy from '@tippyjs/react';
-import { Estados } from '@/domain/vagas/usecases/edit-vagas';
 import useFiltroCandidatoStore from '../../store/filtro-candidato-store';
+import { Estados } from '@/domain/models/view-vagas-model';
 
 export const FiltroCandidatos =({register, errors}: any) => {
     const {
@@ -64,8 +64,7 @@ export const FiltroCandidatos =({register, errors}: any) => {
                         </div>
                     </div>
                 </div>
-                <>
-                    <label htmlFor="estados">Selecione a região da Vaga anunciada</label>
+                <label htmlFor="estados">Selecione a região da Vaga anunciada</label>
                     <select id="estados" value={estadoSelecionadoId} onChange={(e) => setEstadoSelecionadoId(e.target.value)}  disabled={isRemoto} className="form-select text-white-dark" name="estados">
                         {estados.map((estado: Estados) => (
                             <option key={estado.id} value={estado.id} selected={estado.selected}>
@@ -73,7 +72,6 @@ export const FiltroCandidatos =({register, errors}: any) => {
                             </option>
                         ))}
                     </select>
-                </>
             </div>
             <div className="mb-5">
                 <div className="mb-5">

@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useFormOn } from "../hooks/useForm";
+
 
 export const DadosBasicos = ({register, errors}: any) => {
     // const { register, formState: { errors }, watch } = useFormOn();
@@ -39,20 +38,6 @@ export const DadosBasicos = ({register, errors}: any) => {
                 required
             />
         </div>
-        {/* <div className="mt-2">
-            <label htmlFor="contato" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                Contato
-            </label>
-            <input
-                {...register('contato')}
-                type="number"
-                name="contato"
-                id="contato"
-                className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-600 focus:ring-blue-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                placeholder="11999999999"
-                required
-            />
-        </div> */}
         <div className="mt-2">
             <label htmlFor="descricao" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                 Descrição da vaga

@@ -1,5 +1,5 @@
 import { ViewVagasModel } from "@/domain/models/view-vagas-model";
-import {Estados } from "@/domain/vagas/usecases/edit-vagas";
+
 
 export interface VagasContextType {
     recordsData: {

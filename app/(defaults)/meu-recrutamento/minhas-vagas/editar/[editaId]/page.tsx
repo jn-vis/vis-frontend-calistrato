@@ -1,6 +1,4 @@
-
-import EditarVagaExistente from '@/presentation/components/meu-recrutamento/minhas-vagas/editar-vaga/editar-vaga';
-import CadastrarNovaVaga from '@/presentation/pages/meu-recrutamento/minhas-vagas/crud-vagas/formulario-vaga';
+import FormularioVaga from '@/presentation/pages/meu-recrutamento/minhas-vagas/formulario/formulario-vaga';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,7 +7,7 @@ export const metadata: Metadata = {
 
 const EditarVaga = ({params}:any) => {
 
-    return <CadastrarNovaVaga vagaId={params.editaId} />;
+    return <FormularioVaga vagaId={params.editaId} />;
   };
 
   export default EditarVaga;

@@ -1,13 +1,12 @@
 import { Estados, Sortable, ViewVagasModel } from "@/domain/models/view-vagas-model"
 
 
-export interface ViewVagas {
-    findAll: () => Promise<ViewVagas.Model[]>
+export interface AddVagas {
+  add: (params: AddVagas.Params) => Promise<AddVagas.Model>
 }
 
-export namespace ViewVagas {
+export namespace AddVagas {
   export type Params = {
-    id: string,
     vaga: string,
     descricao: string,
     remoto: boolean,

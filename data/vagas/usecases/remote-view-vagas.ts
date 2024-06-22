@@ -1,11 +1,12 @@
 import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors';
 import { HttpClient, HttpStatusCode } from '../../protocols/http/http-client';
 import { ViewVagas } from '@/domain/vagas/usecases/view-vagas';
+import { ViewVagasModel } from '@/domain/models/view-vagas-model';
 
 export class RemoteViewVagas implements ViewVagas {
-    constructor(private readonly url: string, private readonly httpClient: HttpClient<ViewVagas.Model[]>) {}
+    constructor(private readonly url: string, private readonly httpClient: HttpClient<ViewVagasModel[]>) {}
 
-    async findAll(): Promise<ViewVagas.Model[]> {
+    async findAll(): Promise<ViewVagasModel[]> {
         const httpResponse = await this.httpClient.request({
             url: this.url,
             method: 'get',

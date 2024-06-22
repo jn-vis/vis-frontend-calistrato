@@ -1,13 +1,6 @@
-import { Sortable, ViewVagasModel } from "@/domain/models/view-vagas-model"
-
+import { Estados, Sortable, ViewVagasModel } from "@/domain/models/view-vagas-model"
 export interface EditVagas {
   edit: (params: EditVagas.Params) => Promise<EditVagas.Model>
-}
-
-export interface Estados {
-    id: string;
-    nome: string;
-    selected: boolean;
 }
 
 export namespace EditVagas {
