@@ -8,7 +8,7 @@ import formatDate from '@/presentation/utils/format-date';
 import Link from 'next/link';
 import { RowData } from '../../../../../interfaces/vagas';
 import useListVagas from '../../hooks/useListVagas';
-import Modal from '@/presentation/components/modal-composition';
+import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
 import { Curriculo } from '@/presentation/interfaces/curriculos';
 import useListCurriculo from '../../hooks/useListCurriculo';
 

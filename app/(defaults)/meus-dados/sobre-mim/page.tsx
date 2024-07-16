@@ -1,4 +1,4 @@
-import { SobreMimTabs } from '@/presentation/components/meus-dados/sobre-mim/sobre-mim-tabs';
+import { SobreMimTabs } from '@/presentation/modules/MeusDados/SobreMim/application/sobre-mim-tabs';
 import { getTranslation } from '@/i18n';
 import { Metadata } from 'next';
 import Link from 'next/link';

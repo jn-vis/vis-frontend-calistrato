@@ -3,7 +3,7 @@ import { InvalidCredentialsError, UnexpectedError } from '@/domain/errors'
 
 import casual from 'casual'
 import { HttpClientSpy } from '../mocks'
-import { RemoteAuthentication } from '@/data/login/usecases/remote-authentication'
+import { RemoteAuthentication } from '@/data/usecases/login/remote-authentication'
 import { HttpStatusCode } from '@/data/protocols/http/http-client'
 import { mockAuthenticationModel, mockAuthenticationParams } from '@/test/domain/mocks/mock-authentication'
 

@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/data/protocols/http/http-client";
-import { makeRemoteTokenLanguage } from "@/main/factories/usecases/remote-token-language-factory";
+import { makeRemoteTokenLanguage } from "@/main/factories/usecases/login/remote-token-language-factory";
 import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 

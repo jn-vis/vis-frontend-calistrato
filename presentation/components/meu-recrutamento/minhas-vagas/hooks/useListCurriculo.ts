@@ -9,7 +9,7 @@ const rowData: Curriculo[] = [
     {
         id: 1,
         nome: 'João',
-        email: 'joao@jobsnow.com',
+        email: 'joao@jobsnsow.com',
         dataVisAlt: '2024-05-10',
         pretensoes: 'R$ 10.000,00',
         tipo: 'PJ',

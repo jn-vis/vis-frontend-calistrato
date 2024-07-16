@@ -1,5 +1,5 @@
 import { setCurrentAccountAdapter } from "@/main/adapters";
-import { makeRemoteLogout } from "@/main/factories/usecases/remote-logout-factory";
+import { makeRemoteLogout } from "@/main/factories/usecases/login/remote-logout-factory";
 import { accessTokenState, emailUsuarioState, modalState, userState } from "@/presentation/pages/login/atom/atom";
 import { useRouter } from "next/navigation";
 import { useRecoilValue, useSetRecoilState } from "recoil";

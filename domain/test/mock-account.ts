@@ -1,11 +1,12 @@
 
 
+
 import { AccountModel } from '../models'
 import casual from 'casual'
 
 
 
-export const mockAuthentication = (): AuthenticationParams => ({
+export const mockAuthentication = (): mockAuthenticationParams => ({
      email: casual.email,
      password: casual.password
 })

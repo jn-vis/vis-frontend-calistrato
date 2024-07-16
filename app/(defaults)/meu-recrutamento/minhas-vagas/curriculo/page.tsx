@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 const Curriculos = () => {
     return (
         <div>
-            <ul className="flex space-x-2 rtl:space-x-reverse mb-12">
+            {/* <ul className="flex space-x-2 rtl:space-x-reverse mb-12">
                 <li>
                     <Link href="#" className="text-primary hover:underline">
                        Meus curriculos
                     </Link>
                 </li>
-            </ul>
+            </ul> */}
             {/* <MeusCurriculosLista /> */}
             <ListaDeCurriculos />
         </div>

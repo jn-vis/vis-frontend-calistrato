@@ -1,5 +1,5 @@
 
-import CadastrarNovaVaga from '@/presentation/pages/meu-recrutamento/minhas-vagas/formulario/formulario-vaga';
+import CadastrarNovaVaga from '@/presentation/modules/MeuRecrutamento/MinhasVagas/application/NovaVaga/formulario-vaga';
 import { Metadata } from 'next';
 import React from 'react';
 

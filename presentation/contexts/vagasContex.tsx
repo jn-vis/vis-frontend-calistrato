@@ -8,7 +8,7 @@ import { VagasContextType, VagasProviderProps } from './interfaces';
 export const VagasContext = createContext<VagasContextType | null>(null);
 export const VagasProvider: React.FC<VagasProviderProps> = ({ children }) => {
     const { paginate } = usePagination();
-    const currentDate = new Date();
+
 
     const { data, error} = useQuery({
         queryKey: ['vagas'],
@@ -25,8 +25,8 @@ export const VagasProvider: React.FC<VagasProviderProps> = ({ children }) => {
 
     useEffect(() => {
         if (data) {
-            const ativas = data.filter((item: ViewVagasModel) => new Date(item.datelimite) >= currentDate);
-            const encerradas = data.filter((item: ViewVagasModel) => new Date(item.datelimite) < currentDate);
+            const ativas = data.filter((item: ViewVagasModel) => item.status === 'ativo');
+            const encerradas = data.filter((item: ViewVagasModel) => item.status === 'inativo');
             setRecordsData({
                 ativas: paginate(ativas),
                 encerradas: paginate(encerradas)
@@ -43,7 +43,7 @@ export const VagasProvider: React.FC<VagasProviderProps> = ({ children }) => {
         return data?.find(vaga => vaga.id === id);
     };
 
-    return <VagasContext.Provider value={{ recordsData, currentDate, findVagaById}}>{children}</VagasContext.Provider>;
+    return <VagasContext.Provider value={{ recordsData, findVagaById}}>{children}</VagasContext.Provider>;
 };
 
 export const useVagas = () => {

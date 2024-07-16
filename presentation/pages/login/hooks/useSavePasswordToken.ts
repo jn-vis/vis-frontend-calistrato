@@ -1,5 +1,5 @@
 import { setCurrentAccountAdapter } from "@/main/adapters";
-import { makeRemoteTokenPassword } from "@/main/factories/usecases/remote-token-password";
+import { makeRemoteTokenPassword } from "@/main/factories/usecases/login/remote-token-password";
 import { accessTokenState, emailUsuarioState, modalState, userState } from "@/presentation/pages/login/atom/atom";
 import {  useRecoilValue, useSetRecoilState } from "recoil";
 

@@ -1,5 +1,5 @@
 
-import HomePage from '@/presentation/components/home/home-page-componente';
+import HomePage from '@/presentation/modules/home/home-page-componente';
 import { Metadata } from 'next';
 import React from 'react';
 

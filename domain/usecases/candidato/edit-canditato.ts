@@ -9,7 +9,13 @@ export interface EditCandidato {
 export namespace EditCandidato {
   export type Params = {
     id: string,
-    sobremim: string,
+    empresasExcluidas: string[],
+    vagaExclusivaPCD: string | undefined,
+    cargoRecenteAtual: string | undefined,
+    cargoDesejado: string | undefined,
+    experiencia: string | undefined,
+    estadoSelecionadoId: string | undefined,
+    sobremim: string | undefined,
     remoto: boolean,
     presencial: boolean,
     hibrido: boolean,
@@ -20,8 +26,12 @@ export namespace EditCandidato {
     pcd: boolean,
     pagamentopj: string,
     pagamentoclt: string,
-    pagamentobtc: string
+    pagamentobtc: string,
+    pretensaoPJ: string,
+    pretensaoCLT: string
   }
 
   export type Model = ViewCandidatoModel
 }
+
+

@@ -15,6 +15,7 @@ export interface Estados {
 
 export type ViewVagasModel = {
     id: string,
+    status: string,
     vaga: string,
     descricao: string,
     remoto: boolean,

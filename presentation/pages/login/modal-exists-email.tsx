@@ -2,7 +2,7 @@
 
 import IconUser from '@/presentation/icons/icon-user';
 import IconLoader from '@/presentation/icons/icon-loader';
-import Modal from '@/presentation/components/modal-composition';
+import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
 import { useFormEmail } from './validators/useFormEmail';
 import {useRecoilValue, useSetRecoilState } from 'recoil';
 import { modalState } from '@/presentation/pages/login/atom/atom';

@@ -1,4 +1,4 @@
-import { RemoteAddCandidato } from '@/data/candidatos/remote-cadastro-candidato'
+import { RemoteAddCandidato } from '@/data/usecases/candidatos/remote-cadastro-candidato'
 import { AddCandidato } from '@/domain/usecases/candidato/add-candidato'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 

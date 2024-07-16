@@ -6,7 +6,7 @@ export interface VagasContextType {
         ativas: ViewVagasModel[];
         encerradas: ViewVagasModel[];
     };
-    currentDate: Date;
+
     findVagaById: (id: string) => ViewVagasModel | undefined;
 }
 

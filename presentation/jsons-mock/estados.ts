@@ -1,4 +1,4 @@
-import { Estados } from "@/domain/vagas/usecases/edit-vagas";
+import { Estados } from "@/domain/usecases/vagas/edit-vagas";
 
 export const listaEstados: Estados[] =
 	  [

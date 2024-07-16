@@ -3,7 +3,7 @@
 import IconGithub from '@/presentation/icons/icon-github';
 import IconPencilPaper from '@/presentation/icons/icon-pencil-paper';
 import IconPrinter from '@/presentation/icons/icon-printer';
-import Modal from '@/presentation/components/modal-composition';
+import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
 import Tippy from '@tippyjs/react';
 import { useState } from 'react';
 

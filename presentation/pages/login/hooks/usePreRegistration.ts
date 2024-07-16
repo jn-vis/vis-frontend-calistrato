@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/data/protocols/http/http-client";
-import { makeRemotePreRegistration } from "@/main/factories/usecases/remote-pre-registration-factory";
+import { makeRemotePreRegistration } from "@/main/factories/usecases/login/remote-pre-registration-factory";
 import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { useSendTokenLanguage } from "./useSendTokenLanguage";

@@ -1,6 +1,6 @@
 import { HttpStatusCode } from "@/data/protocols/http/http-client";
 import { setCurrentAccountAdapter } from "@/main/adapters";
-import { makeRemoteAuthentication } from "@/main/factories/usecases/remote-authentication-factory";
+import { makeRemoteAuthentication } from "@/main/factories/usecases/login/remote-authentication-factory";
 import { accessTokenState, emailUsuarioState, modalState, userState } from "@/presentation/pages/login/atom/atom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 

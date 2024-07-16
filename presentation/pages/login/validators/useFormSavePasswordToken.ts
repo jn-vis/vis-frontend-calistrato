@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useAuth } from '@/presentation/contexts/authContext';
 import { BlockedTokenError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
 import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';

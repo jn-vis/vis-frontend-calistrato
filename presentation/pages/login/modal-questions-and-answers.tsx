@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Select from 'react-select';
-import Modal from '@/presentation/components/modal-composition';
+import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
 import { usePreRegistration } from './hooks/usePreRegistration';
 import { useRecoilState } from 'recoil';
 import { modalState } from '@/presentation/pages/login/atom/atom';

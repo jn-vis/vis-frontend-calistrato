@@ -1,5 +1,5 @@
 import { HttpStatusCode } from "@/data/protocols/http/http-client";
-import { makeRemoteConfirmEmail } from "@/main/factories/usecases/remote-confirm-email-factory";
+import { makeRemoteConfirmEmail } from "@/main/factories/usecases/login/remote-confirm-email-factory";
 import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
 import {  useSetRecoilState } from "recoil";
 

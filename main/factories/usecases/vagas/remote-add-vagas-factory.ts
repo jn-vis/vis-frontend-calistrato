@@ -1,5 +1,5 @@
-import { RemoteAddVagas } from '@/data/vagas/usecases/remote-cadastro-vagas'
-import { AddVagas } from '@/domain/vagas/usecases/add-vagas'
+import { RemoteAddVagas } from '@/data/usecases/vagas/remote-cadastro-vagas'
+import { AddVagas } from '@/domain/usecases/vagas/add-vagas'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 
 //TODO -> alterar client para decorators de autenticação

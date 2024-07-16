@@ -1,4 +1,4 @@
-import { RemoteViewCandidatos } from '@/data/candidatos/remote-view-candidatos'
+import { RemoteViewCandidatos } from '@/data/usecases/candidatos/remote-view-candidatos'
 import { ViewCandidatos } from '@/domain/usecases/candidato/view-candidato'
 import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TFormData, emailSchema} from '@/domain/schemas/login-email';
-import { useAuth } from '@/presentation/contexts/authContext';
+// import { useAuth } from '@/presentation/contexts/authContext';
 import { BlockedTokenError, InvalidCredentialsError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
 import { useConfirmEmail } from '../hooks/useConfirmEmail';
 

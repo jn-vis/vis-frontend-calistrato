@@ -3,7 +3,7 @@ import IconLockDots from "../../icons/icon-lock-dots";
 import IconLoader from "../../icons/icon-loader";
 import IconEye from "@/presentation/icons/icon-eye";
 import { useTogglePassword } from "@/presentation/pages/login/hooks/useTogglePassword";
-import Modal from "@/presentation/components/modal-composition";
+import Modal from "@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
 import { useSendTokenLanguage } from "./hooks/useSendTokenLanguage";

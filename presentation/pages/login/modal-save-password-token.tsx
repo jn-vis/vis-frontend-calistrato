@@ -5,7 +5,7 @@ import PasswordRequirements from '@/domain/schemas/regex-password';
 import IconEye from '@/presentation/icons/icon-eye';
 import { useFormSavePasswordToken } from './validators/useFormSavePasswordToken';
 import { useTogglePassword } from '@/presentation/pages/login/hooks/useTogglePassword';
-import Modal from '@/presentation/components/modal-composition';
+import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
 import { useRecoilState } from 'recoil';
 import { modalState } from '@/presentation/pages/login/atom/atom';
 

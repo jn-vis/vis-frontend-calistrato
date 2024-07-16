@@ -1,5 +1,5 @@
 
-import PreviewCandidatoComponent from '@/presentation/components/meus-dados/sobre-mim/preview-candidato-ind';
+import PreviewCandidatoComponent from '@/presentation/modules/MeusDados/SobreMim/application/preview-candidato-ind';
 
 const PreviewCandidato = () => {
 

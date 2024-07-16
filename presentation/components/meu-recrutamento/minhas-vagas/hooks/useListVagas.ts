@@ -8,7 +8,7 @@ import { Sortable, ViewVagasModel } from "@/domain/models/view-vagas-model";
 
 const useListVagas = () => {
     const [filtro, setFiltro] = useState('');
-    const { currentDate, recordsData } = useVagas();
+    const { recordsData } = useVagas();
     const [viewType, setViewType] = useState<'list' | 'grid'>('grid');
     const col = ['vaga', 'descricao', 'datelimite'];
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl';
@@ -61,7 +61,6 @@ const useListVagas = () => {
     modalOpenSortable,
     setModalOpenSortable,
     abrirModalSortable,
-    currentDate
     };
 };
 

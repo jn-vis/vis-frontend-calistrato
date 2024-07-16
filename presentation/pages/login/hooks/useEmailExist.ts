@@ -1,7 +1,7 @@
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { emailUsuarioState, modalState } from '@/presentation/pages/login/atom/atom';
 import { HttpStatusCode } from '@/data/protocols/http/http-client';
-import { makeRemoteEmailExists } from '@/main/factories/usecases/remote-exists-login-factory';
+import { makeRemoteEmailExists } from '@/main/factories/usecases/login/remote-exists-login-factory';
 
 
 export const useEmailExist = () => {
