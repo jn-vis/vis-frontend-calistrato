@@ -8,8 +8,7 @@ import React, { ReactNode, Suspense, useEffect } from 'react';
 import Loading from '@/presentation/layouts/loading';
 
 import { VagasProvider } from '../contexts/vagasContex';
-import {  useSetRecoilState,  } from 'recoil';
-import { userState } from '../pages/login/atom/atom';
+import { useStore } from '@/presentation/Login/store/useStore';
 import { getCurrentAccountAdapter } from '@/main/adapters';
 
 
@@ -19,7 +18,7 @@ interface IProps {
 
 const ProviderComponent = ({ children }: IProps) => {
 
-    const setUser = useSetRecoilState(userState);
+    const setUser = useStore(state => state.setUserState);
 
     useEffect(() => {
         const storedAccount = getCurrentAccountAdapter();

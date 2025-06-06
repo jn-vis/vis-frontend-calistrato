@@ -18,9 +18,8 @@ import IconCaretDown from '@/presentation/icons/icon-caret-down';
 import IconMenuPages from '@/presentation/icons/menu/icon-menu-pages';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { useRecoilValue } from 'recoil';
-import { userState } from '../pages/login/atom/atom';
-import { useLogout } from '../pages/login/hooks/useLogout';
+import { useStore } from '@/presentation/Login/store/useStore';
+import { useLogout } from '@/presentation/Login/hooks/useLogout';
 
 const Header = () => {
     const pathname = usePathname();
@@ -28,7 +27,7 @@ const Header = () => {
     const router = useRouter();
     const { t, i18n } = getTranslation();
 
-    const user = useRecoilValue(userState)
+    const user = useStore(state => state.userState)
     const { handleLogoutSubmission } = useLogout()
 
     useEffect(() => {
@@ -240,7 +239,7 @@ const Header = () => {
                                     </li>
                                     <li className="border-t border-white-light dark:border-white-light/10">
                                         {/* <Link href="/auth/boxed-signin" className="!py-3 text-danger"> */}
-                                        <button className="!py-3 text-danger" onClick={() => handleLogoutSubmission(user)}>
+                                        <button className="!py-3 text-danger" onClick={() => handleLogoutSubmission(user as string)}>
                                             <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
                                             Sair do Sistema
                                         </button>

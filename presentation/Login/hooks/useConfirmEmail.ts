@@ -1,11 +1,9 @@
 import { HttpStatusCode } from "@/data/protocols/http/http-client";
 import { makeRemoteConfirmEmail } from "@/main/factories/usecases/login/remote-confirm-email-factory";
-import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
-import {  useSetRecoilState } from "recoil";
+import { useStore } from "@/presentation/Login/store/useStore";
 
 export const useConfirmEmail = () => {
-    const setModal = useSetRecoilState(modalState);
-    const setEmailUsuario = useSetRecoilState(emailUsuarioState);
+    const { setModalState, setEmailUsuarioState } = useStore();
 
     const handleConfirmEmailSubmission = async (email: string | null) => {
         const confirmEmailRepository = makeRemoteConfirmEmail(email);
@@ -13,10 +11,10 @@ export const useConfirmEmail = () => {
             const result = await confirmEmailRepository.confirmEmail({email});
 
             if (result && result.status === HttpStatusCode.accepted) {
-                setModal('registration');
-                setEmailUsuario(email);
+                setModalState('registration');
+                setEmailUsuarioState(email);
             } else {
-                setModal(null);
+                setModalState(null);
             }
         } catch (error) {
             console.error('Failed to verify email:', error);
@@ -26,6 +24,6 @@ export const useConfirmEmail = () => {
 
     return {
         handleConfirmEmailSubmission,
-        setModal
+        setModal: setModalState
     }
 }

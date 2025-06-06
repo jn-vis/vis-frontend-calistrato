@@ -12,9 +12,8 @@ import IconMenuUsers from '@/presentation/icons/menu/icon-menu-users';
 import IconMenuAuthentication from '@/presentation/icons/menu/icon-menu-authentication';
 import { usePathname } from 'next/navigation';
 import { getTranslation } from '@/i18n';
-import { AuthenticationManager } from '../pages/login';
-import {  useRecoilValue, useSetRecoilState } from 'recoil';
-import { accessTokenState, modalState } from '../pages/login/atom/atom';
+import { LoginView } from '../Login/login.view';
+import { useStore } from '@/presentation/Login/store/useStore';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -29,8 +28,8 @@ const Sidebar = () => {
         });
     };
 
-    const setModal = useSetRecoilState(modalState);
-    const accessToken = useRecoilValue(accessTokenState);
+    const setModal = useStore(state => state.setModalState);
+    const accessToken = useStore(state => state.accessTokenState);
     const handleOpenModal = () => {
         if (!accessToken) {
             setModal('login');
@@ -206,7 +205,8 @@ const Sidebar = () => {
                     </PerfectScrollbar>
                 </div>
             </nav>
-            <AuthenticationManager />
+            <LoginView />
+            {/* <AuthenticationManager /> */}
         </div>
     );
 };

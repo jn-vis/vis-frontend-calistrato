@@ -3,19 +3,15 @@
 import IconUser from '@/presentation/icons/icon-user';
 import IconLoader from '@/presentation/icons/icon-loader';
 import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
-import { useFormEmail } from './validators/useFormEmail';
-import {useRecoilValue, useSetRecoilState } from 'recoil';
-import { modalState } from '@/presentation/pages/login/atom/atom';
+import { useStore } from '../store/useStore';
+import { useFormEmail } from '../validators/useFormEmail';
 
 export const ModalExistsEmail = () => {
-
-    const { register, handleSubmit, errors, isSubmitting,handleFormSubmit } = useFormEmail();
-
-    const setModal = useSetRecoilState(modalState);
-    const modal = useRecoilValue(modalState);
+    const { register, handleSubmit, errors, isSubmitting, handleFormSubmit } = useFormEmail();
+    const { modalState, setModalState } = useStore();
 
     return (
-        <Modal isOpen={modal === "login"} onClose={() => setModal(null)} title="Informe o seu e-mail">
+        <Modal isOpen={modalState === "login"} onClose={() => setModalState(null)} title="Informe o seu e-mail">
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <div className="relative mb-4">
                         <div className="relative">

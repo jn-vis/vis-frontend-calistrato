@@ -2,15 +2,12 @@
 import { useState } from 'react';
 import Select from 'react-select';
 import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
-import { usePreRegistration } from './hooks/usePreRegistration';
-import { useRecoilState } from 'recoil';
-import { modalState } from '@/presentation/pages/login/atom/atom';
+import { usePreRegistration } from '@/presentation/Login/hooks/usePreRegistration';
+import { useStore } from '@/presentation/Login/store/useStore';
 
 export const ModalQuestionsAndAnswers = () => {
-
-    const {handleSavePreRegistrationSubmission} = usePreRegistration()
-    const [modal, setModal] = useRecoilState(modalState)
-
+    const { handleSavePreRegistrationSubmission } = usePreRegistration();
+    const { modalState, setModalState } = useStore();
 
     const comoNosConheceu = [
         { value: 'linkedin', label: 'Por alguém ou por anúncio no linkedin' },
@@ -45,22 +42,20 @@ export const ModalQuestionsAndAnswers = () => {
     };
 
     return (
-
-            <Modal isOpen={modal === 'registration'} onClose={() => setModal(null)} title="Perguntas para te conhecer">
-                <form onSubmit={handleSubmit}>
-                    <h5>Como você nos conheceu?</h5>
-                    <div className="mb-5 pb-2">
-                        <Select defaultValue={comoNosConheceu[0]} options={comoNosConheceu} isSearchable={false} onChange={handleComoNosConheceuChange} />
-                    </div>
-                    <h5>Qual seu objetivo?</h5>
-                    <div className="mb-12">
-                        <Select defaultValue={qualObjetivo[0]} options={qualObjetivo} isSearchable={false} onChange={handleQualObjetivoChange} />
-                    </div>
-                    <button type="submit" className="btn btn-primary w-full">
-                        Enviar
-                    </button>
-                </form>
-            </Modal>
-
+        <Modal isOpen={modalState === 'registration'} onClose={() => setModalState(null)} title="Perguntas para te conhecer">
+            <form onSubmit={handleSubmit}>
+                <h5>Como você nos conheceu?</h5>
+                <div className="mb-5 pb-2">
+                    <Select defaultValue={comoNosConheceu[0]} options={comoNosConheceu} isSearchable={false} onChange={handleComoNosConheceuChange} />
+                </div>
+                <h5>Qual seu objetivo?</h5>
+                <div className="mb-12">
+                    <Select defaultValue={qualObjetivo[0]} options={qualObjetivo} isSearchable={false} onChange={handleQualObjetivoChange} />
+                </div>
+                <button type="submit" className="btn btn-primary w-full">
+                    Enviar
+                </button>
+            </form>
+        </Modal>
     );
 };

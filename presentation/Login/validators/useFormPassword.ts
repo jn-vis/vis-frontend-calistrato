@@ -2,11 +2,12 @@ import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { BlockedTokenError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
-import { TFormDataPassword, passwordSchema } from '@/domain/schemas';
 import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
 import { WrongPasswordError } from '@/domain/errors/wrong-password-error';
 import { usePassword } from '../hooks/usePassword';
+import { TFormDataPassword } from '../login.types';
+import { passwordSchema } from '../login.schema';
 
 export const useFormPassword = () => {
     const { handlePasswordSubmission} = usePassword();

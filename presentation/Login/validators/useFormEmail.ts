@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { useAuth } from '@/presentation/contexts/authContext';
-import { TFormData, emailSchema } from '@/domain/schemas';
 import { BlockedTokenError, InvalidCredentialsError, InvalidEmailError, UserAlreadyLoggedError } from '@/domain/errors';
-import { useEmailExist } from '@/presentation/pages/login/hooks/useEmailExist';
+import { useEmailExist } from '@/presentation/Login/hooks/useEmailExist';
+import { emailSchema } from '../login.schema';
+import { TFormData } from '../login.types';
 
 
 export const useFormEmail = () => {

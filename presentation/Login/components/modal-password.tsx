@@ -2,26 +2,22 @@
 import IconLockDots from "../../icons/icon-lock-dots";
 import IconLoader from "../../icons/icon-loader";
 import IconEye from "@/presentation/icons/icon-eye";
-import { useTogglePassword } from "@/presentation/pages/login/hooks/useTogglePassword";
+import { useTogglePassword } from "@/presentation/Login/hooks/useTogglePassword";
 import Modal from "@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { emailUsuarioState, modalState } from "@/presentation/pages/login/atom/atom";
-import { useSendTokenLanguage } from "./hooks/useSendTokenLanguage";
-import { useFormPassword } from "./validators/useFormPassword";
-
+import { useStore } from "../store/useStore";
+import { useSendTokenLanguage } from "@/presentation/Login/hooks/useSendTokenLanguage";
+import { useFormPassword } from "../validators/useFormPassword";
 
 export const ModalPassword = () => {
-    const [modal, setModal] = useRecoilState(modalState);
-    const emailUsuario = useRecoilValue(emailUsuarioState);
-    const { register, handleSubmit,errors, isSubmitting,handleFormSubmit } = useFormPassword();
+    const { modalState, setModalState, emailUsuarioState } = useStore();
+    const { register, handleSubmit, errors, isSubmitting, handleFormSubmit } = useFormPassword();
     const { showPassword, togglePasswordVisibility } = useTogglePassword();
-    const {handleTokenLanguageSubmission} = useSendTokenLanguage()
+    const { handleTokenLanguageSubmission } = useSendTokenLanguage();
 
     return (
-      <Modal isOpen={modal === 'password'} onClose={() => setModal(null)} title="Password">
+      <Modal isOpen={modalState === 'password'} onClose={() => setModalState(null)} title="Password">
       <form onSubmit={handleSubmit(handleFormSubmit)}>
                 <div className="relative mb-2">
-
                     <input {...register('password')} type={showPassword ? "text" : "password"} placeholder="Password" className="form-input ltr:pl-10 rtl:pr-10" id="login_password" />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                         <IconLockDots fill={true} />
@@ -41,7 +37,7 @@ export const ModalPassword = () => {
             <div className="border-t border-[#ebe9f1] p-5 dark:border-white/10">
                 <p className="text-center text-sm text-white-dark dark:text-white-dark/70">
                     Esqueceu a senha?
-                    <button   onClick={() => handleTokenLanguageSubmission(emailUsuario, 'portuguese')}  type="button" className="text-[#515365] hover:underline ltr:ml-1 rtl:mr-1 dark:text-white-dark">
+                    <button onClick={() => handleTokenLanguageSubmission(emailUsuarioState, 'portuguese')} type="button" className="text-[#515365] hover:underline ltr:ml-1 rtl:mr-1 dark:text-white-dark">
                         Cadastre uma nova aqui
                     </button>
                 </p>

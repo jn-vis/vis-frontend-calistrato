@@ -4,4 +4,4 @@ import { makeApiUrl, makeAxiosHttpClient } from '@/main/factories/http'
 
 //TODO -> alterar client para decorators de autenticação
 export const makeRemoteViewVagas = (): ViewVagas =>
-new RemoteViewVagas(makeApiUrl(`/vagas`), makeAxiosHttpClient())
+new RemoteViewVagas(makeApiUrl(`/vagas/teste`), makeAxiosHttpClient())

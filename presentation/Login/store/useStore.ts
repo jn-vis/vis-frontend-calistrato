@@ -16,9 +16,9 @@ interface AppState {
 export const useStore = create<AppState>((set) => ({
   modalState: null,
   setModalState: (state) => set({ modalState: state }),
-  emailUsuarioState: "" || null,
+  emailUsuarioState: "",
   setEmailUsuarioState: (email) => set({ emailUsuarioState: email }),
-  accessTokenState: '' || undefined,
+  accessTokenState: "",
   setAccessTokenState: (token) => set({ accessTokenState: token }),
   userState: null,
   setUserState: (user) => set({ userState: user }),

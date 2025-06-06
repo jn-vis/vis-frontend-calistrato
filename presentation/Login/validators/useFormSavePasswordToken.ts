@@ -5,14 +5,13 @@ import { BlockedTokenError, InvalidEmailError, UserAlreadyLoggedError } from '@/
 import { MissingEmailError } from '@/domain/errors/missing-email-error';
 import { PasswordLockedRecentlyError } from '@/domain/errors/password-locked-recently-error';
 import { WrongPasswordError } from '@/domain/errors/wrong-password-error';
-import { TFormTokenPassword, tokenPasswordSchema } from '@/domain/schemas/token-password';
-import { useSendTokenLanguage } from '../hooks/useSendTokenLanguage';
 import { useSavePasswordToken } from '../hooks/useSavePasswordToken';
-import { useRecoilValue } from 'recoil';
-import { emailUsuarioState } from '@/presentation/pages/login/atom/atom';
+import { useStore } from '@/presentation/Login/store/useStore';
+import { TFormTokenPassword } from '../login.types';
+import { tokenPasswordSchema } from '../login.schema';
 
 export const useFormSavePasswordToken = () => {
-    const emailUsuario = useRecoilValue(emailUsuarioState);
+    const emailUsuario = useStore(state => state.emailUsuarioState);
     const { handleTokenPasswordSubmission} = useSavePasswordToken()
     const {
         register,
@@ -34,14 +33,14 @@ export const useFormSavePasswordToken = () => {
 
       const handleSetData = useCallback((data: Partial<TFormTokenPassword>) => {
         Object.keys(data).forEach(key => {
-            setValue(key, data[key] ?? "");
+            setValue(key as keyof TFormTokenPassword, data[key as keyof TFormTokenPassword] ?? "");
         });
     }, [setValue]);
 
     const handleFormSubmit = async (data: TFormTokenPassword) => {
         try {
             const { token, password, confirmPassword } = data;
-            await handleTokenPasswordSubmission(token, password, confirmPassword, emailUsuario);
+            await handleTokenPasswordSubmission(token, password, confirmPassword, emailUsuario as string);
             handleSetData({ token: '', password: '', confirmPassword: '' });
         } catch (error: any) {
             const errorMap = {

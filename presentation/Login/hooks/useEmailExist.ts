@@ -1,41 +1,38 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { emailUsuarioState, modalState } from '@/presentation/pages/login/atom/atom';
+import { useStore } from '@/presentation/Login/store/useStore';
 import { HttpStatusCode } from '@/data/protocols/http/http-client';
 import { makeRemoteEmailExists } from '@/main/factories/usecases/login/remote-exists-login-factory';
 
-
 export const useEmailExist = () => {
-    const [emailUsuario, setEmailUsuario] = useRecoilState(emailUsuarioState);
-    const setModal = useSetRecoilState(modalState);
+    const { emailUsuarioState, setEmailUsuarioState, setModalState } = useStore();
 
     const handleEmailSubmission = async (email: string | null) => {
         const emailExistsRepository = makeRemoteEmailExists(email);
         try {
-            const result = await emailExistsRepository.email({email: emailUsuario});
+            const result = await emailExistsRepository.email({email: emailUsuarioState});
 
             if (result && result.status) {
                 switch (result.status) {
                     case HttpStatusCode.ok:
-                        setModal('password')
-                        setEmailUsuario(email);
+                        setModalState('password')
+                        setEmailUsuarioState(email);
                         break;
                     case HttpStatusCode.created:
-                        setModal('registration');
+                        setModalState('registration');
                         break;
                     case HttpStatusCode.accepted:
-                        setModal('register');
+                        setModalState('register');
                         break;
                     case HttpStatusCode.notFound:
-                        setModal('confirmLogin');
+                        setModalState('confirmLogin');
                         break;
                     case HttpStatusCode.passwordError:
-                        setModal('register');
+                        setModalState('register');
                         break;
                     default:
-                        setModal(null);
+                        setModalState(null);
                 }
             } else {
-                setModal(null);
+                setModalState(null);
             }
         } catch (error: any) {
             console.error('Failed to verify email:', error);
@@ -45,9 +42,7 @@ export const useEmailExist = () => {
 
     return {
         handleEmailSubmission,
-        emailUsuario,
-        setEmailUsuario
+        emailUsuario: emailUsuarioState,
+        setEmailUsuario: setEmailUsuarioState
     }
-
-
 }

@@ -1,36 +1,38 @@
 import { setCurrentAccountAdapter } from "@/main/adapters";
 import { makeRemoteLogout } from "@/main/factories/usecases/login/remote-logout-factory";
-import { accessTokenState, emailUsuarioState, modalState, userState } from "@/presentation/pages/login/atom/atom";
+import { useStore } from "@/presentation/Login/store/useStore";
 import { useRouter } from "next/navigation";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 
 export const useLogout = () => {
-    const setAccessToken = useSetRecoilState(accessTokenState);
-    const setUser = useSetRecoilState(userState);
-    const setModal = useSetRecoilState(modalState);
-    const emailUsuario = useRecoilValue(emailUsuarioState);
+    const {
+        setAccessTokenState,
+        setUserState,
+        setModalState,
+        emailUsuarioState
+    } = useStore();
     const router = useRouter();
 
     const handleLogoutSubmission = async (email: string) => {
         const logoutRepository = makeRemoteLogout(email);
         try {
-            await logoutRepository.logout({email: emailUsuario});
+            if (emailUsuarioState) {
+                await logoutRepository.logout({email: emailUsuarioState});
+            }
         } catch (error) {
             console.error('Failed to logout:', error);
         } finally {
             setCurrentAccountAdapter(null);
-            setAccessToken(undefined);
-            setUser(null);
+            setAccessTokenState(undefined);
+            setUserState(null);
             router.push('/');
         }
     };
 
-        function closeModal() {
-            setModal(null);
-        }
+    function closeModal() {
+        setModalState(null);
+    }
 
-
-    return{
+    return {
         handleLogoutSubmission,
         closeModal
     }

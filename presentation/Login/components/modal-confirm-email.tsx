@@ -1,13 +1,16 @@
 'use client';
 import IconUser from '@/presentation/icons/icon-user';
 import IconLoader from '@/presentation/icons/icon-loader';
-import { useFormConfirmEmail } from './validators/useFormConfirmEmail';
+
 import Modal from '@/presentation/modules/MeusDados/SobreMim/application/components/modal-composition';
-import { modalState } from '@/presentation/pages/login/atom/atom';
-import { useRecoilState } from 'recoil';
+import { useStore } from '../store/useStore';
+import { useFormConfirmEmail } from '../validators/useFormConfirmEmail';
+
+
 
 export const ModalConfirmEmail = () => {
-    const [modal, setModal] = useRecoilState(modalState);
+    const modal = useStore(state => state.modalState);
+    const setModal = useStore(state => state.setModalState);
     const { register, handleSubmit, errors, isSubmitting, handleFormSubmit } = useFormConfirmEmail();
 
     return (

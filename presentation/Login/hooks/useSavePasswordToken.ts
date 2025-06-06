@@ -1,16 +1,13 @@
 import { setCurrentAccountAdapter } from "@/main/adapters";
-import { makeRemoteTokenPassword } from "@/main/factories/usecases/login/remote-token-password";
-import { accessTokenState, emailUsuarioState, modalState, userState } from "@/presentation/pages/login/atom/atom";
-import {  useRecoilValue, useSetRecoilState } from "recoil";
+    import { makeRemoteTokenPassword } from "@/main/factories/usecases/login/remote-token-password";
+import { useStore } from "@/presentation/Login/store/useStore";
 
 export const useSavePasswordToken = () => {
 
-    const setModal = useSetRecoilState(modalState);
-    const emailUsuario = useRecoilValue(emailUsuarioState);
-    const setAccessToken = useSetRecoilState(accessTokenState);
-    const setUser = useSetRecoilState(userState);
-
-    console.log(emailUsuario)
+    const setModal = useStore(state => state.setModalState);
+    const emailUsuario = useStore(state => state.emailUsuarioState);
+    const setAccessToken = useStore(state => state.setAccessTokenState);
+    const setUser = useStore(state => state.setUserState);
 
     const handleTokenPasswordSubmission = async (token: string, password: string, confirmPassword: string, emailUsuario: string) => {
         const tokenPasswordRepository = makeRemoteTokenPassword(emailUsuario);
