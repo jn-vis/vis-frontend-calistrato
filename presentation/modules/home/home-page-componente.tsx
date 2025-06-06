@@ -19,7 +19,7 @@ const HomePage = () => {
             <div className="min-h-[calc(100vh-8rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
                 <div className="container mx-auto px-6 py-16">
                     <div className="flex flex-col lg:flex-row items-center justify-between">
-                        {/* Conteúdo Principal */}
+
                         <div className="lg:w-1/2 mb-12 lg:mb-0">
                             <div className="mb-6">
                                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">
@@ -50,10 +50,10 @@ const HomePage = () => {
                             </div>
                         </div>
 
-                        {/* Área Visual */}
+
                         <div className="lg:w-1/2 lg:pl-12">
                             <div className="relative">
-                                {/* Card Principal */}
+
                                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
                                     <div className="flex items-center justify-between mb-6">
                                         <div className="flex items-center space-x-3">
@@ -103,7 +103,7 @@ const HomePage = () => {
                                     </div>
                                 </div>
 
-                                {/* Card Terciário */}
+
                                 <div className="absolute -bottom-6 -left-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 transform rotate-12 hover:rotate-0 transition-transform duration-300">
                                     <div className="flex items-center space-x-2">
                                         <div className="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
@@ -121,7 +121,6 @@ const HomePage = () => {
                         </div>
                     </div>
 
-                    {/* Formulário de Demo */}
                     {showDemoForm && (
                         <div className="mt-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white shadow-2xl">
                             <div className="max-w-4xl mx-auto">
@@ -186,7 +185,7 @@ const HomePage = () => {
                         </div>
                     )}
 
-                    {/* Seção de Planos */}
+
                     {showPlans && (
                         <div className="mt-16">
                             <div className="text-center mb-12">
@@ -286,7 +285,6 @@ const HomePage = () => {
                                     </button>
                                 </div>
 
-                                {/* Plano Enterprise */}
                                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300">
                                     <div className="text-center mb-6">
                                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Enterprise</h3>
